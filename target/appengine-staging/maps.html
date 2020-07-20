@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hello Google Maps</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGQdYWTcQJpXXjzfZEVf_lQzv5Vy7oOEk" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">               <!-- Bulma.css is the css I used. so importing its CDN -->
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>                     <!-- Font awesome- used for icons-->
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+  
+  <style>
+      body {
+        background-image: url("https://www.jakpost.travel/wimages/large/212-2123695_world-map-wallpaper-world-map-wallpaper-sepia-new.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    </style>  
+     
+</head>
+
+<body onload="onloadMaps()">
+
+    <!-- This section of the page has a neat display with the title of my page-->
+    <section class="hero is-medium is-info is-bold">
+      <div class="hero-body">
+        <div class="container"><h1 class="title is-1"> Welcome to my MAPS! <i class="fas fa-map-pin"></i></h1></div>
+      </div>
+    </section>
+
+    <!-- This section of my page has a map of my office -->
+    <section class = "section">
+      <div class="container ">
+        <div class="card has-background-danger">
+          <div class="card-content">
+            <h1 class="title has-text-white-bis">Google Mountain View Office <i class="fas fa-building"></i></h1>
+            <h2 class="subtitle has-text-white-bis is-italic">This is where I am doing my Summer STEP Internship. <br>Note: If you move out of the map for more than 4 seconds, your map will be brought back to its original state</h2>
+            <div class = "container" id="map"></div>
+          </div>
+          <footer class="card-footer">
+            <p class="card-footer-item has-text-white-bis is-italic">
+              <span>
+                View on <a href="https://goo.gl/maps/5SUi9xC3vmFoYRpy5">Gmaps <i class="fas fa-location-arrow"></i> </a>
+              </span>
+            </p>
+          </footer>
+        </div>
+      </div>
+    </section>
+
+    <!-- This has the map of important places in my life -->
+    <section class = "section">
+      <div class="container ">
+        <div class="card has-background-primary	">
+          <div class="card-content">
+            <h1 class="title has-text-info-dark">My Favorite Places across the world <i class="fas fa-map-marked"></i></h1>
+            <h2 class="subtitle has-text-info-dark is-italic">These incude restaurants, parks, and other points of interest. </h2>
+            <div class = "container" id="map2"></div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+     <!-- This section of the page is present in all my html pages. It basically says that I am the author of the page and specifies the CSS I have used to render my web pages. -->
+    <section class="section">
+      <div class="container">
+        <footer class="footer">
+          <div class="content has-text-centered"><p>This page was created by Bhargavi Kumar Sundaresan. <a href="https://bulma.io/"> <strong> BULMA CSS </strong> </a> was used.</p></div>
+        </footer>
+      </div>
+    </section>
+
+  </body>
+</html>
