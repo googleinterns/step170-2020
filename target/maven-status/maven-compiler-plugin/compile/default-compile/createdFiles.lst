@@ -1,7 +1,0 @@
-com/google/sps/servlets/DeleteCommentServlet.class
-com/google/sps/servlets/NewCommentServlet.class
-com/google/sps/data/Comment.class
-com/google/sps/servlets/DeleteAllServlet.class
-com/google/sps/servlets/PlacesServlet.class
-com/google/sps/data/Point.class
-com/google/sps/servlets/DataServlet.class
