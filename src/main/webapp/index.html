@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>WeTime</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">       <!-- Bulma.css is the css I used. so importing its CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>          <!-- Ajax, Jquery -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>             <!-- Font awesome- used for icons-->
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+
+    <!-- This is the first section of the page that contains the navbar containing the WeTime title and other home, log in buttons, etc.. -->
+    <section class="hero is-default is-bold">
+      <div class="hero-head">
+        <nav class="navbar">
+          <div class="container">
+
+            <div class="navbar-brand">
+              <a class="navbar-item" href="index.html"> WeTime <i class="fas fa-heartbeat"></i> </a>
+              <span class="navbar-burger burger" data-target="navbarMenu"><span></span><span></span><span></span></span>
+            </div>
+
+            <div id="navbarMenu" class="navbar-menu">
+              <div class="navbar-end">
+                <div class="tabs is-right">
+                  <ul>
+                    <li><a href=""><span class="icon"><i class="fas fa-home"></i></span><span> Home </span> </a></li>
+                    <li><a href=""><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
+                    <li><a href=""><span class="icon"><i class="fas fa-question-circle"></i></span><span> Help </span> </a></li>
+                    <li><a href=""><span class="icon"><i class="fas fa-address-card"></i></span><span> About</span> </a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <!-- This section of the page contains the drop box that span the entire width of the page as well as the buttons to schedule and browse. -->
+    <section class = "section">
+
+      <!-- This container consists of the drop box. -->
+      <div class="container has-text-centered">
+        <div class="control is-centered">
+          <div class="select is-info is-fullwidth title is-2">
+            <select class="is-focused">
+              <option><span class="icon"><i class="fas fa-dice-two"></i></span><span>Games </span></option>
+              <option><span class="icon"><i class="fas fa-peace"></i></span><span>Active</span></option>
+              <option><span class="icon"><i class="fas fa-glasses"></i></span><span>Reading</span> </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <br><br> 
+
+      <!-- This container consists of the buttons to schedule and browse. -->
+      <div class ="container has-text-centered is-centered">
+        <button class="button is-large is-success is-rounded">Schedule an event</button>
+        <button class="button is-large is-danger is-rounded">Browse</button>
+      </div>
+    </section>
+
+    <!-- This section is a footer that can have basic information, like welcome messages -->
+    <section class = "section">
+      <div class="container">
+        <div class="tabs is-centered">
+          <ul><li><a>We hope you have a great time!</a></li></ul>
+        </div>
+      </div>
+    </section>
+    
+  </body>
+</html>
