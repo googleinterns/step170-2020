@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function(){
 function init() {
   initializeDatePickers();
   initializeTimePickers();
+  initializeDropdowns();
 }
 
 function initializeDatePickers() {
@@ -15,4 +16,9 @@ function initializeDatePickers() {
 function initializeTimePickers() {
   let elems = document.querySelectorAll('.timepicker');
   M.Timepicker.init(elems, {});
+}
+
+function initializeDropdowns() {
+  let elems = document.querySelectorAll('.dropdown-trigger');
+  M.Dropdown.init(elems, {});
 }

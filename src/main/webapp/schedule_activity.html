@@ -18,18 +18,26 @@
             </div>
           </div>
           <div class="row">
-            <div class="input-field inline">
+            <div class="input-field inline pr-6">
               <input type="text" class="datepicker" placeholder="Date">
             </div>
-          </div>
-          <div class="row">
             <div class="input-field inline">
               <input type="text" class="timepicker" placeholder="Start Time">
             </div>
-            <span>to</span>
+            <span class="px-3">To</span>
             <div class="input-field inline">
               <input type="text" class="timepicker" placeholder="End Time">
             </div>
+          </div>
+          <div class="row">
+            <!-- Dropdown Trigger -->
+            <a class='dropdown-trigger btn teal lighten-3' href='#' data-target='dropdown1'>Does not repeat</a>
+
+            <!-- Dropdown Structure -->
+            <ul id='dropdown1' class='dropdown-content'>
+              <li><a href="#!">Repeats</a></li>
+              <li><a href="#!">Does not repeat</a></li>
+            </ul>
           </div>
         </form>
       </div>
