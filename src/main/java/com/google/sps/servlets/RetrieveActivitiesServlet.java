@@ -10,8 +10,8 @@ import com.google.gson.Gson;
 
 import com.google.sps.data.Activity;
 import com.google.sps.data.Activity.Category;
+import static com.google.sps.data.ActivitiesUtility.getActivities;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -28,15 +28,15 @@ public class RetrieveActivitiesServlet extends HttpServlet {
 
     switch(activityCategory) {
       case GAMES: {
-        activities = getGames();
+        activities = getActivities(Category.GAMES);
         break;
       }
       case VIDEOS: {
-        activities = getVideos();
+        activities = getActivities(Category.VIDEOS);
         break;
       }       
       case ARTICLES: {
-        activities = getArticles();
+        activities = getActivities(Category.ARTICLES);
         break;
       }
       default: {
@@ -66,39 +66,6 @@ public class RetrieveActivitiesServlet extends HttpServlet {
       System.out.println("The specified activity type was either not defined or it's invalid.");
     }
     return activityCategory;
-  }
-
-  private static List<Activity> getGames() {
-    List<Activity> games = Arrays.asList(
-      new Activity("Pictionary", Category.GAMES, "www.pictionary.com"),
-      new Activity("Spy Master", Category.GAMES, "www.spymaster.com"),
-      new Activity("Skribbl", Category.GAMES, "www.skribbl.io")
-    );
-
-    return games;
-  }
-
-  private static List<Activity> getVideos() {
-    List<Activity> videos = Arrays.asList(
-      new Activity("Meditation for Anxiety", Category.VIDEOS, "https://www.youtube.com/watch?v=4pLUleLdwY4"),
-      new Activity("Restorative Yoga and Meditation", Category.VIDEOS, "https://www.youtube.com/watch?v=LI6RwT0ulDk"),
-      new Activity("Zumba Workout", Category.VIDEOS, "https://www.youtube.com/watch?v=-VXhoeaxxi0")
-    );
-
-    return videos;
-  }
-
-  private static List<Activity> getArticles() {
-    List<Activity> articles = Arrays.asList(
-      new Activity("How to Improve Your Psychological Well-Being", Category.ARTICLES, 
-        "https://www.verywellmind.com/improve-psychological-well-being-4177330"),
-      new Activity("How to Know if Zen Meditation Is Right for You", Category.ARTICLES, 
-        "https://www.verywellmind.com/what-is-zen-meditation-4586721"),
-      new Activity("What Is the Negativity Bias?", Category.ARTICLES, 
-        "https://www.verywellmind.com/negative-bias-4589618")
-    );
-
-    return articles;
   }
 
   /**
