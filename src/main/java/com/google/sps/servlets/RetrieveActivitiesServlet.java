@@ -39,7 +39,7 @@ public class RetrieveActivitiesServlet extends HttpServlet {
         activities = getArticles();
         break;
       default:
-        activities = null;
+        System.out.println("Activity category type is invalid or not assigned.");
         break;
     }
 
