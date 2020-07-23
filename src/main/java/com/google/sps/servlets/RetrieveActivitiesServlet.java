@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import com.google.sps.data.Activity;
+import com.google.sps.data.Activity.Category;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,28 +20,29 @@ import java.util.ArrayList;
 */
 @WebServlet("/retrieve-activities")
 public class RetrieveActivitiesServlet extends HttpServlet {
-  private static final String GAMES_CATEGORY = "games";
-  private static final String VIDEOS_CATEGORY = "videos";
-  private static final String ARTICLES_CATEGORY = "articles";
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String activityType = getActivityType(request);
+    Category activityCategory = getActivityCategory(request);
     List<Activity> activities;
 
-    switch(activityType) {
-      case GAMES_CATEGORY:
+    switch(activityCategory) {
+      case GAMES: {
         activities = getGames();
         break;
-      case VIDEOS_CATEGORY:
+      }
+      case VIDEOS: {
         activities = getVideos();
         break;
-      case ARTICLES_CATEGORY:
+      }       
+      case ARTICLES: {
         activities = getArticles();
         break;
-      default:
-        System.out.println("Activity category type is invalid or not assigned.");
+      }
+      default: {
+        activities = new ArrayList<Activity>();
         break;
+      }
     }
 
     // Convert activity list to json string
@@ -53,16 +55,24 @@ public class RetrieveActivitiesServlet extends HttpServlet {
   /**
   * Retrieves type of activity from request parameters.
   */
-  private static String getActivityType(HttpServletRequest request) {
+  private static Category getActivityCategory(HttpServletRequest request) {
     String name = "activity-type", defaultValue = "";
-    return getParameter(request, name, defaultValue);
+    String activityType = getParameter(request, name, defaultValue);
+    Category activityCategory = null;
+
+    try {
+      activityCategory = Category.valueOf(activityType.toUpperCase());
+    } catch(IllegalArgumentException exception) {
+      System.out.println("The specified activity type was either not defined or it's invalid.");
+    }
+    return activityCategory;
   }
 
   private static List<Activity> getGames() {
     List<Activity> games = Arrays.asList(
-      new Activity("Pictionary", GAMES_CATEGORY, "www.pictionary.com"),
-      new Activity("Spy Master", GAMES_CATEGORY, "www.spymaster.com"),
-      new Activity("Skribbl", GAMES_CATEGORY, "www.skribbl.io")
+      new Activity("Pictionary", Category.GAMES, "www.pictionary.com"),
+      new Activity("Spy Master", Category.GAMES, "www.spymaster.com"),
+      new Activity("Skribbl", Category.GAMES, "www.skribbl.io")
     );
 
     return games;
@@ -70,9 +80,9 @@ public class RetrieveActivitiesServlet extends HttpServlet {
 
   private static List<Activity> getVideos() {
     List<Activity> videos = Arrays.asList(
-      new Activity("Meditation for Anxiety", VIDEOS_CATEGORY, "https://www.youtube.com/watch?v=4pLUleLdwY4"),
-      new Activity("Restorative Yoga and Meditation", VIDEOS_CATEGORY, "https://www.youtube.com/watch?v=LI6RwT0ulDk"),
-      new Activity("Zumba Workout", VIDEOS_CATEGORY, "https://www.youtube.com/watch?v=-VXhoeaxxi0")
+      new Activity("Meditation for Anxiety", Category.VIDEOS, "https://www.youtube.com/watch?v=4pLUleLdwY4"),
+      new Activity("Restorative Yoga and Meditation", Category.VIDEOS, "https://www.youtube.com/watch?v=LI6RwT0ulDk"),
+      new Activity("Zumba Workout", Category.VIDEOS, "https://www.youtube.com/watch?v=-VXhoeaxxi0")
     );
 
     return videos;
@@ -80,11 +90,11 @@ public class RetrieveActivitiesServlet extends HttpServlet {
 
   private static List<Activity> getArticles() {
     List<Activity> articles = Arrays.asList(
-      new Activity("How to Improve Your Psychological Well-Being", ARTICLES_CATEGORY, 
+      new Activity("How to Improve Your Psychological Well-Being", Category.ARTICLES, 
         "https://www.verywellmind.com/improve-psychological-well-being-4177330"),
-      new Activity("How to Know if Zen Meditation Is Right for You", ARTICLES_CATEGORY, 
+      new Activity("How to Know if Zen Meditation Is Right for You", Category.ARTICLES, 
         "https://www.verywellmind.com/what-is-zen-meditation-4586721"),
-      new Activity("What Is the Negativity Bias?", ARTICLES_CATEGORY, 
+      new Activity("What Is the Negativity Bias?", Category.ARTICLES, 
         "https://www.verywellmind.com/negative-bias-4589618")
     );
 

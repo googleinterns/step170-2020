@@ -2,10 +2,14 @@ package com.google.sps.data;
 
 public class Activity {
   private String name;
-  private String type;
+  private Category type;
   private String url;
 
-  public Activity(String name, String type, String url) {
+  public enum Category {
+    GAMES, VIDEOS, ARTICLES;
+  }
+
+  public Activity(String name, Category type, String url) {
     this.name = name;
     this.type = type;
     this.url = url;
@@ -16,6 +20,6 @@ public class Activity {
   */
   @Override
   public String toString() {
-    return String.format("[%s, %s, %s]", name, type, url);
+    return String.format("[%s, %s, %s]", name, type.toString(), url);
   }
 }
