@@ -19,17 +19,18 @@ public class GetUrlServlet extends HttpServlet {
     Gson gson = new Gson();
 
     if (userService.isUserLoggedIn()) {
-    //String userEmail = userService.getCurrentUser().getEmail();
-    String urlToRedirectToAfterUserLogsOut = "/";
-    String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);  // Prepares the url that when clicked logs the user out. 
-    String json = gson.toJson(logoutUrl);
-    response.getWriter().println(json);   // This sends the URL when reached logs the user out.
+      // Comes here if the user is logged in. 
+      String urlToRedirectToAfterUserLogsOut = "/";
+      String logoutUrl = userService.createLogoutURL(urlToRedirectToAfterUserLogsOut);  // Prepares the url that when clicked logs the user out. 
+      String json = gson.toJson(logoutUrl);
+      response.getWriter().println(json);   // This sends the URL when reached logs the user out.
 
     } else {
-    String urlToRedirectToAfterUserLogsIn = "/";
-    String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
-    String json = gson.toJson(loginUrl);
-    response.getWriter().println(json);   // This sens the URl when reached gives the sign in page of google. 
-    }
+      // Comes here if the user has not logged in. 
+      String urlToRedirectToAfterUserLogsIn = "/";
+      String loginUrl = userService.createLoginURL(urlToRedirectToAfterUserLogsIn);
+      String json = gson.toJson(loginUrl);
+      response.getWriter().println(json);   // This sens the URl when reached gives the sign in page of google. 
     }
   }
+}

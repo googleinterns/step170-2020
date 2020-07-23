@@ -30,7 +30,7 @@ function initializeGuestTab() {
 }
 
 function getUrl() {
-  fetch('/getUrl').then(response => response.json()).then( (greeting) => {
-    document.getElementById('login').href = greeting;
+  fetch('/getUrl').then(response => response.json()).then( (logUrl) => {
+    document.getElementById('login').href = logUrl;
   });
 }
