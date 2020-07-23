@@ -39,12 +39,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 /** 
-* This servlet is used to update the database with well-being related 
-* activity links.
+* This servlet is used to update the database with well-being related activity links.
 */
 @WebServlet("/articleLinks")
 public class articlesServlet extends HttpServlet {
-  private static final String baseURL = "https://newsapi.org/v2/everything?domains=healthline.com&apiKey=";
+  private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
   private static final Logger logger = Logger.getLogger(articlesServlet.class.getName());
 
   @Override
