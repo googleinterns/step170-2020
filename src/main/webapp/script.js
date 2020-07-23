@@ -6,6 +6,7 @@ function init() {
   initializeDatePickers();
   initializeTimePickers();
   initializeDropdowns();
+  initializeGuestTab();
 }
 
 function initializeDatePickers() {
@@ -21,4 +22,9 @@ function initializeTimePickers() {
 function initializeDropdowns() {
   let elems = document.querySelectorAll('.dropdown-trigger');
   M.Dropdown.init(elems, {});
+}
+
+function initializeGuestTab() {
+  let elem = document.querySelector('.tabs');
+  M.Tabs.init(elem, {})
 }
