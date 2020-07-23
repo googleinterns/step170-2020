@@ -5,7 +5,7 @@ public class Activity {
   private Category category;
   private String url;
 
-  public enum Category {
+  public static enum Category {
     GAMES, VIDEOS, ARTICLES;
   }
 
