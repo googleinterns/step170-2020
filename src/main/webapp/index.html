@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="style.css">
   </head>
 
-  <body>
+  <body onload="javascript:getUrl()">
 
     <!-- This is the first section of the page that contains the navbar containing the WeTime title and other home, log in buttons, etc.. -->
     <section class="hero is-default is-bold">
@@ -31,7 +31,7 @@
                 <div class="tabs is-right">
                   <ul>
                     <li><a href=""><span class="icon"><i class="fas fa-home"></i></span><span> Home </span> </a></li>
-                    <li><a href=""><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
+                    <li><a id="login" href="javascript:getUrl()"><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
                     <li><a href=""><span class="icon"><i class="fas fa-question-circle"></i></span><span> Help </span> </a></li>
                     <li><a href=""><span class="icon"><i class="fas fa-address-card"></i></span><span> About</span> </a></li>
                   </ul>
@@ -41,6 +41,9 @@
           </div>
         </nav>
       </div>
+
+      <!-- <div class= "container" id="welcome-user"></div>   -->
+      
     </section>
 
     <!-- This section of the page contains the drop box that span the entire width of the page as well as the buttons to schedule and browse. -->
