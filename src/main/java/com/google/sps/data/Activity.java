@@ -12,7 +12,7 @@ public class Activity {
   }
 
   /*
-  * Return String representation of comment.
+  * Return String representation of activity.
   */
   @Override
   public String toString() {
