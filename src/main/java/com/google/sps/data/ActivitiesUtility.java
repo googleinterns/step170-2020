@@ -3,6 +3,7 @@ package com.google.sps.data;
 import com.google.sps.data.Activity.Category;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public final class ActivitiesUtility {
@@ -10,14 +11,28 @@ public final class ActivitiesUtility {
   private ActivitiesUtility(){}
 
   public static List<Activity> getActivities(Category category) {
-    if (category.equals(Category.GAMES))
-      return getGames();
-    else if (category.equals(Category.VIDEOS))
-      return getVideos();
-    else if (category.equals(Category.ARTICLES))
-      return getArticles();
-    else
-      return null;
+    List<Activity> activities;
+
+    switch(category) {
+      case GAMES: {
+        activities = getGames();
+        break;
+      }
+      case VIDEOS: {
+        activities = getVideos();
+        break;
+      }       
+      case ARTICLES: {
+        activities = getArticles();
+        break;
+      }
+      default: {
+        activities = new ArrayList<Activity>();
+        break;
+      }
+    }
+    
+    return activities;
   }
 
   private static List<Activity> getGames() {

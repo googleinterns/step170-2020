@@ -24,26 +24,11 @@ public class RetrieveActivitiesServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Category activityCategory = getActivityCategory(request);
-    List<Activity> activities;
 
-    switch(activityCategory) {
-      case GAMES: {
-        activities = getActivities(Category.GAMES);
-        break;
-      }
-      case VIDEOS: {
-        activities = getActivities(Category.VIDEOS);
-        break;
-      }       
-      case ARTICLES: {
-        activities = getActivities(Category.ARTICLES);
-        break;
-      }
-      default: {
-        activities = new ArrayList<Activity>();
-        break;
-      }
-    }
+    // Get list of activities in specified category
+    List<Activity> activities = getActivities(activityCategory);
+
+    
 
     // Convert activity list to json string
     String activitiesJson = new Gson().toJson(activities);
@@ -62,8 +47,13 @@ public class RetrieveActivitiesServlet extends HttpServlet {
 
     try {
       activityCategory = Category.valueOf(activityType.toUpperCase());
-    } catch(IllegalArgumentException exception) {
-      System.out.println("The specified activity type was either not defined or it's invalid.");
+    } catch (IllegalArgumentException exception) {
+      if (activityType.isEmpty())
+        System.out.println("The activity type was not defined.");
+      else {
+        String errorMsg = String.format("The specified activity type, %s, is invalid.", activityType);
+        System.out.println(errorMsg);
+      }
     }
     return activityCategory;
   }
