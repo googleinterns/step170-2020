@@ -1,1 +1,5 @@
+# Compile code
 target/
+
+# Node modules
+src/main/webapp/node_modules/
