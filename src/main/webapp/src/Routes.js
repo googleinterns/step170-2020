@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
+import ScheduleActivityPage from './pages/ScheduleActivityPage';
+
 import NavigationNavPage from './pages/NavigationNavPage';
 import FormsNavPage from './pages/FormsNavPage';
 import TablesNavPage from './pages/TablesNavPage';
@@ -69,7 +71,7 @@ class Routes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/' component={HomePage} />
+        <Route exact path='/' component={ScheduleActivityPage} />
         <Route exact path='/addons' component={AddonsNavPage} />
         <Route exact path='/advanced' component={AdvancedNavPage} />
         <Route exact path='/components' component={ComponentsNavPage} />
