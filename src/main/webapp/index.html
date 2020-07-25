@@ -10,14 +10,135 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>          <!-- Ajax, Jquery -->
     <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>             <!-- Font awesome- used for icons-->
     <script src="script.js"></script>
+    <script src="keys.js"></script>
+
     <link rel="stylesheet" href="style.css">
+
   </head>
 
-  <body onload="javascript:getUrl()">
+  <body>
 
     <!-- This is the first section of the page that contains the navbar containing the WeTime title and other home, log in buttons, etc.. -->
-    <section class="hero is-default is-bold">
-      <div class="hero-head">
+    <section class="section">
+      <div class = "container">
+        <nav class="navbar" role="navigation" aria-label="main navigation">
+          
+          <div class="navbar-brand">
+            <a class="navbar-item" href="index.html"> WeTime <i class="fas fa-heartbeat"></i> </a>
+
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+              <a class="navbar-item"><span class="icon"><i class="fas fa-home"></i></span><span> Home</a>
+              <a class="navbar-item"><span class="icon"><i class="fas fa-question-circle"></i></span><span> Help </span></a>
+              <a class="navbar-item"><span class="icon"><i class="fas fa-address-card"></i></span><span> About</span></a> 
+            </div>
+          </div>
+
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                <button class = "button is-info" id="authorize_button" style="display: none;"> Login with Google</button>
+                <button class = "button is-primary" id="signout_button" style="display: none;">Log out</button>
+                <!-- <a class="button is-info"><strong>Log in</strong></a> -->
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+
+    <!-- <button id="authorize_button" style="display: none;">Authorize</button>
+    <button id="signout_button" style="display: none;">Sign Out</button> -->
+
+    <script type="text/javascript">
+      
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+
+      var authorizeButton = document.getElementById('authorize_button');
+      var signoutButton = document.getElementById('signout_button');
+
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load('client:auth2', initClient);
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client.init({
+          apiKey: API_KEY,
+          clientId: CLIENT_ID,
+          discoveryDocs: DISCOVERY_DOCS,
+          scope: SCOPES
+        }).then(function () {
+          // Listen for sign-in state changes.
+          gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+
+          // Handle the initial sign-in state.
+          updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+          authorizeButton.onclick = handleAuthClick;
+          signoutButton.onclick = handleSignoutClick;
+        }, function(error) {
+          appendPre(JSON.stringify(error, null, 2));
+        });
+      }
+
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          authorizeButton.style.display = 'none';
+          signoutButton.style.display = 'block';
+          listUpcomingEvents();
+        } else {
+          authorizeButton.style.display = 'block';
+          signoutButton.style.display = 'none';
+        }
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+    </script>
+
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+
+
+      <!-- <div class="hero-head">
         <nav class="navbar">
           <div class="container">
 
@@ -31,7 +152,8 @@
                 <div class="tabs is-right">
                   <ul>
                     <li><a href=""><span class="icon"><i class="fas fa-home"></i></span><span> Home </span> </a></li>
-                    <li><a id="login" href="javascript:getUrl()"><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
+                    <li><a id="login" href=""><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
+                    <li><a id="logout" href ="" ><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log out </span> </a></li>
                     <li><a href=""><span class="icon"><i class="fas fa-question-circle"></i></span><span> Help </span> </a></li>
                     <li><a href=""><span class="icon"><i class="fas fa-address-card"></i></span><span> About</span> </a></li>
                   </ul>
@@ -40,11 +162,10 @@
             </div>
           </div>
         </nav>
-      </div>
+      </div> -->
 
       <!-- <div class= "container" id="welcome-user"></div>   -->
       
-    </section>
 
     <!-- This section of the page contains the drop box that span the entire width of the page as well as the buttons to schedule and browse. -->
     <section class = "section">
