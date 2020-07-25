@@ -18,10 +18,11 @@
 
   <body>
 
-    <!-- This is the first section of the page that contains the navbar containing the WeTime title and other home, log in buttons, etc.. -->
+    <!-- This is the first section of the page that contains the navbar containing the WeTime title and other home, log in, log out buttons, etc.. -->
+    <!-- Navbar. --> 
     <section class="section">
       <div class = "container">
-        <nav class="navbar" role="navigation" aria-label="main navigation">
+        <nav class="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
           
           <div class="navbar-brand">
             <a class="navbar-item" href="index.html"> WeTime <i class="fas fa-heartbeat"></i> </a>
@@ -33,6 +34,7 @@
             </a>
           </div>
 
+          <!-- Navbar options to other other html pages. --> 
           <div id="navbarBasicExample" class="navbar-menu">
             <div class="navbar-start">
               <a class="navbar-item"><span class="icon"><i class="fas fa-home"></i></span><span> Home</a>
@@ -41,12 +43,12 @@
             </div>
           </div>
 
+          <!-- The login and log out button. Changes according to signed in status. Handled in js just below. -->
           <div class="navbar-end">
             <div class="navbar-item">
               <div class="buttons">
-                <button class = "button is-info" id="authorize_button" style="display: none;"> Login with Google</button>
-                <button class = "button is-primary" id="signout_button" style="display: none;">Log out</button>
-                <!-- <a class="button is-info"><strong>Log in</strong></a> -->
+                <button class = "button is-info" id="authorize_button" style="display: none;"> <i class="fab fa-google"></i> Login with Google</button>
+                <button class = "button is-primary" id="signout_button" style="display: none;"><i class="fas fa-sign-out-alt"></i> Log out</button>
               </div>
             </div>
           </div>
@@ -54,20 +56,19 @@
       </div>
     </section>
 
-
-    <!-- <button id="authorize_button" style="display: none;">Authorize</button>
-    <button id="signout_button" style="display: none;">Sign Out</button> -->
-
+    <!-- This javscript code handles the calendar sign in and singn out. API and Client_id decalred elsewhere. -->
     <script type="text/javascript">
       
-      // Array of API discovery doc URLs for APIs used by the quickstart
+      // Array of API discovery doc URLs for APIs used by the quickstart.
       var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 
-      // Authorization scopes required by the API; multiple scopes can be
-      // included, separated by spaces.
+      // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
       var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
-
+ 
+      // Button to log in.
       var authorizeButton = document.getElementById('authorize_button');
+
+      // Button to log out.
       var signoutButton = document.getElementById('signout_button');
 
       /**
@@ -88,6 +89,7 @@
           discoveryDocs: DISCOVERY_DOCS,
           scope: SCOPES
         }).then(function () {
+
           // Listen for sign-in state changes.
           gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
@@ -99,7 +101,6 @@
           appendPre(JSON.stringify(error, null, 2));
         });
       }
-
 
       /**
        *  Called when the signed in status changes, to update the UI
@@ -136,36 +137,6 @@
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-
-
-      <!-- <div class="hero-head">
-        <nav class="navbar">
-          <div class="container">
-
-            <div class="navbar-brand">
-              <a class="navbar-item" href="index.html"> WeTime <i class="fas fa-heartbeat"></i> </a>
-              <span class="navbar-burger burger" data-target="navbarMenu"><span></span><span></span><span></span></span>
-            </div>
-
-            <div id="navbarMenu" class="navbar-menu">
-              <div class="navbar-end">
-                <div class="tabs is-right">
-                  <ul>
-                    <li><a href=""><span class="icon"><i class="fas fa-home"></i></span><span> Home </span> </a></li>
-                    <li><a id="login" href=""><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log In </span> </a></li>
-                    <li><a id="logout" href ="" ><span class="icon"><i class="fas fa-sign-in-alt"></i></span><span> Log out </span> </a></li>
-                    <li><a href=""><span class="icon"><i class="fas fa-question-circle"></i></span><span> Help </span> </a></li>
-                    <li><a href=""><span class="icon"><i class="fas fa-address-card"></i></span><span> About</span> </a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </div> -->
-
-      <!-- <div class= "container" id="welcome-user"></div>   -->
-      
 
     <!-- This section of the page contains the drop box that span the entire width of the page as well as the buttons to schedule and browse. -->
     <section class = "section">

@@ -28,9 +28,3 @@ function initializeGuestTab() {
   let elem = document.querySelector('.tabs');
   M.Tabs.init(elem, {})
 }
-
-function getUrl() {
-  fetch('/getUrl').then(response => response.json()).then( (logUrl) => {
-    document.getElementById('login').href = logUrl;
-  });
-}
