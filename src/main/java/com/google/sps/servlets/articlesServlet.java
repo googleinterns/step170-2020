@@ -17,13 +17,11 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.*;
-import java.lang.Object;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -133,11 +131,13 @@ public class articlesServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
+    // Clears datastore before updating the results.
     for (Entity entity : results.asIterable()) {
       Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
       datastore.delete(articleEntityKey);
     }
 
+    // Formats data using the aritcle entity to be stored in the database.
     JSONObject obj = new JSONObject(articles);
     JSONArray articleData = obj.getJSONArray("articles");
     int numArticles = articleData.length();
