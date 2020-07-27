@@ -17,11 +17,13 @@ package com.google.sps.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.*;
+import java.lang.Object;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -37,6 +39,23 @@ import java.net.URLEncoder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.sps.data.Article;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
+import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 /** 
 * This servlet is used to update the database with well-being related activity links.
@@ -46,16 +65,30 @@ public class articlesServlet extends HttpServlet {
   private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
   private static final Logger logger = Logger.getLogger(articlesServlet.class.getName());
 
+  // This method is used to access the api key stored in gcloud secret manager.
+  public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
+    try (SecretManagerServiceClient client = SecretManagerServiceClient.create()){
+      SecretVersionName secretVersionName = SecretVersionName.of(projectId, secretId, versionId);
+
+      // Access the secret version.
+      AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);
+
+      // Return the secret payload as a string.
+      return response.getPayload().getData().toStringUtf8();
+    }
+  }
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     StringBuilder strBuf = new StringBuilder();  
-    
     HttpURLConnection conn = null;        
     BufferedReader reader = null;
 
     try {
-      // Get hidden api key from .env, hidden in .gitignore.
-      URL url = new URL(baseURL + System.getenv("news_api_key"));
+      // If running on local server use this to get hidden api instead: "URL url = new URL(baseURL + System.getenv("news_api_key"));".
+      // Get hidden api key from gcloud secret manager.
+      String newsapiKey = accessSecretVersion("298755462", "news_api_key", "1");
+      URL url = new URL(baseURL + newsapiKey);
       conn = (HttpURLConnection) url.openConnection();
 
       conn.setRequestMethod("GET");
@@ -95,10 +128,44 @@ public class articlesServlet extends HttpServlet {
     }
 
     String articles = strBuf.toString();
+
+    Query query = new Query("Article");
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
+      datastore.delete(articleEntityKey);
+    }
+
+    JSONObject obj = new JSONObject(articles);
+    JSONArray articleData = obj.getJSONArray("articles");
+    int numArticles = articleData.length();
+
+    for (int i = 0; i < numArticles; ++i) {
+      JSONObject currentArticle = articleData.getJSONObject(i);
+      Entity articleEntity = new Entity("Article");
+
+      articleEntity.setProperty("source", currentArticle.getJSONObject("source").getString("name"));
+      articleEntity.setProperty("author", currentArticle.getString("author"));
+      articleEntity.setProperty("title", currentArticle.getString("title"));
+      articleEntity.setProperty("description", currentArticle.getString("description"));
+      articleEntity.setProperty("url", currentArticle.getString("url"));
+      articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
+
+      datastore.put(articleEntity);
+    }
+    
     Gson gson = new Gson();
     String json = gson.toJson(articles);
 
     response.setContentType("application/json");
     response.getWriter().println(json);
+  }
+
+  
+  @Override
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    doGet(request, response);
   }
 }
