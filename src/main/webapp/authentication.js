@@ -1,20 +1,14 @@
-//authenticate();
+// Array of API discovery doc URLs for APIs used by the quickstart.
+var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
 
-//function authenticate() {
-   // Array of API discovery doc URLs for APIs used by the quickstart.
-      var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+// Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
+var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
 
-      // Authorization scopes required by the API; multiple scopes can be included, separated by spaces.
-      var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
- 
-      // Button to log in.
-      var authorizeButton = document.getElementById('authorize_button');
+// Button to log in.
+var authorizeButton = document.getElementById('authorize_button');
 
-      // Button to log out.
-      var signoutButton = document.getElementById('signout_button');
-      
-
-//}
+// Button to log out.
+var signoutButton = document.getElementById('signout_button');
 
 /**
   *  On load, called to load the auth2 library and API client library.
