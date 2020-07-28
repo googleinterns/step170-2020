@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import Routes from './Routes';
 
-import Navbar from './components/Navbar';
+import Navbar from './constants/Navbar';
 
 class App extends Component {
   state = {
