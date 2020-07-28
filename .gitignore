@@ -1,2 +1,10 @@
+# Compile code
 target/
+
+# Node modules
+src/main/webapp/node_modules/
+
+# api keys
+.env
+
 *keys.js
