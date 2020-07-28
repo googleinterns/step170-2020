@@ -24,11 +24,11 @@ public final class Article {
   private final String author;
   private final String title;
   private final String description;
-  private final URL url;
+  private final String url;
   private final String publishedAt;
 
   public Article(String publisher, String author, String title, 
-    String description, URL url, String publishedAt) {
+    String description, String url, String publishedAt) {
     this.publisher = publisher;
     this.author = author;
     this.title = title;

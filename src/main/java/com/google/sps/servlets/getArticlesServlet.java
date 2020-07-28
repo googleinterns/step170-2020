@@ -59,9 +59,9 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 * This servlet is used to update the database with well-being related activity links.
 */
 @WebServlet("/articleLinks")
-public class articlesServlet extends HttpServlet {
+public class getArticlesServlet extends HttpServlet {
   private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
-  private static final Logger logger = Logger.getLogger(articlesServlet.class.getName());
+  private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -73,17 +73,28 @@ public class articlesServlet extends HttpServlet {
 
       // Return the secret payload as a string.
       return response.getPayload().getData().toStringUtf8();
+
+      // If running on local server return this line instead: return System.getenv("news_api_key");
     }
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Deletes queries from last doPut so the datastore results can be updated.
+    Query query = new Query("Article");
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
+      datastore.delete(articleEntityKey);
+    }
+
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
     BufferedReader reader = null;
 
     try {
-      // If running on local server use this to get hidden api instead: "URL url = new URL(baseURL + System.getenv("news_api_key"));".
       // Get hidden api key from gcloud secret manager.
       String newsapiKey = accessSecretVersion("298755462", "news_api_key", "1");
       URL url = new URL(baseURL + newsapiKey);
@@ -127,16 +138,6 @@ public class articlesServlet extends HttpServlet {
 
     String articles = strBuf.toString();
 
-    Query query = new Query("Article");
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    // Clears datastore before updating the results.
-    for (Entity entity : results.asIterable()) {
-      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
-      datastore.delete(articleEntityKey);
-    }
-
     // Formats data using the aritcle entity to be stored in the database.
     JSONObject obj = new JSONObject(articles);
     JSONArray articleData = obj.getJSONArray("articles");
@@ -146,7 +147,7 @@ public class articlesServlet extends HttpServlet {
       JSONObject currentArticle = articleData.getJSONObject(i);
       Entity articleEntity = new Entity("Article");
 
-      articleEntity.setProperty("source", currentArticle.getJSONObject("source").getString("name"));
+      articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
       articleEntity.setProperty("author", currentArticle.getString("author"));
       articleEntity.setProperty("title", currentArticle.getString("title"));
       articleEntity.setProperty("description", currentArticle.getString("description"));
@@ -155,17 +156,34 @@ public class articlesServlet extends HttpServlet {
 
       datastore.put(articleEntity);
     }
-    
+  }
+
+  
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Article");
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Article> articles = new ArrayList<Article>();
+
+    for (Entity entity : results.asIterable()) {
+      String publisher = (String) entity.getProperty("publisher");
+      String author = (String) entity.getProperty("author");
+      String title = (String) entity.getProperty("title");
+      String description = (String) entity.getProperty("description");
+      String url = (String) entity.getProperty("url");
+      String publishedAt = (String) entity.getProperty("publishedAt");
+
+      Article newArticle = new Article(publisher, author, title, description, url, publishedAt);
+      articles.add(newArticle);
+    }
+
     Gson gson = new Gson();
     String json = gson.toJson(articles);
 
     response.setContentType("application/json");
     response.getWriter().println(json);
-  }
-
-  
-  @Override
-  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    doGet(request, response);
   }
 }
