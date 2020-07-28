@@ -20,16 +20,16 @@ import java.net.URL;
 /** A well-being related article that will be displayed */
 public final class Article {
 
-  private final ArrayList<String> source;
+  private final String publisher;
   private final String author;
   private final String title;
   private final String description;
-  private final URL url;
+  private final String url;
   private final String publishedAt;
 
-  public Article(ArrayList<String> source, String author, String title, 
-    String description, URL url, String publishedAt) {
-    this.source = source;
+  public Article(String publisher, String author, String title, 
+    String description, String url, String publishedAt) {
+    this.publisher = publisher;
     this.author = author;
     this.title = title;
     this.description = description;
