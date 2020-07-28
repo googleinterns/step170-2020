@@ -3,10 +3,12 @@ import {GoogleLogin, GoogleLogout} from 'react-google-login'
 
 import 'bulma/css/bulma.css';
 
+/* Component for web app navigation bar */
 const Navbar = () => {
-  // State for login/logout status
+  // Create state for login/logout status
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
 
+  // Initialize google auth api information
   const clientID = "";
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const scope = "https://www.googleapis.com/auth/calendar.readonly";
@@ -14,20 +16,18 @@ const Navbar = () => {
   // Handle successful login
   const handleLogin = (res) => {
     updateIsLoggedIn(true);
-    console.log(isLoggedIn);
-    responseGoogle(res);
   }
 
   // Handle successful logout
   const handleLogout = (res) => {
     updateIsLoggedIn(false);
-    console.log(isLoggedIn);
-    responseGoogle(res);
   }
 
-  const responseGoogle = (response) => {
-    console.log(response);
-  }
+  // Handle failed login
+  const handleLoginFail = (res) => {}
+
+  // Handle failed logout
+  const handleLogoutFail = (res) => {}
   
   return (
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
@@ -42,7 +42,7 @@ const Navbar = () => {
           </a>
         </div>
 
-        {/*Navbar options to other other html pages.*/}
+        {/*Navbar tabs to other pages.*/}
         <div id="navbarBasicExample" className="navbar-menu">
           <div className="navbar-start">
             <a className="navbar-item"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></a>
@@ -54,6 +54,7 @@ const Navbar = () => {
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
+            {/* Display login or logout button depending on loggedIn state */}
             { !isLoggedIn ? 
               <GoogleLogin
                 clientId={clientID}
@@ -63,7 +64,7 @@ const Navbar = () => {
                   </button>
                 )}
                 onSuccess={handleLogin}
-                onFailure={responseGoogle}
+                onFailure={handleLoginFail}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
@@ -76,7 +77,7 @@ const Navbar = () => {
                   </button>
                 )}
                 onLogoutSuccess={handleLogout}
-                onFailure={responseGoogle}
+                onFailure={handleLogoutFail}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}

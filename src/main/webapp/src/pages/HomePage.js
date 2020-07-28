@@ -3,10 +3,13 @@ import React from 'react';
 import 'bulma/css/bulma.css';
 import '../css/home.css';
 
+/* Component for home page */
 const HomePage = () => {
 
-  const [activity, updateActivity] = React.useState("Games");
+  // Create state for activity selection with Games as default
+  const [activity, updateActivity] = React.useState("games");
 
+  // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
   }
@@ -14,7 +17,7 @@ const HomePage = () => {
   return (
     <section className="section">
 
-      {/*This container consists of the drop box. */}
+      {/*This container consists of the activities dropdown. */}
       <div className="container has-text-centered">
         <div className="control is-centered">
           <div className="select is-info is-fullwidth title is-2">

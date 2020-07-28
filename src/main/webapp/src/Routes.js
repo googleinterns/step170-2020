@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ScheduleActivityPage from './pages/ScheduleActivityPage';
 
+/* Routes address bar to corresponding page components */
 class Routes extends React.Component {
   render() {
     return (
