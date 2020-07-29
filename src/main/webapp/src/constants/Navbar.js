@@ -55,7 +55,8 @@ const Navbar = () => {
           <div className="navbar-item">
             <div className="buttons">
             {/* Display login or logout button depending on loggedIn state */}
-            { !isLoggedIn ? 
+            { !isLoggedIn ? {/* Conditional Statement for logged in status */}
+              {/* If not logged in display log in button*/}
               <GoogleLogin
                 clientId={clientID}
                 render={renderProps => (
@@ -68,7 +69,9 @@ const Navbar = () => {
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
-              /> :
+              />
+              :
+              {/* If logged in display log out button*/}
               <GoogleLogout
                 clientId={clientID}
                 render={renderProps => (
