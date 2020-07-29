@@ -14,12 +14,14 @@
 
 package com.google.sps.data;
 
+import com.google.appengine.api.datastore.Key;
 import java.util.ArrayList;
 import java.net.URL;
 
 /** A well-being related article that will be displayed */
 public final class Game {
 
+  private final Key id;
   private final String title;
   private final String description;
   private final String notes;
@@ -27,8 +29,9 @@ public final class Game {
   private final String minPlayer;
   private final String maxPlayer;
 
-  public Game(String title, String description, String notes, String url,
+  public Game(Key id, String title, String description, String notes, String url,
     String minPlayer, String maxPlayer) {
+    this.id = id;
     this.title = title;
     this.description = description;
     this.notes = notes;

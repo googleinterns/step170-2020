@@ -14,18 +14,21 @@
 
 package com.google.sps.data;
 
+import com.google.appengine.api.datastore.Key;
 import java.util.ArrayList;
 import java.net.URL;
 
 /** A well-being related article that will be displayed */
 public final class Video {
 
+  private final Key id;
   private final String title;
   private final String creator;
   private final String url;
   private final String publishedAt;
 
-  public Video(String title, String creator, String url, String publishedAt) {
+  public Video(Key id, String title, String creator, String url, String publishedAt) {
+    this.id = id;
     this.title = title;
     this.creator = creator;
     this.url = url;
