@@ -58,7 +58,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 /** 
 * This servlet is used to update the database with well-being related activity links.
 */
-@WebServlet("/articleLinks")
+@WebServlet("/articleData")
 public class getArticlesServlet extends HttpServlet {
   private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
   private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
@@ -73,8 +73,6 @@ public class getArticlesServlet extends HttpServlet {
 
       // Return the secret payload as a string.
       return response.getPayload().getData().toStringUtf8();
-
-      // If running on local server return this line instead: return System.getenv("news_api_key");
     }
   }
 
