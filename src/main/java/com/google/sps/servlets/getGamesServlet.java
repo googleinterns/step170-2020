@@ -34,10 +34,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-
+import com.google.sps.data.Game;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
@@ -115,8 +119,29 @@ public class getGamesServlet extends HttpServlet {
 
     String games = strBuf.toString();
 
+    // Formats data to be fetched in js.
+    JSONObject obj = new JSONObject(games);
+    JSONArray gamesData = obj.getJSONArray("records");
+    int numGames = gamesData.length();
+
+    List<Game> gamesArray = new ArrayList<Game>();
+
+    for (int i = 0; i < numGames; ++i) {
+      JSONObject currentGame = gamesData.getJSONObject(i);
+
+      String title = currentGame.getJSONObject("fields").getString("title");
+      String description = currentGame.getJSONObject("fields").getString("description");
+      String notes = currentGame.getJSONObject("fields").getString("notes");
+      String url = currentGame.getJSONObject("fields").getString("url");
+      String minPlayer = currentGame.getJSONObject("fields").getString("minPlayer");
+      String maxPlayer = currentGame.getJSONObject("fields").getString("maxPlayer");
+
+      Game newGame = new Game(title, description, notes, url, minPlayer, maxPlayer);
+      gamesArray.add(newGame);
+    }
+
     Gson gson = new Gson();
-    String json = gson.toJson(games);
+    String json = gson.toJson(gamesArray);
 
     response.setContentType("application/json");
     response.getWriter().println(json);
