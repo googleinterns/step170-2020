@@ -42,12 +42,21 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.sps.data.Game;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 /** 
-* This servlet is used to update the database with well-being related activity links.
+* This servlet is used to update the database with well-being related game activity links.
 */
 @WebServlet("/gameData")
 public class getGamesServlet extends HttpServlet {
@@ -68,7 +77,17 @@ public class getGamesServlet extends HttpServlet {
   }
 
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Deletes queries from last doPut so the datastore results can be updated.
+    Query query = new Query("Game");
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
+      datastore.delete(gameEntityKey);
+    }
+
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
     BufferedReader reader = null;
@@ -117,29 +136,50 @@ public class getGamesServlet extends HttpServlet {
 
     String games = strBuf.toString();
 
-    // Formats data to be fetched in js.
+    // Formats data using the game entity to be stored in the database.
     JSONObject obj = new JSONObject(games);
-    JSONArray gamesData = obj.getJSONArray("records");
-    int numGames = gamesData.length();
-
-    List<Game> gamesArray = new ArrayList<Game>();
+    JSONArray gameData = obj.getJSONArray("records");
+    int numGames = gameData.length();
 
     for (int i = 0; i < numGames; ++i) {
-      JSONObject currentGame = gamesData.getJSONObject(i);
+      JSONObject currentGame = gameData.getJSONObject(i);
+      Entity gameEntity = new Entity("Game");
+      
+      gameEntity.setProperty("title", currentGame.getJSONObject("fields").getString("title"));
+      gameEntity.setProperty("description", currentGame.getJSONObject("fields").getString("description"));
+      gameEntity.setProperty("notes", currentGame.getJSONObject("fields").getString("notes"));
+      gameEntity.setProperty("url", currentGame.getJSONObject("fields").getString("url"));
+      gameEntity.setProperty("minPlayer", currentGame.getJSONObject("fields").getString("minPlayer"));
+      gameEntity.setProperty("maxPlayer", currentGame.getJSONObject("fields").getString("maxPlayer"));
 
-      String title = currentGame.getJSONObject("fields").getString("title");
-      String description = currentGame.getJSONObject("fields").getString("description");
-      String notes = currentGame.getJSONObject("fields").getString("notes");
-      String url = currentGame.getJSONObject("fields").getString("url");
-      String minPlayer = currentGame.getJSONObject("fields").getString("minPlayer");
-      String maxPlayer = currentGame.getJSONObject("fields").getString("maxPlayer");
+      datastore.put(gameEntity);
+    }
+  }
 
-      Game newGame = new Game(title, description, notes, url, minPlayer, maxPlayer);
-      gamesArray.add(newGame);
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query("Game");
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    List<Game> games = new ArrayList<Game>();
+
+    for (Entity entity : results.asIterable()) {
+      Key id = entity.getKey();
+      String title = (String) entity.getProperty("title");
+      String description = (String) entity.getProperty("description");
+      String notes = (String) entity.getProperty("notes");
+      String url = (String) entity.getProperty("url");
+      String minPlayer = (String) entity.getProperty("minPlayer");
+      String maxPlayer = (String) entity.getProperty("maxPlayer");
+
+      Game newGame = new Game(id, title, description, notes, url, minPlayer, maxPlayer);
+      games.add(newGame);
     }
 
     Gson gson = new Gson();
-    String json = gson.toJson(gamesArray);
+    String json = gson.toJson(games);
 
     response.setContentType("application/json");
     response.getWriter().println(json);

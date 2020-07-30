@@ -56,7 +56,7 @@ import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 /** 
-* This servlet is used to update the database with well-being related activity links.
+* This servlet is used to update the database with well-being related video activity links.
 */
 @WebServlet("/videoData")
 public class getVideosServlet extends HttpServlet {
@@ -136,7 +136,7 @@ public class getVideosServlet extends HttpServlet {
 
     String videos = strBuf.toString();
 
-    // Formats data using the aritcle entity to be stored in the database.
+    // Formats data using the video entity to be stored in the database.
     JSONObject obj = new JSONObject(videos);
     JSONArray videoData = obj.getJSONArray("items");
     int numVideos = videoData.length();
@@ -166,12 +166,13 @@ public class getVideosServlet extends HttpServlet {
     List<Video> videos = new ArrayList<Video>();
 
     for (Entity entity : results.asIterable()) {
+      Key id = entity.getKey();
       String url = (String) entity.getProperty("url");
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
 
-      Video newVideo = new Video(title, creator, url, publishedAt);
+      Video newVideo = new Video(id, title, creator, url, publishedAt);
       videos.add(newVideo);
     }
 
