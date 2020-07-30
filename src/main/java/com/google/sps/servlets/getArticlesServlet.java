@@ -58,7 +58,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 /** 
 * This servlet is used to update the database with well-being related activity links.
 */
-@WebServlet("/articleData")
+@WebServlet("/articleLinks")
 public class getArticlesServlet extends HttpServlet {
   private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
   private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
@@ -73,6 +73,8 @@ public class getArticlesServlet extends HttpServlet {
 
       // Return the secret payload as a string.
       return response.getPayload().getData().toStringUtf8();
+
+      // If running on local server return this line instead: return System.getenv("news_api_key");
     }
   }
 
@@ -156,6 +158,7 @@ public class getArticlesServlet extends HttpServlet {
     }
   }
 
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query("Article");
@@ -166,7 +169,6 @@ public class getArticlesServlet extends HttpServlet {
     List<Article> articles = new ArrayList<Article>();
 
     for (Entity entity : results.asIterable()) {
-      Key id = entity.getKey();
       String publisher = (String) entity.getProperty("publisher");
       String author = (String) entity.getProperty("author");
       String title = (String) entity.getProperty("title");
@@ -174,7 +176,7 @@ public class getArticlesServlet extends HttpServlet {
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
 
-      Article newArticle = new Article(id, publisher, author, title, description, url, publishedAt);
+      Article newArticle = new Article(publisher, author, title, description, url, publishedAt);
       articles.add(newArticle);
     }
 
