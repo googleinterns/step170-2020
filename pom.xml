@@ -85,6 +85,17 @@
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
+
+      <!-- Plugin in to exclude node_module files while deploying. -->
+      <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.2.0</version>
+            <configuration>
+                <warSourceExcludes>node_modules/**</warSourceExcludes>
+            </configuration>
+      </plugin>
+
     </plugins>
   </build>
 </project>
