@@ -20,7 +20,6 @@ import java.net.URL;
 
 /** A well-being related article that will be displayed */
 public final class Game {
-
   private final Key id;
   private final String title;
   private final String description;
