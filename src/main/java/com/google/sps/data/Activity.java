@@ -15,6 +15,14 @@ public class Activity {
     this.url = url;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public String getUrl() {
+    return url;
+  }
+
   /*
   * Return String representation of activity.
   */
