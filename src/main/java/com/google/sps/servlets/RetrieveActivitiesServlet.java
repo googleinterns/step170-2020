@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.google.sps.data.Activity;
 import com.google.sps.data.Activity.Category;
 import static com.google.sps.data.ActivitiesUtility.getActivities;
+import static com.google.sps.data.GneralUtility.getParameter;
+
 
 import java.util.List;
 import java.util.ArrayList;
@@ -56,17 +58,5 @@ public class RetrieveActivitiesServlet extends HttpServlet {
       }
     }
     return activityCategory;
-  }
-
-  /**
-  * Retrieves the request parameter, or the default value if the parameter
-  * was not specified by the client
-  */
-  private static String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null) {
-      return defaultValue;
-    }
-    return value;
   }
 }
