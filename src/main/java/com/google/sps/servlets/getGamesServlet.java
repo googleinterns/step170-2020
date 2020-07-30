@@ -34,34 +34,34 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.google.sps.data.Game;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.sps.data.Article;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 /** 
-* This servlet is used to update the database with well-being related activity links.
+* This servlet is used to update the database with well-being related game activity links.
 */
-@WebServlet("/articleData")
-public class getArticlesServlet extends HttpServlet {
-  private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
-  private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
+@WebServlet("/gameData")
+public class getGamesServlet extends HttpServlet {
+  private static final String baseURL = "https://api.airtable.com/v0/appdlpPF3wZ8scgvw/Imported%20table?api_key=";
+  private static final Logger logger = Logger.getLogger(getGamesServlet.class.getName());
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -79,13 +79,13 @@ public class getArticlesServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query("Article");
+    Query query = new Query("Game");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
-      datastore.delete(articleEntityKey);
+      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
+      datastore.delete(gameEntityKey);
     }
 
     StringBuilder strBuf = new StringBuilder();  
@@ -94,8 +94,8 @@ public class getArticlesServlet extends HttpServlet {
 
     try {
       // Get hidden api key from gcloud secret manager.
-      String newsapiKey = accessSecretVersion("298755462", "news_api_key", "1");
-      URL url = new URL(baseURL + newsapiKey);
+      String airtableapiKey = accessSecretVersion("298755462", "airtable_api_key", "1");
+      URL url = new URL(baseURL + airtableapiKey);
       conn = (HttpURLConnection) url.openConnection();
 
       conn.setRequestMethod("GET");
@@ -134,52 +134,52 @@ public class getArticlesServlet extends HttpServlet {
         }
     }
 
-    String articles = strBuf.toString();
+    String games = strBuf.toString();
 
-    // Formats data using the aritcle entity to be stored in the database.
-    JSONObject obj = new JSONObject(articles);
-    JSONArray articleData = obj.getJSONArray("articles");
-    int numArticles = articleData.length();
+    // Formats data using the game entity to be stored in the database.
+    JSONObject obj = new JSONObject(games);
+    JSONArray gameData = obj.getJSONArray("records");
+    int numGames = gameData.length();
 
-    for (int i = 0; i < numArticles; ++i) {
-      JSONObject currentArticle = articleData.getJSONObject(i);
-      Entity articleEntity = new Entity("Article");
+    for (int i = 0; i < numGames; ++i) {
+      JSONObject currentGame = gameData.getJSONObject(i);
+      Entity gameEntity = new Entity("Game");
+      
+      gameEntity.setProperty("title", currentGame.getJSONObject("fields").getString("title"));
+      gameEntity.setProperty("description", currentGame.getJSONObject("fields").getString("description"));
+      gameEntity.setProperty("notes", currentGame.getJSONObject("fields").getString("notes"));
+      gameEntity.setProperty("url", currentGame.getJSONObject("fields").getString("url"));
+      gameEntity.setProperty("minPlayer", currentGame.getJSONObject("fields").getString("minPlayer"));
+      gameEntity.setProperty("maxPlayer", currentGame.getJSONObject("fields").getString("maxPlayer"));
 
-      articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
-      articleEntity.setProperty("author", currentArticle.getString("author"));
-      articleEntity.setProperty("title", currentArticle.getString("title"));
-      articleEntity.setProperty("description", currentArticle.getString("description"));
-      articleEntity.setProperty("url", currentArticle.getString("url"));
-      articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
-
-      datastore.put(articleEntity);
+      datastore.put(gameEntity);
     }
   }
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Article");
+    Query query = new Query("Game");
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    List<Article> articles = new ArrayList<Article>();
+    List<Game> games = new ArrayList<Game>();
 
     for (Entity entity : results.asIterable()) {
       Key id = entity.getKey();
-      String publisher = (String) entity.getProperty("publisher");
-      String author = (String) entity.getProperty("author");
       String title = (String) entity.getProperty("title");
       String description = (String) entity.getProperty("description");
+      String notes = (String) entity.getProperty("notes");
       String url = (String) entity.getProperty("url");
-      String publishedAt = (String) entity.getProperty("publishedAt");
+      String minPlayer = (String) entity.getProperty("minPlayer");
+      String maxPlayer = (String) entity.getProperty("maxPlayer");
 
-      Article newArticle = new Article(id, publisher, author, title, description, url, publishedAt);
-      articles.add(newArticle);
+      Game newGame = new Game(id, title, description, notes, url, minPlayer, maxPlayer);
+      games.add(newGame);
     }
 
     Gson gson = new Gson();
-    String json = gson.toJson(articles);
+    String json = gson.toJson(games);
 
     response.setContentType("application/json");
     response.getWriter().println(json);

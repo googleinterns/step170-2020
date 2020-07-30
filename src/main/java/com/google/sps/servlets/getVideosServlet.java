@@ -41,7 +41,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.sps.data.Article;
+import com.google.sps.data.Video;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -56,12 +56,12 @@ import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
 
 /** 
-* This servlet is used to update the database with well-being related activity links.
+* This servlet is used to update the database with well-being related video activity links.
 */
-@WebServlet("/articleData")
-public class getArticlesServlet extends HttpServlet {
-  private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
-  private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
+@WebServlet("/videoData")
+public class getVideosServlet extends HttpServlet {
+  private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=yoga&type=video&key=";
+  private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -77,15 +77,15 @@ public class getArticlesServlet extends HttpServlet {
   }
 
   @Override
-  public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query("Article");
+    Query query = new Query("Video");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
     for (Entity entity : results.asIterable()) {
-      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
-      datastore.delete(articleEntityKey);
+      Key videoEntityKey = KeyFactory.createKey("Video", entity.getKey().getId());
+      datastore.delete(videoEntityKey);
     }
 
     StringBuilder strBuf = new StringBuilder();  
@@ -94,8 +94,8 @@ public class getArticlesServlet extends HttpServlet {
 
     try {
       // Get hidden api key from gcloud secret manager.
-      String newsapiKey = accessSecretVersion("298755462", "news_api_key", "1");
-      URL url = new URL(baseURL + newsapiKey);
+      String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "1");
+      URL url = new URL(baseURL + youtubeapiKey);
       conn = (HttpURLConnection) url.openConnection();
 
       conn.setRequestMethod("GET");
@@ -134,52 +134,50 @@ public class getArticlesServlet extends HttpServlet {
         }
     }
 
-    String articles = strBuf.toString();
+    String videos = strBuf.toString();
 
-    // Formats data using the aritcle entity to be stored in the database.
-    JSONObject obj = new JSONObject(articles);
-    JSONArray articleData = obj.getJSONArray("articles");
-    int numArticles = articleData.length();
+    // Formats data using the video entity to be stored in the database.
+    JSONObject obj = new JSONObject(videos);
+    JSONArray videoData = obj.getJSONArray("items");
+    int numVideos = videoData.length();
+    
+    String videoLinkBaseURL = "https://www.youtube.com/watch?v=";
 
-    for (int i = 0; i < numArticles; ++i) {
-      JSONObject currentArticle = articleData.getJSONObject(i);
-      Entity articleEntity = new Entity("Article");
+    for (int i = 0; i < numVideos; ++i) {
+      JSONObject currentVideo = videoData.getJSONObject(i);
+      Entity videoEntity = new Entity("Video");
 
-      articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
-      articleEntity.setProperty("author", currentArticle.getString("author"));
-      articleEntity.setProperty("title", currentArticle.getString("title"));
-      articleEntity.setProperty("description", currentArticle.getString("description"));
-      articleEntity.setProperty("url", currentArticle.getString("url"));
-      articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
+      videoEntity.setProperty("url", videoLinkBaseURL + (currentVideo.getJSONObject("id").getString("videoId")));
+      videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
+      videoEntity.setProperty("title", currentVideo.getJSONObject("snippet").getString("title"));
+      videoEntity.setProperty("publishedAt", currentVideo.getJSONObject("snippet").getString("publishedAt"));
 
-      datastore.put(articleEntity);
+      datastore.put(videoEntity);
     }
   }
-
+  
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Article");
+    Query query = new Query("Video");
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
-    List<Article> articles = new ArrayList<Article>();
+    List<Video> videos = new ArrayList<Video>();
 
     for (Entity entity : results.asIterable()) {
       Key id = entity.getKey();
-      String publisher = (String) entity.getProperty("publisher");
-      String author = (String) entity.getProperty("author");
-      String title = (String) entity.getProperty("title");
-      String description = (String) entity.getProperty("description");
       String url = (String) entity.getProperty("url");
+      String creator = (String) entity.getProperty("creator");
+      String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
 
-      Article newArticle = new Article(id, publisher, author, title, description, url, publishedAt);
-      articles.add(newArticle);
+      Video newVideo = new Video(id, title, creator, url, publishedAt);
+      videos.add(newVideo);
     }
 
     Gson gson = new Gson();
-    String json = gson.toJson(articles);
+    String json = gson.toJson(videos);
 
     response.setContentType("application/json");
     response.getWriter().println(json);
