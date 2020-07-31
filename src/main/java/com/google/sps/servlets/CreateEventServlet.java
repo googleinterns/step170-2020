@@ -31,7 +31,7 @@ public class CreateEventServlet extends HttpServlet {
     // Store activity event in datastore
     storeActivityEvent(event);
 
-    // Create calendar event and send invite to guests
+    // Todo: Create calendar event and send invite to guests
   }
 
   /*

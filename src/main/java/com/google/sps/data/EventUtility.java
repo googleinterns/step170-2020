@@ -59,17 +59,11 @@ public final class EventUtility {
   * Creates activity event object using event information.
   */
   public static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
-    String userId = eventInfo.get("userId");
-    String accessToken = eventInfo.get("accessToken");
-    long startTimestamp = Long.valueOf(eventInfo.get("startTimestamp"));
-    long endTimestamp = Long.valueOf(eventInfo.get("endTimestamp"));
-    Activity activity = getActivity(eventInfo.get("activityKey"));
-    List<String> guests = getGuests(eventInfo.get("guests"));
-
     ActivityEvent event = new ActivityEvent(
-      userId, accessToken, startTimestamp, endTimestamp, activity, guests
+      eventInfo.get("userId"), eventInfo.get("accessToken"), 
+      Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
+      getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests"))
     );
-
     return event;
   }
 
@@ -78,20 +72,6 @@ public final class EventUtility {
   * the datastore activity key.
   */
   private static Activity getActivity(String activityKey) {
-    Map<String, String> activityInfo = getActivityInfo(activityKey);
-    return new Activity(
-      KeyFactory.stringToKey(activityInfo.get("key")),
-      activityInfo.get("title"),
-      Activity.Category.valueOf(activityInfo.get("category").toUpperCase()),
-      activityInfo.get("url")
-    );
-  }
-
-  /*
-  * Retrieves activity information from datastore using specified activity key.
-  * Activity information includes the name, url, and category.
-  */
-  private static Map<String, String> getActivityInfo(String activityKey) {
     // Prepare database.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -103,17 +83,13 @@ public final class EventUtility {
       System.out.println("The entity requested wasn't found.");
     }
 
-    final String[] activityProperties = new String[]{"title", "category", "url"};
-    Map<String, String> activityMap = new HashMap<>();
-
-    // Retrieves each activity property from entity and puts it into activity map.
-    for (String activityProperty : activityProperties) {
-      activityMap.put(activityProperty, (String) activityEntity.getProperty(activityProperty));
-    }
-
-    activityMap.put("key", KeyFactory.keyToString(activityEntity.getKey()));
-
-    return activityMap;
+    String category = (String) activityEntity.getProperty("category");
+    return new Activity(
+      activityEntity.getKey(),
+      (String) activityEntity.getProperty("title"),
+      Activity.Category.valueOf(category.toUpperCase()),
+      (String) activityEntity.getProperty("url")
+    );
   }
 
   private static List<String> getGuests(String guests) {
