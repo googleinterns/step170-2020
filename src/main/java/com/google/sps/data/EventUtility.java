@@ -18,7 +18,7 @@ import java.util.HashMap;
 /*
 * This utility class contains helper methods relating to storing
 * events in datastore and creating calendar events.
-*/ 
+*/
 public final class EventUtility {
 
   private EventUtility(){}
@@ -30,10 +30,10 @@ public final class EventUtility {
   * Activity information includes the name, url, and category.
   */
   public static Map<String, String> getActivityInfo(String activityId) {
-    // Prepare database
+    // Prepare database.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    // Retrieve activity entity with specified key
+    // Retrieve activity entity with specified key.
     Entity activityEntity = datastore.get(activityId);
 
     final String[] activityProperties = {"name", "url", "category"};
@@ -53,19 +53,19 @@ public final class EventUtility {
   * Store activity event into datastore.
   */
   public static void storeActivityEvent(ActivityEvent event) {
-    // Prepare database
+    // Prepare database.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     Entity eventEntity = new Entity(eventCollectionID);
 
-    // Get all activity event properties
+    // Get all activity event properties.
     String userId = event.getUserId();
     String startTimestamp = new String(event.getStartTimestamp());
     String endTimestamp = new String(event.getEndTimestamp());
     String activityId = event.getActivity().getId();
     String guests = String.join(",", event.getGuests());
 
-    // Set the properties into the event entity
+    // Set the properties into the event entity.
     eventEntity.setProperty("userId", userId);
     eventEntity.setProperty("startTimestamp", startTimestamp);
     eventEntity.setProperty("endTimestamp", endTimestamp);

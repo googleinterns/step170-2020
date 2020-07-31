@@ -8,7 +8,6 @@ public class Activity {
   private Category category;
   private String url;
 
-
   public static enum Category {
     GAMES, VIDEOS, ARTICLES;
   }
@@ -23,7 +22,7 @@ public class Activity {
   public Key getId() {
     return id;
   }
-  
+
   public String getName() {
     return name;
   }
