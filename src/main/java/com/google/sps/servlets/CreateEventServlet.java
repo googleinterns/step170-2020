@@ -15,7 +15,7 @@ import com.google.sps.data.Activity.Category;
 import java.util.Map;
 import java.util.HashMap;
 
-/** 
+/**
 * Servlet creates activity event, adds it to the user's calendar, and sends calendar invites to guests.
 */
 @WebServlet("/create-event")
@@ -39,7 +39,7 @@ public class CreateEventServlet extends HttpServlet {
   */
   private static Map<String, String> getParameters(HttpServletRequest request) {
     Map<String, String> eventInfo = new HashMap<>();
-    String[] paramNames = {"userID", "accessToken", "startTimestamp", "endTimestamp", "activityKey", "guests"};
+    String[] paramNames = {"userId", "accessToken", "startTimestamp", "endTimestamp", "activityKey", "guests"};
 
     for (String paramName : paramNames) {
       String paramValue = getParameter(paramName);

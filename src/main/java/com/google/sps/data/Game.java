@@ -19,23 +19,22 @@ import java.util.ArrayList;
 import java.net.URL;
 
 /** A well-being related article that will be displayed */
-public final class Game {
+public final class Game extends Activity {
 
-  private final Key id;
-  private final String title;
   private final String description;
   private final String notes;
-  private final String url;
   private final String minPlayer;
   private final String maxPlayer;
 
-  public Game(Key id, String title, String description, String notes, String url,
+  public Game(Key key, String title, String description, String notes, String url,
     String minPlayer, String maxPlayer) {
-    this.id = id;
-    this.title = title;
+
+    Activity.Category category = Activity.Category.GAMES;
+    // Initialize activity fields
+    super(key, title, category, url);
+
     this.description = description;
     this.notes = notes;
-    this.url = url;
     this.minPlayer = minPlayer;
     this.maxPlayer = maxPlayer;
   }

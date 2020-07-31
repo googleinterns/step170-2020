@@ -1,30 +1,36 @@
 package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 
 public class Activity {
-  private Key id;
-  private String name;
-  private Category category;
-  private String url;
+  private final Key key;
+  private final String title;
+  private final Category category;
+  private final String url;
 
   public static enum Category {
     GAMES, VIDEOS, ARTICLES;
   }
 
-  public Activity(Key id, String name, Category category, String url) {
-    this.id = id;
-    this.name = name;
+  public Activity(Key key, String title, Category category, String url) {
+    this.key = key;
+    this.title = title;
     this.category = category;
     this.url = url;
   }
 
-  public Key getId() {
-    return id;
+  // Getters
+  public Key getKey() {
+    return key;
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
+  }
+
+  public Category getCategory() {
+    return category;
   }
 
   public String getUrl() {
@@ -36,6 +42,7 @@ public class Activity {
   */
   @Override
   public String toString() {
-    return String.format("[%s, %s, %s]", name, category.toString(), url);
+    return String.format("[%s, %s, %s, %s]",
+      KeyFactory.keyToString(key), title, category.toString(), url);
   }
 }

@@ -3,22 +3,29 @@ package com.google.sps.data;
 import java.util.List;
 
 public final class ActivityEvent {
-  private String userID;
-  private long startTimestamp;
-  private long endTimestamp;
-  private Activity activity;
-  private List<String> guests;
+  private final String userId;
+  private final String accessToken;
+  private final long startTimestamp;
+  private final long endTimestamp;
+  private final Activity activity;
+  private final List<String> guests;
 
-  public ActivityEvent(String userID, long startTimestamp, long endTimestamp, Activity activity, List<String> guests) {
-    this.userID = userID;
+  public ActivityEvent(String userId, String accessToken, long startTimestamp, long endTimestamp, Activity activity, List<String> guests) {
+    this.userId = userId;
+    this.accessToken = accessToken;
     this.startTimestamp = startTimestamp;
     this.endTimestamp = endTimestamp;
     this.activity = activity;
     this.guests = guests;
   }
 
+  // Getters
   public String getUserId() {
-    return userID;
+    return userId;
+  }
+
+  public String getAccessToken() {
+    return accessToken;
   }
 
   public long getStartTimestamp() {
