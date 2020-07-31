@@ -19,19 +19,16 @@ import java.util.ArrayList;
 import java.net.URL;
 
 /** A well-being related article that will be displayed */
-public final class Video {
+public final class Video extends Activity {
 
-  private final Key id;
-  private final String title;
   private final String creator;
-  private final String url;
   private final String publishedAt;
 
-  public Video(Key id, String title, String creator, String url, String publishedAt) {
-    this.id = id;
-    this.title = title;
+  public Video(Key key, String title, String creator, String url, String publishedAt) {
+    // Initialize activity fields
+    super(key, title, Activity.Category.VIDEOS, url);
+
     this.creator = creator;
-    this.url = url;
     this.publishedAt = publishedAt;
   }
 }
