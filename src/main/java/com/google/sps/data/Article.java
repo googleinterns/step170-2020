@@ -29,10 +29,9 @@ public final class Article extends Activity {
   public Article(Key key, String publisher, String author, String title,
     String description, String url, String publishedAt) {
 
-    Activity.Category category = Activity.Category.ARTICLES;
     // Initialize activity fields
-    super(key, title, category, url);
-
+    super(key, title, Activity.Category.ARTICLES, url);
+    
     this.publisher = publisher;
     this.author = author;
     this.description = description;

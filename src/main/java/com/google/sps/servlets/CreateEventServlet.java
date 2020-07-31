@@ -29,7 +29,7 @@ public class CreateEventServlet extends HttpServlet {
     ActivityEvent event = getActivityEvent(eventInfo);
 
     // Store activity event in datastore
-    storeActivityEvnet(event);
+    storeActivityEvent(event);
 
     // Create calendar event and send invite to guests
   }
@@ -39,10 +39,10 @@ public class CreateEventServlet extends HttpServlet {
   */
   private static Map<String, String> getParameters(HttpServletRequest request) {
     Map<String, String> eventInfo = new HashMap<>();
-    String[] paramNames = {"userId", "accessToken", "startTimestamp", "endTimestamp", "activityKey", "guests"};
+    String[] paramNames = new String[]{"userId", "accessToken", "startTimestamp", "endTimestamp", "activityKey", "guests"};
 
     for (String paramName : paramNames) {
-      String paramValue = getParameter(paramName);
+      String paramValue = request.getParameter(paramName);
       eventInfo.put(paramName, paramValue);
     }
 

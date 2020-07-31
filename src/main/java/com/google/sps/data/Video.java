@@ -25,9 +25,8 @@ public final class Video extends Activity {
   private final String publishedAt;
 
   public Video(Key key, String title, String creator, String url, String publishedAt) {
-    Activity.Category category = Activity.Category.VIDEOS;
     // Initialize activity fields
-    super(key, title, category, url);
+    super(key, title, Activity.Category.VIDEOS, url);
 
     this.creator = creator;
     this.publishedAt = publishedAt;

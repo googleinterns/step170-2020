@@ -21,8 +21,8 @@ public class Activity {
   }
 
   // Getters
-  public Key getKey() {
-    return key;
+  public String getKey() {
+    return KeyFactory.keyToString(key);
   }
 
   public String getTitle() {

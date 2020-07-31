@@ -11,9 +11,13 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Arrays;
 
 /*
 * This utility class contains helper methods relating to storing
@@ -36,8 +40,8 @@ public final class EventUtility {
 
     // Get all activity event properties.
     String userId = event.getUserId();
-    String startTimestamp = new String(event.getStartTimestamp());
-    String endTimestamp = new String(event.getEndTimestamp());
+    String startTimestamp = new Long(event.getStartTimestamp()).toString();
+    String endTimestamp = new Long(event.getEndTimestamp()).toString();
     String activityKey = event.getActivity().getKey();
     String guests = String.join(",", event.getGuests());
 
@@ -54,9 +58,9 @@ public final class EventUtility {
   /*
   * Creates activity event object using event information.
   */
-  private static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
+  public static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
     String userId = eventInfo.get("userId");
-    String accessToken = event.get("accessToken");
+    String accessToken = eventInfo.get("accessToken");
     long startTimestamp = Long.valueOf(eventInfo.get("startTimestamp"));
     long endTimestamp = Long.valueOf(eventInfo.get("endTimestamp"));
     Activity activity = getActivity(eventInfo.get("activityKey"));
@@ -76,9 +80,9 @@ public final class EventUtility {
   private static Activity getActivity(String activityKey) {
     Map<String, String> activityInfo = getActivityInfo(activityKey);
     return new Activity(
-      activityInfo.get("key"),
+      KeyFactory.stringToKey(activityInfo.get("key")),
       activityInfo.get("title"),
-      Category.valueOf(activityInfo.get("category").toUpperCase()),
+      Activity.Category.valueOf(activityInfo.get("category").toUpperCase()),
       activityInfo.get("url")
     );
   }
@@ -87,27 +91,32 @@ public final class EventUtility {
   * Retrieves activity information from datastore using specified activity key.
   * Activity information includes the name, url, and category.
   */
-  public static Map<String, String> getActivityInfo(String activityKey) {
+  private static Map<String, String> getActivityInfo(String activityKey) {
     // Prepare database.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
     // Retrieve activity entity with specified key.
-    Entity activityEntity = datastore.get(activityKey);
+    Entity activityEntity = null;
+    try {
+      activityEntity = datastore.get(KeyFactory.stringToKey(activityKey));
+    } catch (EntityNotFoundException exception) {
+      System.out.println("The entity requested wasn't found.");
+    }
 
-    final String[] activityProperties = {"title", "category", "url"};
+    final String[] activityProperties = new String[]{"title", "category", "url"};
     Map<String, String> activityMap = new HashMap<>();
 
     // Retrieves each activity property from entity and puts it into activity map.
     for (String activityProperty : activityProperties) {
-      activityMap.put(activityProperty, activityEntity.getProperty(activityProperty));
+      activityMap.put(activityProperty, (String) activityEntity.getProperty(activityProperty));
     }
 
-    activityMap.put("key", activityEntity.getKey());
+    activityMap.put("key", KeyFactory.keyToString(activityEntity.getKey()));
 
     return activityMap;
   }
 
   private static List<String> getGuests(String guests) {
-    return new ArrayList<String>(guests.split(","));
+    return Arrays.asList(guests.split(","));
   }
 }

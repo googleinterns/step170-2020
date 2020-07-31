@@ -29,9 +29,8 @@ public final class Game extends Activity {
   public Game(Key key, String title, String description, String notes, String url,
     String minPlayer, String maxPlayer) {
 
-    Activity.Category category = Activity.Category.GAMES;
     // Initialize activity fields
-    super(key, title, category, url);
+    super(key, title, Activity.Category.GAMES, url);
 
     this.description = description;
     this.notes = notes;
