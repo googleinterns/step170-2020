@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
 * Servlet creates activity event, adds it to the user's calendar, and sends calendar invites to guests.
 */
-@WebServlet("/create-event")
+@WebServlet("/api/create-event")
 public class CreateEventServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -58,7 +58,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 /** 
 * This servlet is used to update the database with well-being related game activity links.
 */
-@WebServlet("/gameData")
+@WebServlet("/api/gameData")
 public class getGamesServlet extends HttpServlet {
   private static final String baseURL = "https://api.airtable.com/v0/appdlpPF3wZ8scgvw/Imported%20table?api_key=";
   private static final Logger logger = Logger.getLogger(getGamesServlet.class.getName());

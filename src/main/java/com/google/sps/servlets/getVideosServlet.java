@@ -58,7 +58,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 /** 
 * This servlet is used to update the database with well-being related video activity links.
 */
-@WebServlet("/videoData")
+@WebServlet("/api/videoData")
 public class getVideosServlet extends HttpServlet {
   private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=yoga&type=video&key=";
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
