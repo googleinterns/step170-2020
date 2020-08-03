@@ -2,7 +2,7 @@
 target/
 
 # Node modules
-src/main/webapp/node_modules/
+src/main/app/node_modules/
 
 # api keys
 .env
