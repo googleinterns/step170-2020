@@ -13,7 +13,6 @@ class Routes extends React.Component {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/schedule-activity' component={ScheduleActivityPage} />
         <Route exact path='/help' component={HelpPage} />
-
         
         <Route
           render={function() {
