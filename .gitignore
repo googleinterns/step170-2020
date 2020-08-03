@@ -8,3 +8,6 @@ src/main/app/node_modules/
 .env
 
 *keys.js
+
+# app engine resource files
+src/main/resources/
