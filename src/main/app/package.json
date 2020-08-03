@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "PORT=8080 react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && mv ../webapp/WEB-INF ../ && rm -r ../webapp && mv build ../webapp && mv ../WEB-INF ../webapp",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "rename": "renamer --find App-clear.js --replace App.js ./src/App-clear.js && renamer --find style.css --replace index.css ./src/style.css ",
