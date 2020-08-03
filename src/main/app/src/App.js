@@ -9,7 +9,7 @@ class App extends Component {
     return (
       <Router>
         <Navbar />
-        <main style={{ marginTop: '4rem' }}>
+        <main style={{ marginTop: '0.5rem' }}>
           <Routes />
         </main>
       </Router>

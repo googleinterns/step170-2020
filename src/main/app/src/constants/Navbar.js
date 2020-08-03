@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
 
   // Initialize google auth api information
-  const clientID = "";
+  const clientID = "298755462-7fnqhho2db1b0mb5i6o7irgg8v7om76g.apps.googleusercontent.com";
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const scope = "https://www.googleapis.com/auth/calendar.readonly";
 
@@ -68,6 +68,7 @@ const Navbar = () => {
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
+                isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
               />
               :
               <GoogleLogout
