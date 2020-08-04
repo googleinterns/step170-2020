@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../css/home.css';
 
+import info from '../constants/keys.js';
+
 // Import Bootstrap CSS and JS. Only this page uses these. 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -22,26 +24,25 @@ const ResourceCard = ({ organization, description, url }) => (
 const HelpPage = () => {
 
   const [resources, updateResources] = React.useState([]);
-
   useEffect(() => {
-    fetch('https://api.airtable.com/v0/appun5As9N6CFqu4H/Resources?api_key=keyvEcGAXuzDAVmVb')
+    fetch(info[0].Airtable_URL)
     .then((resp) => resp.json())
     .then(data => {
        updateResources(data.records);
     }).catch(err => {
-      // Error :(
+      console.log("ERROR: Couldn't fetch data from airtable!");
     });
   },[]); // Added [] means that this function useEffect() is called only when this component loads.
   
   // Create a map to all the resources in the airtable to its fields and display them in Resource card format. 
   return (
-      <section className = "section">
-        <div className="container mt-1 w-auto p-3">
-          <div className="row"> 
-            <div> {resources.map(resource => <ResourceCard key={resource.fields.url} {...resource.fields} /> )}  </div> 
-          </div>
+    <section className = "section">
+      <div className="container mt-1 w-auto p-3">
+        <div className="row"> 
+          <div> {resources.map(resource => <ResourceCard key={resource.fields.url} {...resource.fields} /> )}  </div> 
         </div>
-      </section>
+      </div>
+    </section>
   ); 
 }
 
