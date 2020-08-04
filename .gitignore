@@ -7,4 +7,5 @@ src/main/app/node_modules/
 # api keys
 .env
 
-*keys.js
+src/main/resources/client_secrets.jso
+src/constants/keys.js

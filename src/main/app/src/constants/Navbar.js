@@ -8,6 +8,7 @@ import 'bulma/css/bulma.css';
 const Navbar = () => {
   // Create state for login/logout status
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
+  const [greeting, updateGreeting] = React.useState("Welcome!");
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -17,11 +18,14 @@ const Navbar = () => {
   // Handle successful login
   const handleLogin = (res) => {
     updateIsLoggedIn(true);
+    updateGreeting("Welcome " + res.Ot.Cd +"!");
   }
 
   // Handle successful logout
   const handleLogout = (res) => {
     updateIsLoggedIn(false);
+     updateGreeting("Welcome!");
+
   }
 
   // Handle failed login
@@ -29,8 +33,9 @@ const Navbar = () => {
 
   // Handle failed logout
   const handleLogoutFail = (res) => {}
-  
+
   return (
+    <div>
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
       <div className="container">
         <div className="navbar-brand">
@@ -90,6 +95,12 @@ const Navbar = () => {
         </div>
       </div>
     </nav>
+
+    <div className = "container">
+      <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
+    </div> 
+
+    </div>
   )
 }
 
