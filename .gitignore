@@ -11,3 +11,7 @@ src/main/app/node_modules/
 
 # app engine resource files
 src/main/resources/
+
+# Everything in the webapp folder except the WEB-INF folder.
+src/main/webapp/*
+!src/main/webapp/WEB-INF
