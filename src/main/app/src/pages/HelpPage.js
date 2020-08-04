@@ -38,7 +38,7 @@ const HelpPage = () => {
       <section className = "section">
         <div className="container mt-1 w-auto p-3">
           <div className="row"> 
-            <div> {resources.map(resource => <ResourceCard {...resource.fields} /> )}  </div> 
+            <div> {resources.map(resource => <ResourceCard key={resource.fields.url} {...resource.fields} /> )}  </div> 
           </div>
         </div>
       </section>
