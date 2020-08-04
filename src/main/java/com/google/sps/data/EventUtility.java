@@ -32,7 +32,7 @@ public final class EventUtility {
   /*
   * Store activity event into datastore.
   */
-  public static void storeActivityEvent(ActivityEvent event) {
+  public static void storeActivityEvent(ActivityEvent event, String calendarEventId) {
     // Prepare database.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -51,6 +51,7 @@ public final class EventUtility {
     eventEntity.setProperty("endTimestamp", endTimestamp);
     eventEntity.setProperty("activityKey", activityKey);
     eventEntity.setProperty("guests", guests);
+    eventEntity.setProperty("eventId", calendarEventId);
 
     datastore.put(eventEntity);
   }
@@ -60,10 +61,8 @@ public final class EventUtility {
   */
   public static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
     ActivityEvent event = new ActivityEvent(
-      eventInfo.get("userId"), eventInfo.get("accessToken"), 
-      Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
-      getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests"))
-    );
+      eventInfo.get("userId"), Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
+      getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests")));
     return event;
   }
 
@@ -84,6 +83,7 @@ public final class EventUtility {
     }
 
     String category = (String) activityEntity.getProperty("category");
+    
     return new Activity(
       activityEntity.getKey(),
       (String) activityEntity.getProperty("title"),
