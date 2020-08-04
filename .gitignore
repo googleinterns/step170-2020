@@ -13,5 +13,5 @@ src/main/app/node_modules/
 src/main/resources/
 
 # Everything in the webapp folder except the WEB-INF folder.
-src/main/webapp/*
+src/main/webapp/
 !src/main/webapp/WEB-INF
