@@ -7,7 +7,8 @@ src/main/app/node_modules/
 # api keys
 .env
 
-*keys.js
+src/main/resources/client_secrets.json
+src/constants/keys.js
 
 # app engine resource files
 src/main/resources/
@@ -15,3 +16,4 @@ src/main/resources/
 # Everything in the webapp folder except the WEB-INF folder.
 src/main/webapp/
 !src/main/webapp/WEB-INF
+

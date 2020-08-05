@@ -178,7 +178,7 @@ public class getVideosServlet extends HttpServlet {
 
     Gson gson = new Gson();
     String json = gson.toJson(videos);
-
+    
     response.setContentType("application/json");
     response.getWriter().println(json);
   }
