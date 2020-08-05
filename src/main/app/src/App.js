@@ -5,6 +5,7 @@ import Navbar from './constants/Navbar';
 import Line from './constants/Line';
 import ResourceCard from './constants/ResourceCard';
 import info from './constants/keys.js';
+import './css/app.css';
 
 /* Component for entire application */
 class App extends Component {
