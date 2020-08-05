@@ -24,26 +24,12 @@ const videoData = './videoData';
 const gameData = './gameData';
 
 /* Component for browse page */
-const BrowsePage = ({activity, updateActivity}) => {
+const BrowsePage = ({links, activity, updateActivity}) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
   }
-
-  const [links, updateLinks] = React.useState([]);
-  useEffect(() => {
-    console.log(activity); // TODO(tdonohugh): add card change based on data being request.
-    console.log(activity == "Active" ? videoData : activity == "Reading" ? articleData : gameData); // TODO(tdonohugh): add card change based on data being request.
-    fetch(activity == "Active" ? videoData : activity == "Reading" ? articleData : gameData)
-    .then((resp) => resp.json())
-    .then(data => { 
-      updateLinks(data);
-      console.log(data);
-    }).catch(err => {
-      console.log('err', err);
-    });
-  },[activity]);
 
   return (
     <section className="section-padding-large mb-3 mx-5">
