@@ -51,7 +51,7 @@ public class CreateEventServlet extends HttpServlet {
   */
   private static Map<String, String> getParameters(HttpServletRequest request) {
     Map<String, String> eventInfo = new HashMap<>();
-    String[] paramNames = new String[]{"userId", "accessToken", "startTimestamp", "endTimestamp", "activityKey", "guests"};
+    String[] paramNames = new String[]{"userId", "accessToken", "title", "startTimestamp", "endTimestamp", "activityKey", "guests"};
 
     for (String paramName : paramNames) {
       String paramValue = request.getParameter(paramName);

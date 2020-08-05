@@ -4,13 +4,15 @@ import java.util.List;
 
 public final class ActivityEvent {
   private final String userId;
+  private final String title;
   private final long startTimestamp;
   private final long endTimestamp;
   private final Activity activity;
   private final List<String> guests;
 
-  public ActivityEvent(String userId, long startTimestamp, long endTimestamp, Activity activity, List<String> guests) {
+  public ActivityEvent(String userId, String title, long startTimestamp, long endTimestamp, Activity activity, List<String> guests) {
     this.userId = userId;
+    this.title = title;
     this.startTimestamp = startTimestamp;
     this.endTimestamp = endTimestamp;
     this.activity = activity;
@@ -22,6 +24,10 @@ public final class ActivityEvent {
     return userId;
   }
 
+  public String getTitle() {
+    return title;
+  }
+  
   public long getStartTimestamp() {
     return startTimestamp;
   }
