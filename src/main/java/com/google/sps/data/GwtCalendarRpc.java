@@ -56,7 +56,7 @@ public class GwtCalendarRpc {
       com.google.api.services.calendar.Calendar client = CalendarUtility.loadCalendarClient(token);
 
       Event insertedEvent = client.events().insert(calendarId, new Event()
-        .setSummary(event.getActivity().getTitle())
+        .setSummary(event.getTitle())
         .setDescription(event.getActivity().getUrl())
         .setStart(start)
         .setEnd(end)

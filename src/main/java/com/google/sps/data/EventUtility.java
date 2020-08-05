@@ -40,6 +40,7 @@ public final class EventUtility {
 
     // Get all activity event properties.
     String userId = event.getUserId();
+    String title = event.getTitle();
     String startTimestamp = new Long(event.getStartTimestamp()).toString();
     String endTimestamp = new Long(event.getEndTimestamp()).toString();
     String activityKey = event.getActivity().getKey();
@@ -47,6 +48,7 @@ public final class EventUtility {
 
     // Set the properties into the event entity.
     eventEntity.setProperty("userId", userId);
+    eventEntity.setProperty("title", title);
     eventEntity.setProperty("startTimestamp", startTimestamp);
     eventEntity.setProperty("endTimestamp", endTimestamp);
     eventEntity.setProperty("activityKey", activityKey);
@@ -61,7 +63,7 @@ public final class EventUtility {
   */
   public static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
     ActivityEvent event = new ActivityEvent(
-      eventInfo.get("userId"), Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
+      eventInfo.get("userId"), eventInfo.get("title"), Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
       getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests")));
     return event;
   }
