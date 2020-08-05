@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
+import '@material-ui/core'
 
 // This is a stateless, functional React component used to render each resource in a card format. 
 const BrowseCard = ({ title, url }) => {
@@ -45,8 +46,8 @@ const BrowsePage = () => {
 
   const [links, updateLinks] = React.useState([]);
   useEffect(() => {
-    console.log(activity);
-    console.log(currentData);
+    console.log(activity); // TODO(tdonohugh): add card change based on data being request.
+    console.log(currentData); // TODO(tdonohugh): add card change based on data being request.
     fetch(currentData)
     .then((resp) => resp.json())
     .then(data => { 
