@@ -3,15 +3,14 @@ import 'bulma/css/bulma.css';
 import '../css/home.css';
 
 // This is a stateless, functional React component used to render each resource in a card format. 
-const BrowseCard = ({ title, description, url }) => {
-  if (!description) return <div />
+const BrowseCard = ({ title, url }) => {
+  if (!title) return <div />
   return (
     <div className = "p-3">
       <div className="card">
-        <div className="card-body">
-          <h5 className="card-title text-info">{title}</h5>
-          <p className="card-text text-secondary" >{description}</p>
-          <a className="card-text btn btn-light" href={url}>View more</a>
+        <div className="card-content">
+          <h1 className="title">{title}</h1>
+          <button className="button is-small is-rounded" href={url}>View more</button>
           <button className="button is-small is-rounded">schedule event</button>
         </div>
       </div>
@@ -19,21 +18,37 @@ const BrowseCard = ({ title, description, url }) => {
   );
 };
 
+// Web Servlet links.
+const articleData = './articleData';
+const videoData = './videoData';
+const gameData = './gameData';
+
 /* Component for browse page */
 const BrowsePage = () => {
 
-  // Create initial state for activity selection with Games as default
+  // Create initial state for activity selection with Games as default.
   const [activity, updateActivity] = React.useState("games");
 
-  // Update activty selection state based on dropdown
+  // Create initial state for web servlet links with gameData servlet as default.
+  const [currentData, updateDataLink] = React.useState(gameData);
+
+  // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
+    if (evt.target.value == "Reading") {
+      updateDataLink(articleData);
+    } else if (evt.target.value == "Active") {
+      updateDataLink(videoData);
+    } else if (evt.target.value == "Games") {
+      updateDataLink(gameData);
+    }
   }
 
   const [links, updateLinks] = React.useState([]);
   useEffect(() => {
     console.log(activity);
-    fetch('./articleData') // TODO(tdonohugh): change web servlet based on activity.
+    console.log(currentData);
+    fetch(currentData)
     .then((resp) => resp.json())
     .then(data => { 
       updateLinks(data);
@@ -63,14 +78,13 @@ const BrowsePage = () => {
 
       <div className="section-padding-large mb-3 mx-5">
         <div className="row">
-          <div className="data-container">
+          <div className="data-container is-widescreen">
             {links.map((data, key) => {
               return (
                 <div key={key}>
                   <BrowseCard
                     key={key}
                     title={data.title}
-                    description={data.description}
                     url={data.url}
                   />
                 </div>
