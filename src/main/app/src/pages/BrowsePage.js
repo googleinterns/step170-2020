@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
-import '../css/home.css';
 
 // This is a stateless, functional React component used to render each resource in a card format. 
 const BrowseCard = ({ title, url }) => {
