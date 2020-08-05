@@ -13,7 +13,7 @@ const Navbar = () => {
   // Initialize google auth api information
   const clientID = info[0].clientID;
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
-  const scope = "https://www.googleapis.com/auth/calendar.readonly";
+  const scope = "https://www.googleapis.com/auth/calendar";
 
   // Handle successful login
   const handleLogin = (res) => {
