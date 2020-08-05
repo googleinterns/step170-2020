@@ -5,15 +5,17 @@ import 'bulma/css/bulma.css';
 import '../css/home.css';
 
 /* Component for home page */
-const HomePage = () => {
+const HomePage = ({activity, updateActivity}) => {
 
   // Create state for activity selection with Games as default
-  const [activity, updateActivity] = React.useState("games");
+  // const [activity, updateActivity] = React.useState("games");
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
   }
+
+  console.log(activity);
 
   return (
     <section className="section">
