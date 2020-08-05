@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import 'bulma/css/bulma.css';
 import '../css/home.css';
@@ -30,12 +31,16 @@ const HomePage = () => {
         </div>
       </div>
 
-      <br />
+      <br/>
 
       {/* This container consists of the buttons to schedule and browse. */}
       <div className="container has-text-centered is-centered">
+        <Link to='/schedule-activity'>
         <button className="button is-large is-success is-rounded">Schedule an event</button>
+        </Link>
+        <Link to='/browse'>
         <button className="button is-large is-danger is-rounded">Browse</button>
+        </Link>
       </div>
     </section>
   )
