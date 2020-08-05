@@ -17,23 +17,6 @@ const AboutPage = () => {
         </Jumbotron>
 
         <div className="row featurette"> 
-          <div className="col-md-7">
-            <h2 className="featurette-heading">Who are we? </h2>
-            <p className="lead"> This webapp is developed by Steve Mbouadeus, Bhargavi Kumar Sundaresan, and Trinity Donohugh. We are Summer 
-            2020 STEP interns, and we found it necessary to help people manage their work-life balance. Steve, Bhargavi, and Trinity are currently
-            pursuing their Bachelor's degree in Computer Science at St. John's University, University of California, Santa cruz, and Stanford 
-            University respectively.
-            </p>
-          </div>
-
-          <div className="col-md-5">
-            <img className="block-example border border-primary featurette-image img-responsive center-block" src="https://lh3.googleusercontent.com/vJd-vMl6id5P5-UKpycd5Hc1e2Xkb0YLOpULW1XWvYytz9hgbY1OFfaPhLVhU6sWkC59lvQoXtvu9Tb509mGer_ywqK8kr_-6kbauCo=w650" alt="Intern"></img>
-          </div>
-        </div>
-        
-        <Line color="black" />
-
-        <div className="row featurette"> 
           <div className="col-md-5">
             <img className="block-example border border-warning featurette-image img-responsive center-block" src="https://i.pinimg.com/originals/de/01/e7/de01e79dd4c5a4a07ba9ede68dc62486.gif" alt="mental health"></img>
           </div>
