@@ -9,16 +9,18 @@ import './css/app.css';
 
 /* Component for entire application */
 const App = () => {
-
+    
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
   const [accessToken, updateAccessToken] = React.useState("");
   const [userId, updateUserId] = React.useState("");
+  const [activity, updateActivity] = React.useState("games");
+
 
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes />
+        <Routes activity={activity} updateActivity={updateActivity}/>
       </main>
     </Router>
   );

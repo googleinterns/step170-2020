@@ -7,13 +7,12 @@ import BrowsePage from './pages/BrowsePage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
 /* Routes address bar to corresponding page components */
-class Routes extends React.Component {
-  render() {
+const Routes = ({activity, updateActivity}) => {
     return (
       <Switch>
-        <Route exact path='/' component={HomePage} />
-        <Route exact path='/schedule-activity' component={ScheduleActivityPage} />
-        <Route exact path ='/browse' component={BrowsePage}/>
+        <Route exact path='/' render={() => <HomePage activity={activity} updateActivity={updateActivity}/>}/>
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage activity={activity} updateActivity={updateActivity}/>}/>
+        <Route exact path ='/browse' render={() => <BrowsePage activity={activity} updateActivity={updateActivity}/>}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
 
@@ -24,7 +23,6 @@ class Routes extends React.Component {
         />
       </Switch>
     );
-  }
 }
 
 export default Routes;
