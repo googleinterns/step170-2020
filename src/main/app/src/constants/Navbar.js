@@ -1,6 +1,7 @@
 import React from 'react';
 import {GoogleLogin, GoogleLogout} from 'react-google-login'
 
+import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
@@ -9,7 +10,7 @@ const Navbar = () => {
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
 
   // Initialize google auth api information
-  const clientID = "";
+  const clientID = info[0].clientID;
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const scope = "https://www.googleapis.com/auth/calendar";
 
@@ -68,6 +69,7 @@ const Navbar = () => {
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
+                isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
               />
               :
               <GoogleLogout
