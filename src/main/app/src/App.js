@@ -8,17 +8,20 @@ import info from './constants/keys.js';
 import './css/app.css';
 
 /* Component for entire application */
-class App extends Component {
-  render() {
-    return (
-      <Router>
-        <Navbar />
-        <main style={{ marginTop: '0.5rem' }}>
-          <Routes />
-        </main>
-      </Router>
-    );
-  }
+const App = () => {
+
+  const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
+  const [accessToken, updateAccessToken] = React.useState("");
+  const [userId, updateUserId] = React.useState("");
+
+  return (
+    <Router>
+      <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} />
+      <main style={{ marginTop: '0.5rem' }}>
+        <Routes />
+      </main>
+    </Router>
+  );
 }
 
 export default App;
