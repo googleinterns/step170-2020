@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ScheduleActivityPage from './pages/ScheduleActivityPage';
 import BrowsePage from './pages/BrowsePage';
+import HelpPage from './pages/HelpPage';
 
 /* Routes address bar to corresponding page components */
 class Routes extends React.Component {
@@ -13,7 +14,7 @@ class Routes extends React.Component {
         <Route exact path='/' component={HomePage} />
         <Route exact path='/schedule-activity' component={ScheduleActivityPage} />
         <Route exact path ='/browse' component={BrowsePage}/>
-
+        <Route exact path='/help' component={HelpPage} />
         <Route
           render={function() {
             return <h1>Not Found</h1>;
