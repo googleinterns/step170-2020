@@ -25,7 +25,6 @@ const Navbar = () => {
   const handleLogout = (res) => {
     updateIsLoggedIn(false);
      updateGreeting("Welcome!");
-
   }
 
   // Handle failed login
