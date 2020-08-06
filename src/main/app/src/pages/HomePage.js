@@ -45,7 +45,7 @@ const HomePage = ({updateActivityType, updateServlet}) => {
         <button className="button is-large is-success is-rounded">Schedule an event</button>
         </Link>
         <Link to='/browse'>
-        <button className="button is-large is-danger is-rounded">Browse</button>
+        <button className="button is-large is-danger is-rounded" >Browse</button>
         </Link>
       </div>
     </section>

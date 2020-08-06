@@ -50,18 +50,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const Activities_list = {
-  
-    "activity1":"Coup",
-    "activity2":"pictionary",
-    "activity3":"Skribble",
-
-  };
-
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity}) => {
+const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links}) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -70,6 +62,9 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity}) => {
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
+
+  console.log("initial activity: ");
+  console.log(activity);
   // Get object for css classes.
   const classes = useStyles();
 
@@ -121,6 +116,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity}) => {
 
   const handleSubmit = () => {}
 
+  console.log(links);
   return (
     !isLoggedIn ?
     <Redirect to="/login" /> :
@@ -171,13 +167,13 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity}) => {
 
       {/* Random game suggestions. */}
 
-      {console.log(activity)}
+      {console.log(activity.title)}
 
       <Grid container spacing={3} className={classes.root}>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>{Activities_list.activity1}</Paper>
+        <Grid item xs>
+          <Paper className={classes.paper}>{activity.title}</Paper>
         </Grid>
-
+        {/*
         <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>{Activities_list.activity2}</Paper>
         </Grid>
@@ -185,6 +181,8 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity}) => {
         <Grid item xs={12} sm={6}>
           <Paper className={classes.paper}>{Activities_list.activity3}</Paper>
         </Grid>
+        */}
+        
       </Grid>
 
       <div className={classes.root}>

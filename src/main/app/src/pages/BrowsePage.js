@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
-import '@material-ui/core'
-import {testData} from '../test.js' ;
+import '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+import {testData} from '../test.js'; 
 // This is a stateless, functional React component used to render each resource in a card format. 
 const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
   if (!title) return <div />
@@ -14,7 +14,7 @@ const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
           <h1 className="title">{title}</h1>
           <a className="button is-small is-rounded" href={url}>View more</a> 
           <Link to='/schedule-activity'>
-          <button className="button is-small is-rounded" onClick= {() => updateActivity({activityKey: activityKey})}> Schedule event</button>
+          <button className="button is-small is-rounded" onClick= {() => updateActivity({activityKey: activityKey, title: title})}> Schedule event</button>
           </Link>
         </div>
       </div>

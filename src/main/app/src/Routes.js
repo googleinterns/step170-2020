@@ -13,7 +13,7 @@ const Routes = ({activityType, updateActivityType, activity, updateActivity, upd
     return (
       <Switch>
         <Route exact path='/' render={() => <HomePage updateActivityType={updateActivityType} updateServlet={updateServlet} />}/>
-        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} activity={activity} />}/>
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} activity={activity} links={links}/>}/>
         <Route exact path ='/browse' render={() => <BrowsePage activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
