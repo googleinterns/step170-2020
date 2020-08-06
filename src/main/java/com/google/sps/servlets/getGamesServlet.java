@@ -166,7 +166,7 @@ public class getGamesServlet extends HttpServlet {
     List<Game> games = new ArrayList<Game>();
 
     for (Entity entity : results.asIterable()) {
-      Key id = entity.getKey();
+      String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
       String title = (String) entity.getProperty("title");
       String description = (String) entity.getProperty("description");
       String notes = (String) entity.getProperty("notes");
@@ -174,7 +174,7 @@ public class getGamesServlet extends HttpServlet {
       String minPlayer = (String) entity.getProperty("minPlayer");
       String maxPlayer = (String) entity.getProperty("maxPlayer");
 
-      Game newGame = new Game(id, title, description, notes, url, minPlayer, maxPlayer);
+      Game newGame = new Game(entityKey, title, description, notes, url, minPlayer, maxPlayer);
       games.add(newGame);
     }
 

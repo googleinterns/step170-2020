@@ -4,7 +4,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class Activity {
-  private final Key key;
+  private final String key;
   private final String title;
   private final Category category;
   private final String url;
@@ -13,7 +13,7 @@ public class Activity {
     GAMES, VIDEOS, ARTICLES;
   }
 
-  public Activity(Key key, String title, Category category, String url) {
+  public Activity(String key, String title, Category category, String url) {
     this.key = key;
     this.title = title;
     this.category = category;
@@ -22,7 +22,7 @@ public class Activity {
 
   // Getters
   public String getKey() {
-    return KeyFactory.keyToString(key);
+    return key;
   }
 
   public String getTitle() {
@@ -43,6 +43,6 @@ public class Activity {
   @Override
   public String toString() {
     return String.format("[%s, %s, %s, %s]",
-      KeyFactory.keyToString(key), title, category.toString(), url);
+      key, title, category.toString(), url);
   }
 }

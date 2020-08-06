@@ -26,7 +26,7 @@ public final class Game extends Activity {
   private final String minPlayer;
   private final String maxPlayer;
 
-  public Game(Key key, String title, String description, String notes, String url,
+  public Game(String key, String title, String description, String notes, String url,
     String minPlayer, String maxPlayer) {
 
     // Initialize activity fields

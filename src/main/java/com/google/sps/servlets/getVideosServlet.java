@@ -166,13 +166,13 @@ public class getVideosServlet extends HttpServlet {
     List<Video> videos = new ArrayList<Video>();
 
     for (Entity entity : results.asIterable()) {
-      Key id = entity.getKey();
+      String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
       String url = (String) entity.getProperty("url");
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
 
-      Video newVideo = new Video(id, title, creator, url, publishedAt);
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt);
       videos.add(newVideo);
     }
 

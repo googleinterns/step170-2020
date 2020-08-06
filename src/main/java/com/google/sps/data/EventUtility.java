@@ -87,7 +87,7 @@ public final class EventUtility {
     String category = (String) activityEntity.getProperty("category");
     
     return new Activity(
-      activityEntity.getKey(),
+      (String) activityEntity.getProperty("key"),
       (String) activityEntity.getProperty("title"),
       Activity.Category.valueOf(category.toUpperCase()),
       (String) activityEntity.getProperty("url")
