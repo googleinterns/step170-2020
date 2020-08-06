@@ -24,11 +24,12 @@ const App = () => {
   const [servlet, updateServlet] = React.useState(gameData); 
   const [links, updateLinks] = React.useState([]);
 
+  // Populate links array with default serlet.
+  updateActivityLinks(updateLinks, servlet);
+
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
-    console.log(servlet);
-    console.log(links);
   },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
   
   return (

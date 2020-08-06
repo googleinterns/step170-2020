@@ -21,8 +21,6 @@ const HomePage = ({activity, updateActivity, updateServlet}) => {
     updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
 
-  console.log(activity);
-
   return (
     <section className="section">
 
