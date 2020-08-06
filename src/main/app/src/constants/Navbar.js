@@ -1,6 +1,9 @@
 import React from 'react';
 import {GoogleLogin, GoogleLogout} from 'react-google-login'
 
+import { handleLogin, handleLogout,
+  handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
+
 import info from './keys.js';
 import 'bulma/css/bulma.css';
 
@@ -13,30 +16,6 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
   const clientID = info[0].clientID;
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const scope = "https://www.googleapis.com/auth/calendar";
-
-  // Handle successful login
-  const handleLogin = (res) => {
-    updateIsLoggedIn(true);
-    updateGreeting("Welcome " + res.Ot.Cd +"!");
-    console.log(res);
-    
-    updateAccessToken(res.accessToken);
-    updateUserId(res.Da);
-  }
-
-  // Handle successful logout
-  const handleLogout = (res) => {
-    updateIsLoggedIn(false);
-    updateGreeting("Welcome!");
-    updateAccessToken("");
-    updateUserId("");
-  }
-
-  // Handle failed login
-  const handleLoginFail = (res) => {}
-
-  // Handle failed logout
-  const handleLogoutFail = (res) => {}
 
   return (
     <div>
@@ -73,8 +52,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
                     <i className="fab fa-google fa-fw"></i>Login with Google
                   </button>
                 )}
-                onSuccess={handleLogin}
-                onFailure={handleLoginFail}
+                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onFailure={res => handleLoginFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
@@ -88,8 +67,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
                     <i className="fas fa-sign-out-alt fa-fw"></i>Logout
                   </button>
                 )}
-                onLogoutSuccess={handleLogout}
-                onFailure={handleLogoutFail}
+                onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onFailure={res => handleLogoutFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
