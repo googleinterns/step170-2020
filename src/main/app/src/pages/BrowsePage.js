@@ -24,11 +24,12 @@ const videoData = './videoData';
 const gameData = './gameData';
 
 /* Component for browse page */
-const BrowsePage = ({links, activity, updateActivity}) => {
+const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
+    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
 
   return (
@@ -38,9 +39,9 @@ const BrowsePage = ({links, activity, updateActivity}) => {
         <div className="control is-expanded">
           <div className="select is-fullwidth">
             <select name="Activity" onChange={handleActivitySelection}>
-              <option value="Games">{"Games"}</option>
-              <option value="Reading">{"Reading"}</option>
-              <option value="Active">{"Active"}</option>
+              <option value="games">{"Games"}</option>
+              <option value="reading">{"Reading"}</option>
+              <option value="active">{"Active"}</option>
             </select>
           </div>
         </div>

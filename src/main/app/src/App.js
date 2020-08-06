@@ -21,11 +21,13 @@ const App = () => {
   const [accessToken, updateAccessToken] = React.useState("");
   const [userId, updateUserId] = React.useState("");
   const [activity, updateActivity] = React.useState("games");
+  const [servlet, updateServlet] = React.useState(gameData); 
   const [links, updateLinks] = React.useState([]);
 
+  // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
-    updateActivityLinks(updateLinks,
-      activity == "active" ? videoData : activity == "reading" ? articleData : gameData);
+    updateActivityLinks(updateLinks, servlet);
+    console.log(servlet);
     console.log(links);
   },[activity]);
   
@@ -33,7 +35,7 @@ const App = () => {
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activity={activity} updateActivity={updateActivity} links={links} />
+        <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />
       </main>
     </Router>
   );
