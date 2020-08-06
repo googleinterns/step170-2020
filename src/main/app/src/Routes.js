@@ -6,6 +6,7 @@ import ScheduleActivityPage from './pages/ScheduleActivityPage';
 import BrowsePage from './pages/BrowsePage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
+
 /* Routes address bar to corresponding page components */
 const Routes = ({activity, updateActivity, links}) => {
     return (
