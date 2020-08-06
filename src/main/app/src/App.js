@@ -27,13 +27,13 @@ const App = () => {
     updateActivityLinks(updateLinks,
       activity == "active" ? videoData : activity == "reading" ? articleData : gameData);
     console.log(links);
-  },[activity]);
+  },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
   
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activity={activity} updateActivity={updateActivity} links={links} />
+        <Routes activity={activity} updateActivity={updateActivity} links={links} />    {/* Passing these to routes so that it can be accessible across different pages. */}
       </main>
     </Router>
   );

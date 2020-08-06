@@ -6,8 +6,9 @@ import ScheduleActivityPage from './pages/ScheduleActivityPage';
 import BrowsePage from './pages/BrowsePage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
+
 /* Routes address bar to corresponding page components */
-const Routes = ({activity, updateActivity, links}) => {
+const Routes = ({activity, updateActivity, links}) => {   // Taking in these from App.js and passing it other components.
     return (
       <Switch>
         <Route exact path='/' render={() => <HomePage activity={activity} updateActivity={updateActivity}/>}/>
