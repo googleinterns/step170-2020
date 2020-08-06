@@ -10,7 +10,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
   const [greeting, updateGreeting] = React.useState("Welcome!");
 
   // Initialize google auth api information
-  const clientID = "298755462-7fnqhho2db1b0mb5i6o7irgg8v7om76g.apps.googleusercontent.com";
+  const clientID = info[0].clientID;
   const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
   const scope = "https://www.googleapis.com/auth/calendar";
 

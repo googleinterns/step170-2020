@@ -1,9 +1,10 @@
-/* Fetches data from database through web servlets.*/
+/* Fetches data from database through web servlets.
+   UpdateLinks is a function used to update the data of that activity. And the data is retrieved using this servlet's fetch request to './servlet-url' (dataLink) */
 const updateActivityLinks = (updateLinks, servlet) => {
    fetch(servlet)
     .then((resp) => resp.json())
     .then(data => { 
-      updateLinks(data);
+      updateLinks(data);    // modify the links that have the data according to the activity (the servlet that is called).
     }).catch(err => {
       console.log('err', err);
     });

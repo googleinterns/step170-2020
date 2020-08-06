@@ -29,7 +29,7 @@ const App = () => {
     updateActivityLinks(updateLinks, servlet);
     console.log(servlet);
     console.log(links);
-  },[activity]);
+  },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
   
   return (
     <Router>
