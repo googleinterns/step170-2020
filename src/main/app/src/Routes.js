@@ -6,16 +6,19 @@ import ScheduleActivityPage from './pages/ScheduleActivityPage';
 import BrowsePage from './pages/BrowsePage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
 
 /* Routes address bar to corresponding page components */
-const Routes = ({activity, updateActivity, updateServlet, links}) => {
+const Routes = ({activity, updateActivity, updateServlet, links, isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting}) => {
     return (
       <Switch>
         <Route exact path='/' render={() => <HomePage activity={activity} updateActivity={updateActivity} updateServlet={updateServlet}/>}/>
-        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage activity={activity} updateActivity={updateActivity}/>}/>
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} />}/>
         <Route exact path ='/browse' render={() => <BrowsePage activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
+        <Route exact path ='/login' render={() => <LoginPage isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} 
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} />}/>
 
         <Route
           render={function() {

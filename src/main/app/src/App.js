@@ -45,7 +45,9 @@ const App = () => {
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} 
         greeting={greeting} updateGreeting={updateGreeting} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />
+        <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
+          updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} greeting={greeting} 
+          updateGreeting={updateGreeting}/>
       </main>
     </Router>
   );

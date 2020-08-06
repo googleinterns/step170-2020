@@ -1,5 +1,5 @@
 import React from 'react';
-import {GoogleLogin, GoogleLogout} from 'react-google-login'
+import {GoogleLogin, GoogleLogout} from 'react-google-login';
 
 import { handleLogin, handleLogout,
   handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
@@ -12,8 +12,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
-  const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
-  const scope = "https://www.googleapis.com/auth/calendar";
+  const discoveryDocs = info[0].discoveryDocs;
+  const scope = info[0].scope;
 
   return (
     <div>

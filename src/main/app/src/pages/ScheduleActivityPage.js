@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
 import { makeStyles } from '@material-ui/core/styles';
@@ -49,8 +50,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-/* Component for the schedule activity page */
-const ScheduleActivityPage = () => {
+/* Component for the schedule activity page.
+  If the user isn't already logged in, they wil be redirected to
+  the login page. */
+const ScheduleActivityPage = ({isLoggedIn}) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -107,6 +110,8 @@ const ScheduleActivityPage = () => {
   }
 
   return (
+    !isLoggedIn ?
+    <Redirect to="/login" /> :
     <div className="container py-5">
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
