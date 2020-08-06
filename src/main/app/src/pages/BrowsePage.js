@@ -34,37 +34,37 @@ const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
 
   return (
     <section className="section-padding-large mb-3 mx-5">
-    <div className = "container">
-      {/*Combo box bar component */}
-      <div className="field has-addons">
-        <div className="control is-expanded">
-          <div className="select is-fullwidth">
-            <select name="Activity" onChange={handleActivitySelection} value={activity}>
-              <option value="games">{"Games"}</option>
-              <option value="reading">{"Reading"}</option>
-              <option value="active">{"Active"}</option>
-            </select>
+      <div className = "container">
+        {/*Combo box bar component */}
+        <div className="field has-addons">
+          <div className="control is-expanded">
+            <div className="select is-fullwidth">
+              <select name="Activity" onChange={handleActivitySelection} value={activity}>
+                <option value="games">{"Games"}</option>
+                <option value="reading">{"Reading"}</option>
+                <option value="active">{"Active"}</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="section-padding-large mb-3 mx-5">
-        <div className="row">
-          <div className="data-container is-widescreen">
-            {links.map((data, key) => {
-              return (
-                <div key={key}>
-                  <BrowseCard
-                    key={key}
-                    title={data.title}
-                    url={data.url}
-                  />
-                </div>
-              );
-            })}
+        <div className="section-padding-large mb-3 mx-5">
+          <div className="row">
+            <div className="data-container is-widescreen">
+              {links.map((data, key) => {
+                return (
+                  <div key={key}>
+                    <BrowseCard
+                      key={key}
+                      title={data.title}
+                      url={data.url}
+                    />
+                  </div>
+                );
+              })}
+            </div> 
           </div> 
-        </div> 
-      </div>
+        </div>
       </div>
     </section>
   )
