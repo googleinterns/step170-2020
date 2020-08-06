@@ -46,8 +46,8 @@ const App = () => {
         greeting={greeting} updateGreeting={updateGreeting} />
       <main style={{ marginTop: '0.5rem' }}>
         <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
-          updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} greeting={greeting} 
-          updateGreeting={updateGreeting}/>
+          updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} />
       </main>
     </Router>
   );

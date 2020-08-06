@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn}) => {
+const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -94,7 +94,7 @@ const ScheduleActivityPage = ({isLoggedIn}) => {
   }
 
   // Retrieve all event information from state.
-  const getSubmitInfo = () => {
+  const getEventInfo = () => {
     const guestArray = guestChips.reduce((guests, guest) => {
       guests.push(guest.label);
       return guests;
@@ -102,12 +102,16 @@ const ScheduleActivityPage = ({isLoggedIn}) => {
     const guests = guestArray.join(",");
 
     return {
+      userId: userId,
+      accessToken: accessToken,
       title: title,
       startTime: startTime.getTime(),
       endTime: endTime.getTime(),
       guests: guests
     }
   }
+
+  const handleSubmit = () => {}
 
   return (
     !isLoggedIn ?
@@ -167,7 +171,7 @@ const ScheduleActivityPage = ({isLoggedIn}) => {
       </Grid>
       <div className={classes.root}>
       <Button variant="contained" color="primary" className={classes.largeButton} 
-        onClick={() => console.log(getSubmitInfo())}>Create Event</Button>
+        onClick={handleSubmit}>Create Event</Button>
       </div>
     </div>
   )

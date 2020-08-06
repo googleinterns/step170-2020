@@ -1,4 +1,6 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
+
 import {GoogleLogin, GoogleLogout} from 'react-google-login';
 
 import { handleLogin, handleLogout,
@@ -20,7 +22,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
       <div className="container">
         <div className="navbar-brand">
-          <a className="navbar-item" href="/"> WeTime <i className="fas fa-heartbeat"></i></a>
+          <NavLink className="navbar-item" to="/"> WeTime <i className="fas fa-heartbeat"></i></NavLink>
           
           <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -32,8 +34,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
         {/*Navbar tabs to other pages.*/}
         <div id="navbarBasicExample" className="navbar-menu">
           <div className="navbar-start">
-            <a className="navbar-item"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></a>
-            <a className="navbar-item"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></a> 
+            <NavLink className="navbar-item" to="/help"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></NavLink>
+            <NavLink className="navbar-item" to="/about"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></NavLink> 
           </div>
         </div>
 
