@@ -10,14 +10,14 @@ const videoData = './videoData';
 const gameData = './gameData';
 
 /* Component for home page */
-const HomePage = ({activity, updateActivity, updateServlet}) => {
+const HomePage = ({updateActivityType, updateServlet}) => {
 
   // Create state for activity selection with Games as default
-  // const [activity, updateActivity] = React.useState("games");
+  // const [activityType, updateActivityType] = React.useState("games");
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
-    updateActivity(evt.target.value);
+    updateActivityType(evt.target.value);
     updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
 
@@ -45,7 +45,7 @@ const HomePage = ({activity, updateActivity, updateServlet}) => {
         <button className="button is-large is-success is-rounded">Schedule an event</button>
         </Link>
         <Link to='/browse'>
-        <button className="button is-large is-danger is-rounded">Browse</button>
+        <button className="button is-large is-danger is-rounded" >Browse</button>
         </Link>
       </div>
     </section>
