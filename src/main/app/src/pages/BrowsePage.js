@@ -38,15 +38,12 @@ const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
       <div className="field has-addons">
         <div className="control is-expanded">
           <div className="select is-fullwidth">
-            <select name="Activity" onChange={handleActivitySelection}>
+            <select name="Activity" onChange={handleActivitySelection} value={activity}>
               <option value="games">{"Games"}</option>
               <option value="reading">{"Reading"}</option>
               <option value="active">{"Active"}</option>
             </select>
           </div>
-        </div>
-        <div className="control">
-          <button type="submit" className="button is-normal">Choose</button>
         </div>
       </div>
 

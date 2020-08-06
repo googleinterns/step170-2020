@@ -27,6 +27,8 @@ const App = () => {
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
+    console.log(servlet);
+    console.log(links);
   },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
   
   return (
