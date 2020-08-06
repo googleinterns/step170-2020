@@ -9,12 +9,12 @@ import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 
 /* Routes address bar to corresponding page components */
-const Routes = ({activity, updateActivity, updateServlet, links, isLoggedIn, updateIsLoggedIn, accessToken, updateAccessToken, userId, updateUserId, greeting, updateGreeting}) => {
+const Routes = ({activityType, updateActivityType, activity, updateActivity, updateServlet, links, isLoggedIn, updateIsLoggedIn, accessToken, updateAccessToken, userId, updateUserId, greeting, updateGreeting,schedule_browse_button, changeButton }) => {
     return (
       <Switch>
-        <Route exact path='/' render={() => <HomePage activity={activity} updateActivity={updateActivity} updateServlet={updateServlet}/>}/>
-        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} />}/>
-        <Route exact path ='/browse' render={() => <BrowsePage activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />}/>
+        <Route exact path='/' render={() => <HomePage updateActivityType={updateActivityType} updateServlet={updateServlet} />}/>
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} activity={activity} />}/>
+        <Route exact path ='/browse' render={() => <BrowsePage activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} links={links} />}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
         <Route exact path ='/login' render={() => <LoginPage isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} 

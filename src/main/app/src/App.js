@@ -25,12 +25,15 @@ const App = () => {
   const [userId, updateUserId] = React.useState("");
 
   // State for activity selection and data
-  const [activity, updateActivity] = React.useState("games");
+  const [activityType, updateActivityType] = React.useState("games");
   const [servlet, updateServlet] = React.useState(gameData); 
   const [links, updateLinks] = React.useState([]);
 
   // State for welcome message depending on login status
   const [greeting, updateGreeting] = React.useState("Welcome!");
+
+  // State for activity selected (this can be the three random activities or the activity that the user selected on the browse page)
+  const [activity, updateActivity] = React.useState({});
 
   // Populate links array with default serlet.
   updateActivityLinks(updateLinks, servlet);
@@ -38,14 +41,14 @@ const App = () => {
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
-  },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
+  },[activityType]);    // Adding [activityType] makes sure that the links are updated only as long as the activityType changes.
   
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} 
         greeting={greeting} updateGreeting={updateGreeting} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
+        <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
           updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} />
       </main>
