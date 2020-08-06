@@ -34,6 +34,7 @@ const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
 
   return (
     <section className="section-padding-large mb-3 mx-5">
+    <div className = "container">
       {/*Combo box bar component */}
       <div className="field has-addons">
         <div className="control is-expanded">
@@ -63,6 +64,7 @@ const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
             })}
           </div> 
         </div> 
+      </div>
       </div>
     </section>
   )
