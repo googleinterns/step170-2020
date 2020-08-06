@@ -8,9 +8,7 @@ import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
-const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId}) => {
-  // Create state for login/logout status
-  const [greeting, updateGreeting] = React.useState("Welcome!");
+const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
