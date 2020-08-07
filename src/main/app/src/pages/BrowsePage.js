@@ -24,39 +24,13 @@ const videoData = './videoData';
 const gameData = './gameData';
 
 /* Component for browse page */
-const BrowsePage = () => {
-
-  // Create initial state for activity selection with Games as default.
-  const [activity, updateActivity] = React.useState("games");
-
-  // Create initial state for web servlet links with gameData servlet as default.
-  const [currentData, updateDataLink] = React.useState(gameData);
+const BrowsePage = ({links, activity, updateActivity, updateServlet}) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
-    if (evt.target.value == "Reading") {
-      updateDataLink(articleData);
-    } else if (evt.target.value == "Active") {
-      updateDataLink(videoData);
-    } else if (evt.target.value == "Games") {
-      updateDataLink(gameData);
-    }
+    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
-
-  const [links, updateLinks] = React.useState([]);
-  useEffect(() => {
-    console.log(activity); // TODO(tdonohugh): add card change based on data being request.
-    console.log(currentData); // TODO(tdonohugh): add card change based on data being request.
-    fetch(currentData)
-    .then((resp) => resp.json())
-    .then(data => { 
-      updateLinks(data);
-      console.log(data);
-    }).catch(err => {
-      console.log('err', err);
-    });
-  },[activity]);
 
   return (
     <section className="section-padding-large mb-3 mx-5">
@@ -64,15 +38,12 @@ const BrowsePage = () => {
       <div className="field has-addons">
         <div className="control is-expanded">
           <div className="select is-fullwidth">
-            <select name="Activity" onChange={handleActivitySelection}>
-              <option value="Games">{"Games"}</option>
-              <option value="Reading">{"Reading"}</option>
-              <option value="Active">{"Active"}</option>
+            <select name="Activity" onChange={handleActivitySelection} value={activity}>
+              <option value="games">{"Games"}</option>
+              <option value="reading">{"Reading"}</option>
+              <option value="active">{"Active"}</option>
             </select>
           </div>
-        </div>
-        <div className="control">
-          <button type="submit" className="button is-normal">Choose</button>
         </div>
       </div>
 
