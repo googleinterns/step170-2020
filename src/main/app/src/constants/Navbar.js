@@ -18,8 +18,6 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
   const handleLogin = (res) => {
     updateIsLoggedIn(true);
     updateGreeting("Welcome " + res.Ot.Cd +"!");
-    console.log(res);
-    
     updateAccessToken(res.accessToken);
     updateUserId(res.Da);
   }
