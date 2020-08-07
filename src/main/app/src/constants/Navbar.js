@@ -102,7 +102,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId})
       <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
     </div> 
 
-    </div>
+   </div>
   )
 }
 
