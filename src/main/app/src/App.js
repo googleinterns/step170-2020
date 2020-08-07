@@ -26,7 +26,6 @@ const App = () => {
   React.useEffect(() => {
     updateActivityLinks(updateLinks,
       activity == "active" ? videoData : activity == "reading" ? articleData : gameData);
-    console.log(links);
   },[activity]);
   
   return (
