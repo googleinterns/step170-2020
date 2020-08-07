@@ -14,7 +14,7 @@ const Routes = ({ activityType, updateActivityType, activity, updateActivity, up
   eventScheduled, updateEventScheduled }) => {
     return (
       <Switch>
-        <Route exact path='/' render={() => <HomePage updateActivityType={updateActivityType} updateServlet={updateServlet} articleData={articleData}
+        <Route exact path='/' render={() => <HomePage activityType={activityType} updateActivityType={updateActivityType} updateServlet={updateServlet} articleData={articleData}
           videoData={videoData} gameData={gameData} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>
         <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
           activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>

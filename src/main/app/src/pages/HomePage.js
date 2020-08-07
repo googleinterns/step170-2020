@@ -8,7 +8,7 @@ import 'bulma/css/bulma.css';
 import '../css/home.css';
 
 /* Component for home page */
-const HomePage = ({ updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled }) => {
+const HomePage = ({ activityType, updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled }) => {
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
@@ -23,7 +23,7 @@ const HomePage = ({ updateActivityType, updateServlet, articleData, videoData, g
       <div className="container has-text-centered">
         <div className="control is-centered">
           <div className="select is-info is-fullwidth title is-2">
-            <select className="is-focused" onChange={handleActivitySelection}>
+            <select className="is-focused" onChange={handleActivitySelection} value={activityType}>
               <option value="games">{"Games"}</option>
               <option value="active">{"Active"}</option>
               <option value="reading">{"Reading"}</option>
