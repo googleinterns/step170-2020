@@ -5,12 +5,25 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     width: '100%',
+    flexWrap: "wrap",
     paddingTop: '1.8rem',
     paddingBottom: '1.8rem',
-    margin: 0
+    margin: 0,
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  summaryColor: {
+    backgroundColor: '#0097a7',
+    color: '#e0f7fa',
+  },
+  typoColor: {
+    backgroundColor: '#eceff1',
+    color: '#009688',
   },
   gridItem: {
-    padding: 0
+   padding: 0
   },
   paper: {
     padding: theme.spacing(2),
