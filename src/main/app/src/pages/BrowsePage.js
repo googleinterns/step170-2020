@@ -3,7 +3,6 @@ import 'bulma/css/bulma.css';
 import '@material-ui/core';
 import { Link } from 'react-router-dom';
 
-import {testData} from '../test.js'; 
 // This is a stateless, functional React component used to render each resource in a card format. 
 const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
   if (!title) return <div />
@@ -22,13 +21,8 @@ const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
   );
 };
 
-// Web Servlet links.
-const articleData = './articleData';
-const videoData = './videoData';
-const gameData = './gameData';
-
 /* Component for browse page */
-const BrowsePage = ({links, activityType, updateActivityType, updateActivity, updateServlet}) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData }) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
@@ -55,7 +49,7 @@ const BrowsePage = ({links, activityType, updateActivityType, updateActivity, up
         <div className="section-padding-large mb-3 mx-5">
           <div className="row">
             <div className="data-container is-widescreen">
-              {testData.map((data, key) => {
+              {links.map((data, key) => {
                 
                 return (
                   <div key={key}>
