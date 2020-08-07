@@ -6,6 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import 'bulma/css/bulma.css';
 import '../css/home.css';
+import logo from '../assets/logo.png';
 
 /* Component for home page */
 const HomePage = ({ activityType, updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled }) => {
@@ -18,6 +19,11 @@ const HomePage = ({ activityType, updateActivityType, updateServlet, articleData
 
   return (
     <section className="section">
+      
+      {/* Added logo to homepage. */}
+      <div className="container has-text-centered">
+         <img src={logo} alt="Logo" width="800" height="100"/>
+      </div>
 
       {/*This container consists of the activities dropdown. */}
       <div className="container has-text-centered">
