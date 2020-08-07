@@ -13,7 +13,7 @@ import 'react-datetime/css/react-datetime.css';
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links}) => {
+const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled }) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -75,12 +75,17 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links}
 
   const handleSubmit = () => {
     const eventInfo = getEventInfo();
-    $.post('/createEvent', eventInfo);
+    $.post('/createEvent', eventInfo)
+      .done(eventUrl => {
+        updateEventScheduled(eventUrl);
+      })
   }
 
   return (
     !isLoggedIn ?
     <Redirect to="/login" /> :
+    eventScheduled !== "" ?
+    <Redirect to="/" /> :
     <div className="container py-5">
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}

@@ -1,11 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import {Collapse, IconButton} from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
 
 import 'bulma/css/bulma.css';
 import '../css/home.css';
 
 /* Component for home page */
-const HomePage = ({ updateActivityType, updateServlet, articleData, videoData, gameData }) => {
+const HomePage = ({ updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled }) => {
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
@@ -40,6 +43,25 @@ const HomePage = ({ updateActivityType, updateServlet, articleData, videoData, g
         <button className="button is-large is-danger is-rounded" >Browse</button>
         </Link>
       </div>
+
+      {/* Alert message for successfull event scheduling. */}
+      <Collapse in={eventScheduled !== ""}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                updateEventScheduled("");
+              }}>
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          {eventScheduled}
+        </Alert>
+      </Collapse>
     </section>
   )
 }

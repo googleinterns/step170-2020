@@ -32,6 +32,9 @@ const App = () => {
   const [links, updateLinks] = React.useState([]);
   const [linksLoaded, updateLinksLoaded] = React.useState(false);
 
+  // State for schedule activity form submitted.
+  const [eventScheduled, updateEventScheduled] = React.useState("");
+
   // Populate links array with default serlet.
   if (!linksLoaded) {
     updateActivityLinks(updateLinks, servlet);
@@ -56,7 +59,8 @@ const App = () => {
       <main style={{ marginTop: '0.5rem' }}>
         <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
-          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} />
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} eventScheduled={eventScheduled}
+          updateEventScheduled={updateEventScheduled} />
       </main>
     </Router>
   );
