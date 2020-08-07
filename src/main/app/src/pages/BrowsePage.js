@@ -4,7 +4,7 @@ import '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 // This is a stateless, functional React component used to render each resource in a card format. 
-const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
+const BrowseCard = ({ activityType, activityKey, title,  url ,updateActivity, activity, creator, notes, description}) => {
   if (!title) return <div />
   return (
     <div className = "p-3">
@@ -13,7 +13,14 @@ const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
           <h1 className="title">{title}</h1>
           <a className="button is-small is-rounded" href={url}>View more</a> 
           <Link to='/schedule-activity'>
-          <button className="button is-small is-rounded" onClick= {() => updateActivity({activityKey: activityKey, title: title})}> Schedule event</button>
+          <button className="button is-small is-rounded" onClick= {() => updateActivity(
+          
+              activityType == "active" ? {activityKey: activityKey, title: title, creator:creator} 
+              : activityType == "reading" ? {activityKey: activityKey, title: title, description:description} 
+              : {activityKey: activityKey, title: title,notes:notes }
+            )}> Schedule event</button>
+          
+         
           </Link>
         </div>
       </div>
@@ -22,7 +29,7 @@ const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
 };
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData }) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData, activity }) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
@@ -56,9 +63,14 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                     <BrowseCard
                       key={key}
                       activityKey={data.key}
+                      activityType={activityType}
                       title={data.title}
                       url={data.url}
+                      creator={data.creator}
+                      notes={data.notes}
+                      description={data.description}
                       updateActivity={updateActivity}
+                      activity={activity}
                     />
                   </div>
                 );
