@@ -86,8 +86,8 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   const alertUpdateActivity = (element) => {
     updateActivity(element);
     swal({
-      title: "You clicked " + element.title + "! ",
-      text: "Setting your activity as "+ element.title + ". Have fun!",
+      title: "You clicked "+ element.title + "!",
+      text: "Setting your activity! Have fun! Press Create Event to continue",
       icon: "success",
       button: "Close",
     });
@@ -131,8 +131,6 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
         updateEventScheduled(eventUrl);
       })
   }
-
-  
 
   return (
     !isLoggedIn ?
