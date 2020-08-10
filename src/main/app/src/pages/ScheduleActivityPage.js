@@ -51,20 +51,14 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     // Populate the array elements as 0 to testData's length. 
     const arr = Array.from(Array(testData.length).keys());
 
-    // Items is an array that will have any three random indices of testData. 
-    const items = new Array();
+    // randomArray is an array that will have any three random objects of testData. 
+    const randomArray = new Array();
 
     // For loop to store three indices of testData into items array.
     for (let i = 0; i < 3; i++) {
       var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
-      items[i] = arr[x];   // Storing it in ith index of items.
+      randomArray.push(testData[arr[x]]);    // Storing the objects directly from the testData.
       arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
-    }
-
-    // For loop for pushing the objects at the indices of items into randomArray. 
-    const randomArray = new Array();
-    for(let i = 0; i<3; i++) {
-      randomArray.push(testData[items[i]]);
     }
 
     return (
