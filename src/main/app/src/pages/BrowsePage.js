@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
-import '@material-ui/core';
 import { Link } from 'react-router-dom';
-
-// This is a stateless, functional React component used to render each resource in a card format. 
-const BrowseCard = ({ activityKey, title,  url ,updateActivity}) => {
-  if (!title) return <div />
-  return (
-    <div className = "p-3">
-      <div className="card">
-        <div className="card-content">
-          <h1 className="title">{title}</h1>
-          <a className="button is-small is-rounded" href={url}>View more</a> 
-          <Link to='/schedule-activity'>
-          <button className="button is-small is-rounded" onClick= {() => updateActivity({activityKey: activityKey, title: title})}> Schedule event</button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
+import GameCard from '../constants/GameCard.js';
+import ArticleCard from '../constants/ArticleCard.js';
+import VideoCard from '../constants/VideoCard.js';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData }) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData, id }) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
@@ -48,20 +32,49 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
         <div className="section-padding-large mb-3 mx-5">
           <div className="row">
-            <div className="data-container is-widescreen">
+            <div className="data-container is-fullwidth">
               {links.map((data, key) => {
-                
-                return (
-                  <div key={key}>
-                    <BrowseCard
-                      key={key}
-                      activityKey={data.key}
-                      title={data.title}
-                      url={data.url}
-                      updateActivity={updateActivity}
-                    />
-                  </div>
-                );
+                if (activityType == "games") {
+                  return (
+                    <div key={key}>
+                      <GameCard
+                        key={key}
+                        activityKey={data.key}
+                        title={data.title}
+                        url={data.url}
+                        description={data.description}
+                        updateActivity={updateActivity}
+                      />
+                    </div>
+                  );
+                } else if (activityType == "reading") {
+                  return (
+                    <div key={key}>
+                      <ArticleCard
+                        key={key}
+                        activityKey={data.key}
+                        title={data.title}
+                        url={data.url}
+                        publisher={data.publisher}
+                        description={data.description}
+                        updateActivity={updateActivity}
+                      />
+                    </div>
+                  );
+                } else if (activityType == "active") {
+                  return (
+                    <div key={key}>
+                      <VideoCard
+                        key={key}
+                        activityKey={data.key}
+                        title={data.title}
+                        url={data.url}
+                        updateActivity={updateActivity}
+                        creator={data.creator}
+                      />
+                    </div>
+                  );
+                }
               })}
             </div> 
           </div> 
