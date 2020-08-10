@@ -46,39 +46,32 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     updateGuest("");
   }
 
-  const randomFunction = (testData) => {
+  const generateRandomActivities = (testData) => {
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
-    const arr = new Array();
+    // Populate the array elements as 0 to testData's length. 
+    const arr = Array.from(Array(testData.length).keys());
 
-    //populate the array elements as 0 to testData's length. 
-    for (let i = 0; i < testData.length; i++) {
-      arr.push(i);
+    // randomArray is an array that will have any three random objects of testData. 
+    const randomArray = new Array();
+
+    // For loop to store three indices of testData into items array.
+    for (let i = 0; i < 3; i++) {
+      var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
+      randomArray.push(testData[arr[x]]);    // Storing the objects directly from the testData.
+      arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
     }
 
-    // item1,2,3 are the random indices received
-    // from arr i have gotten index item1.
-    var item1 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item1, 1);
-
-    var item2 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item2, 1);
-
-    var item3 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item3, 1);
-
-    // add the elements from testData at these random indices and return them. 
-    const randomArray = new Array();
-    randomArray.push(testData[item1]);
-    randomArray.push(testData[item2]);
-    randomArray.push(testData[item3]);
-
     return (
-    <div className="d-flex flex-row justify-content-center">
-      {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className="mx-1"> {element.title} </Button>)}
-    </div>)
-    
-}
+      <Grid container spacing={3} className={classes.root}>
+        <Grid item xs>
+          <Grid container justify="center" >
+            {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className="mx-1"> {element.title} </Button>)}
+            </Grid>
+        </Grid>
+      </Grid>
+    )
+  }
 
   const alertUpdateActivity = (element) => {
     updateActivity(element);
@@ -191,15 +184,10 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
             >
               <Typography className={classes .heading}>{activity.title}</Typography>
             </AccordionSummary>
-            <AccordionDetails className={classes.typoColor}>
-              <Typography>
-               { activityType == "active" ? activity.creator : activityType == "reading" ? activity.description : activity.notes}
-              </Typography>
-            </AccordionDetails>
           </Accordion>
         </div>
      :
-        randomFunction(links)
+        generateRandomActivities(links)
       }
 
       <div className={classes.root}>
@@ -208,8 +196,6 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       </div>
 
     </div>
-
-    
   )
 }
 

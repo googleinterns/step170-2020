@@ -41,7 +41,13 @@ const useStyles = makeStyles(theme => ({
     '& > *': {
       margin: theme.spacing(0.5)
     }
-  }
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
 }));
 
 const custom = {

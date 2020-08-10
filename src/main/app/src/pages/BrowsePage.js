@@ -1,35 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import 'bulma/css/bulma.css';
-import '@material-ui/core';
 import { Link } from 'react-router-dom';
-
-// This is a stateless, functional React component used to render each resource in a card format. 
-const BrowseCard = ({ activityType, activityKey, title,  url ,updateActivity, activity, creator, notes, description}) => {
-  if (!title) return <div />
-  return (
-    <div className = "p-3">
-      <div className="card">
-        <div className="card-content">
-          <h1 className="title">{title}</h1>
-          <a className="button is-small is-rounded" href={url}>View more</a> 
-          <Link to='/schedule-activity'>
-          <button className="button is-small is-rounded" onClick= {() => updateActivity(
-          
-              activityType == "active" ? {activityKey: activityKey, title: title, creator:creator} 
-              : activityType == "reading" ? {activityKey: activityKey, title: title, description:description} 
-              : {activityKey: activityKey, title: title,notes:notes }
-            )}> Schedule event</button>
-          
-         
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
+import GameCard from '../constants/GameCard.js';
+import ArticleCard from '../constants/ArticleCard.js';
+import VideoCard from '../constants/VideoCard.js';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData, activity }) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData, id }) => {
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
@@ -55,25 +32,27 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
         <div className="section-padding-large mb-3 mx-5">
           <div className="row">
-            <div className="data-container is-widescreen">
+            <div className="data-container is-fullwidth">
               {links.map((data, key) => {
-                
-                return (
-                  <div key={key}>
-                    <BrowseCard
-                      key={key}
-                      activityKey={data.key}
-                      activityType={activityType}
-                      title={data.title}
-                      url={data.url}
-                      creator={data.creator}
-                      notes={data.notes}
-                      description={data.description}
-                      updateActivity={updateActivity}
-                      activity={activity}
-                    />
-                  </div>
-                );
+                if (activityType == "games") {
+                  return (
+                    <div key={key}>
+                      <GameCard data={data} updateActivity={updateActivity}/>
+                    </div>
+                  );
+                } else if (activityType == "reading") {
+                  return (
+                    <div key={key}>
+                      <ArticleCard data={data} updateActivity={updateActivity}/>
+                    </div>
+                  );
+                } else if (activityType == "active") {
+                  return (
+                    <div key={key}>
+                      <VideoCard data={data} updateActivity={updateActivity}/>
+                    </div>
+                  );
+                }
               })}
             </div> 
           </div> 

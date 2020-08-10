@@ -21,7 +21,6 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
     {updateActivity({})}    // emptying activity so that it changes when reaching homePage
   }
    
-
   return (
     <section className="section">
       
