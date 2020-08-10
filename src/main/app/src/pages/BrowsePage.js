@@ -37,41 +37,19 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                 if (activityType == "games") {
                   return (
                     <div key={key}>
-                      <GameCard
-                        key={key}
-                        activityKey={data.key}
-                        title={data.title}
-                        url={data.url}
-                        description={data.description}
-                        updateActivity={updateActivity}
-                      />
+                      <GameCard data={data} updateActivity={updateActivity}/>
                     </div>
                   );
                 } else if (activityType == "reading") {
                   return (
                     <div key={key}>
-                      <ArticleCard
-                        key={key}
-                        activityKey={data.key}
-                        title={data.title}
-                        url={data.url}
-                        publisher={data.publisher}
-                        description={data.description}
-                        updateActivity={updateActivity}
-                      />
+                      <ArticleCard data={data} updateActivity={updateActivity}/>
                     </div>
                   );
                 } else if (activityType == "active") {
                   return (
                     <div key={key}>
-                      <VideoCard
-                        key={key}
-                        activityKey={data.key}
-                        title={data.title}
-                        url={data.url}
-                        updateActivity={updateActivity}
-                        creator={data.creator}
-                      />
+                      <VideoCard data={data} updateActivity={updateActivity}/>
                     </div>
                   );
                 }
