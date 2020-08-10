@@ -184,7 +184,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
 
       {/* Display activity title if an activity was selected. */}
       {activity.title ?
-        <div className={classes.root} className="container">
+        <div className={classes.root} className="w-100">
           <Accordion>
             <AccordionSummary 
               className={classes.summaryColor}
