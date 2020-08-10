@@ -72,7 +72,7 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
             </IconButton>
           }
         >
-          {eventScheduled}
+          Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
         </Alert>
       </Collapse>
     </section>
