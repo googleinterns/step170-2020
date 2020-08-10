@@ -20,7 +20,8 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
-  const [endTime, updateEndTime] = React.useState(new Date());
+  // Set end date 30mins ahead.
+  const [endTime, updateEndTime] = React.useState(new Date(Date.now() + (60000 * 30)));
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
