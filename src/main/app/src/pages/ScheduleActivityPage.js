@@ -48,25 +48,24 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   const generateRandomActivities = (testData) => {
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
-    //populate the array elements as 0 to testData's length. 
+    // Populate the array elements as 0 to testData's length. 
     const arr = Array.from(Array(testData.length).keys());
 
-    // item1,2,3 are the random indices received
-    // from arr i have gotten index item1.
-    var item1 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item1, 1);
+    // Items is an array that will have any three random indices of testData. 
+    const items = new Array();
 
-    var item2 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item2, 1);
+    // For loop to store three indices of testData into items array.
+    for (let i = 0; i < 3; i++) {
+      var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
+      items[i] = arr[x];   // Storing it in ith index of items.
+      arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
+    }
 
-    var item3 = arr[Math.floor(Math.random() * arr.length)];
-    arr.splice(item3, 1);
-
-    // add the elements from testData at these random indices and return them. 
+    // For loop for pushing the objects at the indices of items into randomArray. 
     const randomArray = new Array();
-    randomArray.push(testData[item1]);
-    randomArray.push(testData[item2]);
-    randomArray.push(testData[item3]);
+    for(let i = 0; i<3; i++) {
+      randomArray.push(testData[items[i]]);
+    }
 
     return (
     <Grid container spacing={3} className={classes.root}>
@@ -190,11 +189,6 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
             >
               <Typography className={classes .heading}>{activity.title}</Typography>
             </AccordionSummary>
-            <AccordionDetails className={classes.typoColor}>
-              <Typography>
-               { activityType == "active" ? activity.creator : activityType == "reading" ? activity.description : activity.notes}
-              </Typography>
-            </AccordionDetails>
           </Accordion>
         </div>
      :
