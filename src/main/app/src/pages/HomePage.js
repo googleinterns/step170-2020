@@ -4,15 +4,18 @@ import { Link } from 'react-router-dom';
 import 'bulma/css/bulma.css';
 import '../css/home.css';
 
-/* Component for home page */
-const HomePage = () => {
+// Web Servlet links.
+const articleData = './articleData';
+const videoData = './videoData';
+const gameData = './gameData';
 
-  // Create state for activity selection with Games as default
-  const [activity, updateActivity] = React.useState("games");
+/* Component for home page */
+const HomePage = ({activity, updateActivity, updateServlet}) => {
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
+    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
 
   return (

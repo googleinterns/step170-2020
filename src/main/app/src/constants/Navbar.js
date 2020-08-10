@@ -1,44 +1,26 @@
 import React from 'react';
-import {GoogleLogin, GoogleLogout} from 'react-google-login'
+import { NavLink } from 'react-router-dom';
+import {GoogleLogin, GoogleLogout} from 'react-google-login';
+import { handleLogin, handleLogout,
+  handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
 
 import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
-const Navbar = () => {
-  // Create state for login/logout status
-  const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
-  const [greeting, updateGreeting] = React.useState("Welcome!");
+const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
-  const discoveryDocs = "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest";
-  const scope = "https://www.googleapis.com/auth/calendar";
-
-  // Handle successful login
-  const handleLogin = (res) => {
-    updateIsLoggedIn(true);
-    updateGreeting("Welcome " + res.Ot.Cd +"!");
-  }
-
-  // Handle successful logout
-  const handleLogout = (res) => {
-    updateIsLoggedIn(false);
-     updateGreeting("Welcome!");
-  }
-
-  // Handle failed login
-  const handleLoginFail = (res) => {}
-
-  // Handle failed logout
-  const handleLogoutFail = (res) => {}
+  const discoveryDocs = info[0].discoveryDocs;
+  const scope = info[0].scope;
 
   return (
     <div>
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
       <div className="container">
         <div className="navbar-brand">
-          <a className="navbar-item" href="/"> WeTime <i className="fas fa-heartbeat"></i></a>
+          <NavLink className="navbar-item" to="/"> WeTime <i className="fas fa-heartbeat"></i></NavLink>
           
           <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -50,8 +32,8 @@ const Navbar = () => {
         {/*Navbar tabs to other pages.*/}
         <div id="navbarBasicExample" className="navbar-menu">
           <div className="navbar-start">
-            <a className="navbar-item"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></a>
-            <a className="navbar-item"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></a> 
+            <NavLink className="navbar-item" to="/help"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></NavLink>
+            <NavLink className="navbar-item" to="/about"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></NavLink> 
           </div>
         </div>
 
@@ -68,8 +50,8 @@ const Navbar = () => {
                     <i className="fab fa-google fa-fw"></i>Login with Google
                   </button>
                 )}
-                onSuccess={handleLogin}
-                onFailure={handleLoginFail}
+                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onFailure={res => handleLoginFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
@@ -83,8 +65,8 @@ const Navbar = () => {
                     <i className="fas fa-sign-out-alt fa-fw"></i>Logout
                   </button>
                 )}
-                onLogoutSuccess={handleLogout}
-                onFailure={handleLogoutFail}
+                onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onFailure={res => handleLogoutFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
                 cookiePolicy={'single_host_origin'}
@@ -99,7 +81,7 @@ const Navbar = () => {
       <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
     </div> 
 
-    </div>
+   </div>
   )
 }
 
