@@ -12,9 +12,6 @@ const gameData = './gameData';
 /* Component for home page */
 const HomePage = ({activity, updateActivity, updateServlet}) => {
 
-  // Create state for activity selection with Games as default
-  // const [activity, updateActivity] = React.useState("games");
-
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
     updateActivity(evt.target.value);
