@@ -14,11 +14,11 @@ const Routes = ({ activityType, updateActivityType, activity, updateActivity, up
   eventScheduled, updateEventScheduled }) => {
     return (
       <Switch>
-        <Route exact path='/' render={() => <HomePage activityType={activityType} updateActivityType={updateActivityType} updateServlet={updateServlet} articleData={articleData}
+        <Route exact path='/' render={() => <HomePage activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} articleData={articleData}
           videoData={videoData} gameData={gameData} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>
-        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
-          activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>
-        <Route exact path='/browse' render={() => <BrowsePage activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} 
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage activityType={activityType} isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
+          activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} updateActivity={updateActivity}/>}/>
+        <Route exact path='/browse' render={() => <BrowsePage  activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} 
           updateServlet={updateServlet} links={links} articleData={articleData} videoData={videoData} gameData={gameData} />}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />

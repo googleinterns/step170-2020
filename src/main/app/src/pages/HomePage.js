@@ -9,20 +9,27 @@ import '../css/home.css';
 import logo from '../assets/logo.png';
 
 /* Component for home page */
-const HomePage = ({ activityType, updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled }) => {
+const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled, updateActivity }) => {
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
     updateActivityType(evt.target.value);
     updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
+  
+  const emptyActivity = () => {
+    {updateActivity({})}    // emptying activity so that it changes when reaching homePage
+  }
+   
 
   return (
     <section className="section">
       
       {/* Added logo to homepage. */}
       <div className="container has-text-centered">
-         <img src={logo} alt="Logo" width="800" height="100"/>
+        <div>
+          <img src={logo} alt="Logo" width="800" height="100"/>
+         </div>
       </div>
 
       {/*This container consists of the activities dropdown. */}
@@ -43,7 +50,7 @@ const HomePage = ({ activityType, updateActivityType, updateServlet, articleData
       {/* This container consists of the buttons to schedule and browse. */}
       <div className="container has-text-centered is-centered">
         <Link to='/schedule-activity'>
-        <button className="button is-large is-success is-rounded">Schedule an event</button>
+        <button className="button is-large is-success is-rounded" onClick={emptyActivity}>Schedule an event</button>
         </Link>
         <Link to='/browse'>
         <button className="button is-large is-danger is-rounded" >Browse</button>

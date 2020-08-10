@@ -4,16 +4,18 @@ import { Redirect } from 'react-router-dom';
 import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
 import { useStyles } from '../hooks/useStyles';
-import {Grid, Button, FormControlLabel,
-  Switch, Paper, FormControl, TextField, Chip} from '@material-ui/core';
-import FaceIcon from '@material-ui/icons/Face';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import {Grid, Button, FormControlLabel, Switch, FormControl, 
+        TextField, Chip, Radio, AccordionSummary, Accordion, AccordionDetails, Typography } from '@material-ui/core';
+import FaceIcon from '@material-ui/icons/Face';
+import swal from 'sweetalert';
 import 'react-datetime/css/react-datetime.css';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled }) => {
+const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled, updateActivity , activityType}) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -41,6 +43,55 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     chips.push({key: guestChips.length, label: guest});
     updateGuestChips(chips);
     updateGuest("");
+  }
+
+  const randomFunction = (testData) => {
+
+    // arr that has all the indices at first, but then removes the indices thare taken into consideration.
+    const arr = new Array();
+
+    //populate the array elements as 0 to testData's length. 
+    for (let i = 0; i < testData.length; i++) {
+      arr.push(i);
+    }
+
+    // item1,2,3 are the random indices received
+    // from arr i have gotten index item1.
+    var item1 = arr[Math.floor(Math.random() * arr.length)];
+    arr.splice(item1, 1);
+
+    var item2 = arr[Math.floor(Math.random() * arr.length)];
+    arr.splice(item2, 1);
+
+    var item3 = arr[Math.floor(Math.random() * arr.length)];
+    arr.splice(item3, 1);
+
+    // add the elements from testData at these random indices and return them. 
+    const randomArray = new Array();
+    randomArray.push(testData[item1]);
+    randomArray.push(testData[item2]);
+    randomArray.push(testData[item3]);
+
+    return (
+    <Grid container spacing={3} className={classes.root}>
+          <Grid item xs>
+            <Grid container justify="center" >
+              {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className={classes.radio}> {element.title} </Button>)}
+              </Grid>
+          </Grid>
+    </Grid>)
+    
+}
+
+  const alertUpdateActivity = (element) => {
+    updateActivity(element);
+    swal({
+      title: "You clicked "+ element.title + "!",
+      text: "Setting your activity! Have fun! Press Create Event to continue",
+      icon: "success",
+      button: "Close",
+    });
+
   }
 
   // Remove guest specified key from guest chip list.
@@ -133,13 +184,26 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
 
       {/* Display activity title if an activity was selected. */}
       {activity.title ?
-      <Grid container spacing={3} className={classes.root}>
-        <Grid item xs>
-          <Paper className={classes.paper}>{activity.title}</Paper>
-        </Grid>
-      </Grid> :
-      null}
-      {/* TODO: Display random game suggestions otherwise. */}
+        <div className={classes.root} className="container">
+          <Accordion>
+            <AccordionSummary 
+              className={classes.summaryColor}
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes .heading}>{activity.title}</Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.typoColor}>
+              <Typography>
+               { activityType == "active" ? activity.creator : activityType == "reading" ? activity.description : activity.notes}
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+     :
+        randomFunction(links)
+      }
 
       <div className={classes.root}>
       <Button variant="contained" color="primary" className={classes.largeButton} 
