@@ -26,7 +26,7 @@ public final class Article extends Activity {
   private final String description;
   private final String publishedAt;
 
-  public Article(Key key, String publisher, String author, String title,
+  public Article(String key, String publisher, String author, String title,
     String description, String url, String publishedAt) {
 
     // Initialize activity fields

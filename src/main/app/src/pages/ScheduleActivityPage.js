@@ -1,59 +1,21 @@
 import React from 'react';
+import $ from 'jquery';
 import { Redirect } from 'react-router-dom';
 import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
-import { makeStyles } from '@material-ui/core/styles';
-import {Grid, Button, FormControlLabel,
-  Switch, Paper, FormControl, TextField, Chip} from '@material-ui/core';
+import { useStyles } from '../hooks/useStyles';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import {Grid, Button, FormControlLabel, Switch, FormControl, 
+        TextField, Chip, Radio, AccordionSummary, Accordion, AccordionDetails, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
-
+import swal from 'sweetalert';
 import 'react-datetime/css/react-datetime.css';
-
-/** CSS styles for material ui components. */
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    width: '100%',
-    paddingTop: '1.8rem',
-    paddingBottom: '1.8rem',
-    margin: 0
-  },
-  gridItem: {
-    padding: 0
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
-  input: {
-    flex: 1
-  },
-  guestInput: {
-    paddingRight: '1rem'
-  },
-  button: {paddingLeft: '1rem'},
-  largeButton: {
-    padding: '1rem 2rem',
-    margin: '0px auto',
-    fontSize: '1.1rem'
-  },
-  chipsList: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    listStyle: 'none',
-    '& > *': {
-      margin: theme.spacing(0.5)
-    }
-  }
-}));
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
+const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled, updateActivity , activityType}) => {
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -83,6 +45,44 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
     updateGuest("");
   }
 
+  const generateRandomActivities = (testData) => {
+
+    // arr that has all the indices at first, but then removes the indices thare taken into consideration.
+    // Populate the array elements as 0 to testData's length. 
+    const arr = Array.from(Array(testData.length).keys());
+
+    // randomArray is an array that will have any three random objects of testData. 
+    const randomArray = new Array();
+
+    // For loop to store three indices of testData into items array.
+    for (let i = 0; i < 3; i++) {
+      var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
+      randomArray.push(testData[arr[x]]);    // Storing the objects directly from the testData.
+      arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
+    }
+
+    return (
+    <Grid container spacing={3} className={classes.root}>
+      <Grid item xs>
+        <Grid container justify="center" >
+          {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className={classes.radio}> {element.title} </Button>)}
+          </Grid>
+      </Grid>
+    </Grid>)
+    
+}
+
+  const alertUpdateActivity = (element) => {
+    updateActivity(element);
+    swal({
+      title: "You clicked "+ element.title + "!",
+      text: "Setting your activity! Have fun! Press Create Event to continue",
+      icon: "success",
+      button: "Close",
+    });
+
+  }
+
   // Remove guest specified key from guest chip list.
   const handleChipDelete = key => {
     let chips = guestChips.reduce((filtered, chip) => {
@@ -95,6 +95,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
 
   // Retrieve all event information from state.
   const getEventInfo = () => {
+    // Concatenate guest list into a single string
     const guestArray = guestChips.reduce((guests, guest) => {
       guests.push(guest.label);
       return guests;
@@ -105,17 +106,26 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
       userId: userId,
       accessToken: accessToken,
       title: title,
-      startTime: startTime.getTime(),
-      endTime: endTime.getTime(),
+      startTimestamp: startTime.getTime(),
+      endTimestamp: endTime.getTime(),
+      activityKey: activity.activityKey,
       guests: guests
     }
   }
 
-  const handleSubmit = () => {}
+  const handleSubmit = () => {
+    const eventInfo = getEventInfo();
+    $.post('/createEvent', eventInfo)
+      .done(eventUrl => {
+        updateEventScheduled(eventUrl);
+      })
+  }
 
   return (
     !isLoggedIn ?
     <Redirect to="/login" /> :
+    eventScheduled !== "" ?
+    <Redirect to="/" /> :
     <div className="container py-5">
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
@@ -160,19 +170,30 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId}) => {
           value={guest} onChange={handleGuestChange} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
-      {/* Random game suggestions. */}
-      <Grid container spacing={3} className={classes.root}>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>Game</Paper>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Paper className={classes.paper}>Game</Paper>
-        </Grid>
-      </Grid>
+
+      {/* Display activity title if an activity was selected. */}
+      {activity.title ?
+        <div className={classes.root} className="container">
+          <Accordion>
+            <AccordionSummary 
+              className={classes.summaryColor}
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes .heading}>{activity.title}</Typography>
+            </AccordionSummary>
+          </Accordion>
+        </div>
+     :
+        generateRandomActivities(links)
+      }
+
       <div className={classes.root}>
       <Button variant="contained" color="primary" className={classes.largeButton} 
         onClick={handleSubmit}>Create Event</Button>
       </div>
+
     </div>
   )
 }

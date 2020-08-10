@@ -25,29 +25,42 @@ const App = () => {
   const [userId, updateUserId] = React.useState("");
 
   // State for activity selection and data
-  const [activity, updateActivity] = React.useState("games");
+  const [activityType, updateActivityType] = React.useState("games");
   const [servlet, updateServlet] = React.useState(gameData); 
+
+  // State for activities data retrieved from servlet
   const [links, updateLinks] = React.useState([]);
+  const [linksLoaded, updateLinksLoaded] = React.useState(false);
+
+  // State for schedule activity form submitted.
+  const [eventScheduled, updateEventScheduled] = React.useState("");
+
+  // Populate links array with default serlet.
+  if (!linksLoaded) {
+    updateActivityLinks(updateLinks, servlet);
+    updateLinksLoaded(true);
+  }
 
   // State for welcome message depending on login status
   const [greeting, updateGreeting] = React.useState("Welcome!");
 
-  // Populate links array with default serlet.
-  updateActivityLinks(updateLinks, servlet);
+  // State for activity selected (this can be the three random activities or the activity that the user selected on the browse page)
+  const [activity, updateActivity] = React.useState({});
 
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
-  },[activity]);    // Adding [activity] makes sure that the links are updated only as long as the activity changes.
+  },[activityType]);    // Adding [activityType] makes sure that the links are updated only as long as the activityType changes.
   
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} 
         greeting={greeting} updateGreeting={updateGreeting} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
+        <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
-          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} />
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} eventScheduled={eventScheduled}
+          updateEventScheduled={updateEventScheduled} />
       </main>
     </Router>
   );

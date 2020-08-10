@@ -84,10 +84,9 @@ public final class EventUtility {
       System.out.println("The entity requested wasn't found.");
     }
 
-    String category = (String) activityEntity.getProperty("category");
-    
+    String category = activityEntity.getKind() + "s";
     return new Activity(
-      activityEntity.getKey(),
+      activityKey,
       (String) activityEntity.getProperty("title"),
       Activity.Category.valueOf(category.toUpperCase()),
       (String) activityEntity.getProperty("url")

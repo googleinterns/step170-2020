@@ -166,7 +166,7 @@ public class getArticlesServlet extends HttpServlet {
     List<Article> articles = new ArrayList<Article>();
 
     for (Entity entity : results.asIterable()) {
-      Key id = entity.getKey();
+      String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
       String publisher = (String) entity.getProperty("publisher");
       String author = (String) entity.getProperty("author");
       String title = (String) entity.getProperty("title");
@@ -174,7 +174,7 @@ public class getArticlesServlet extends HttpServlet {
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
 
-      Article newArticle = new Article(id, publisher, author, title, description, url, publishedAt);
+      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt);
       articles.add(newArticle);
     }
 
