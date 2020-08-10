@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-
 import {GoogleLogin, GoogleLogout} from 'react-google-login';
-
 import { handleLogin, handleLogout,
   handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
 
@@ -83,7 +81,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
       <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
     </div> 
 
-    </div>
+   </div>
   )
 }
 

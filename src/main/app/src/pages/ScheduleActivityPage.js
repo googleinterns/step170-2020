@@ -45,15 +45,11 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     updateGuest("");
   }
 
-  const randomFunction = (testData) => {
+  const generateRandomActivities = (testData) => {
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
-    const arr = new Array();
-
     //populate the array elements as 0 to testData's length. 
-    for (let i = 0; i < testData.length; i++) {
-      arr.push(i);
-    }
+    const arr = Array.from(Array(testData.length).keys());
 
     // item1,2,3 are the random indices received
     // from arr i have gotten index item1.
@@ -74,11 +70,11 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
 
     return (
     <Grid container spacing={3} className={classes.root}>
-          <Grid item xs>
-            <Grid container justify="center" >
-              {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className={classes.radio}> {element.title} </Button>)}
-              </Grid>
+      <Grid item xs>
+        <Grid container justify="center" >
+          {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className={classes.radio}> {element.title} </Button>)}
           </Grid>
+      </Grid>
     </Grid>)
     
 }
@@ -202,7 +198,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
           </Accordion>
         </div>
      :
-        randomFunction(links)
+        generateRandomActivities(links)
       }
 
       <div className={classes.root}>
@@ -211,8 +207,6 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       </div>
 
     </div>
-
-    
   )
 }
 
