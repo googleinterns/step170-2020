@@ -17,8 +17,10 @@ import 'react-datetime/css/react-datetime.css';
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
-const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled, updateActivity , activityType, isGuest}) => {
-
+const ScheduleActivityPage = props => {
+  const {isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
+        updateEventScheduled, updateActivity , activityType, isGuest} = props;
+  
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
@@ -250,7 +252,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       }
 
       <div className={classes.root}>
-      <Button variant="contained" color="primary" className={classes.largeButton} 
+      <Button disabled={activity.title ? false : true} variant="contained" color="primary" className={classes.largeButton} 
         onClick={handleSubmit}>Create Event</Button>
       </div>
 
