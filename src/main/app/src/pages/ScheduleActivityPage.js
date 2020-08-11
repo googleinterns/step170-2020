@@ -19,8 +19,6 @@ import VideoCard from '../constants/VideoCard.js';
   the login page. */
 const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled, updateActivity , activityType}) => {
 
-  const randomActivityArray = generateRandomActivities(links);
-
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
