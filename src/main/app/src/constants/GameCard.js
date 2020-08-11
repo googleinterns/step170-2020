@@ -4,7 +4,7 @@ import { Button, Card, CardActionArea, CardActions, CardContent, Typography, Box
 import { Link } from 'react-router-dom';
 
 // This is a stateless, functional React component used to render each resource in a card format. 
-const GameCard = ({ data, updateActivity }) => {
+const GameCard = ({ data, onClickFunction, parameters, buttonText }) => {
   const classes = useStyles();
 
   if (!data.title) return <div />
@@ -19,8 +19,8 @@ const GameCard = ({ data, updateActivity }) => {
       </CardActionArea>
       <CardActions>
         <Link to='/schedule-activity'>
-          <Button size="small" onClick= {() => updateActivity({activityKey: data.key, title: data.title})}>
-            Schedule event
+          <Button size="small" onClick= {() => onClickFunction(parameters)}>
+            {buttonText}
           </Button>
         </Link>
       </CardActions>

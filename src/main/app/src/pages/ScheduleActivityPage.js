@@ -5,17 +5,21 @@ import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
 import { useStyles } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
         TextField, Chip, Radio, CardContent, CardActions, Card, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import swal from 'sweetalert';
 import 'react-datetime/css/react-datetime.css';
+import GameCard from '../constants/GameCard.js';
+import ArticleCard from '../constants/ArticleCard.js';
+import VideoCard from '../constants/VideoCard.js';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
 const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links, eventScheduled, updateEventScheduled, updateActivity , activityType}) => {
+
+  const randomActivityArray = generateRandomActivities(links);
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -26,24 +30,6 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
 
   // Get object for css classes.
   const classes = useStyles();
-
-  // Changes title state according to title textbox.
-  const handleTitleChange = e => {
-    updateTitle(e.target.value);
-  }
-
-  // Changes guest state according to guest textbox.
-  const handleGuestChange = e => {
-    updateGuest(e.target.value);
-  }
-
-  // Append new guest to guest chip list on submit.
-  const handleGuestSubmit = () => {
-    let chips = guestChips;
-    chips.push({key: guestChips.length, label: guest});
-    updateGuestChips(chips);
-    updateGuest("");
-  }
 
   const generateRandomActivities = (testData) => {
 
@@ -61,39 +47,8 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
     }
 
-    return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        {randomArray.map((element) => 
-          <Grid item xs>
-            <Card className={classes.root}>
-
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  {element.category}
-                </Typography>
-                <Typography variant="h6" component="h3">
-                  {element.title}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  {activityType == "active" ? element.creator: activityType == "reading" ? element.description : element.notes}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
-              <div>
-                <Button key={element.key} size="small" variant="contained" color="primary" href={element.url}> VIEW MORE </Button>
-                <Button key={element.key} size="small" color="secondary" variant="contained" onClick={() => { alertUpdateActivity(element) }}> Choose this activity</Button>
-              </div>
-              </CardActions>
-
-            </Card>
-          </Grid>
-        )}
-      </Grid>
-    </div>
-    )
-}
+    return (randomArray);
+  }
 
   const alertUpdateActivity = (element) => {
     updateActivity({activityKey: element.key, title: element.title});
@@ -103,6 +58,24 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       icon: "success",
       button: "Close",
     });
+  }
+
+  // Changes title state according to title textbox.
+  const handleTitleChange = e => {
+    updateTitle(e.target.value);
+  }
+
+  // Changes guest state according to guest textbox.
+  const handleGuestChange = e => {
+    updateGuest(e.target.value);
+  }
+
+  // Append new guest to guest chip list on submit.
+  const handleGuestSubmit = () => {
+    let chips = guestChips;
+    chips.push({key: guestChips.length, label: guest});
+    updateGuestChips(chips);
+    updateGuest("");
   }
 
   // Remove guest specified key from guest chip list.
@@ -205,7 +178,29 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
           </Card>
         </div>
      :
-        generateRandomActivities(links)
+        <div className={classes.root} className="container">
+          {generateRandomActivities(links).map((element, key) => {
+            if (activityType === "games") {
+              return (
+                <div key={key}>
+                  <GameCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
+                </div>
+              );
+            } else if (activityType === "reading") {
+              return (
+                <div key={key}>
+                  <ArticleCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
+                </div>
+              );
+            } else if (activityType === "active") {
+              return (
+                <div key={key}>
+                  <VideoCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
+                </div>
+              );
+            }
+          })}
+        </div>     
       }
 
       <div className={classes.root}>
