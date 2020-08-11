@@ -14,14 +14,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
-  summaryColor: {
-    backgroundColor: '#0097a7',
-    color: '#e0f7fa',
-  },
-  typoColor: {
-    backgroundColor: '#eceff1',
-    color: '#009688',
-  },
   gridItem: {
    padding: 0
   },
