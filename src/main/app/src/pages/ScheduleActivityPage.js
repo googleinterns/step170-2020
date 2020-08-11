@@ -167,14 +167,19 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       {/* Chip list to display added guests. */}
       {guestChips.length > 0 ?
         <FormControl component="ul" className={classes.chipsList}>
-          {guestChips.map(chip => 
-            <li key={chip.key} className="d-inline-block">
-              <Chip
-                icon={<FaceIcon />}
-                label={chip.label}
-                onDelete={() => handleChipDelete(chip.key)}
-              />
-          </li>)}
+          {guestChips.map(chip => {
+              const label = chip.label;
+              return (
+                <li key={chip.key} className="d-inline-block">
+                  <Chip
+                    icon={<FaceIcon />}
+                    label={label.includes('@google.com') ? label.substring(0, label.length-10) : label}
+                    onDelete={() => handleChipDelete(chip.key)}
+                  />
+                </li>
+              )
+            }
+          )}
         </FormControl> : null
       }
       {/* Form to add guests. */}
