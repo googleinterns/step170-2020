@@ -5,6 +5,7 @@ import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
 import { useStyles } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { isValidEmail } from '../hooks/formValidation';
 
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
         TextField, Chip, Radio, AccordionSummary, Accordion, AccordionDetails, Typography } from '@material-ui/core';
@@ -24,6 +25,9 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
+  // Errors
+  const [guestError, updateGuestError] = React.useState(false);
+
   // Get object for css classes.
   const classes = useStyles();
 
@@ -37,12 +41,17 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     updateGuest(e.target.value);
   }
 
-  // Append new guest to guest chip list on submit.
+  // Append new guest to guest chip list on add.
   const handleGuestSubmit = () => {
-    let chips = guestChips;
-    chips.push({key: guestChips.length, label: guest});
-    updateGuestChips(chips);
-    updateGuest("");
+    if (isValidEmail(guest.toLowerCase())) {
+      let chips = guestChips;
+      chips.push({key: guestChips.length, label: guest.toLowerCase()}); // push guest unto chip list
+      updateGuestChips(chips); // update chip list
+      updateGuest(""); // reset guest
+      updateGuestError(false); // reset guest error
+    } else {
+      updateGuestError(true);
+    }
   }
 
   const generateRandomActivities = (testData) => {
@@ -171,7 +180,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       {/* Form to add guests. */}
       <div className={classes.root}>
         <TextField label="Add Guest" variant="outlined" className={`${classes.input} ${classes.guestInput}`} 
-          value={guest} onChange={handleGuestChange} />
+          value={guest} onChange={handleGuestChange} error={guestError} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
 
