@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Redirect } from 'react-router-dom';
 import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
-import { useStyles } from '../hooks/useStyles';
+import { useStyles, custom } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { isValidEmail, validate } from '../hooks/formValidation';
 
@@ -24,7 +24,7 @@ const ScheduleActivityPage = props => {
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
-  const [endTime, updateEndTime] = React.useState(new Date());
+  const [endTime, updateEndTime] = React.useState(new Date(Date.now() + (60000 * 30))); // Set end date 30mins ahead.
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
@@ -213,7 +213,7 @@ const ScheduleActivityPage = props => {
       />
       {/* Chip list to display added guests. */}
       {guestChips.length > 0 ?
-        <FormControl component="ul" className={classes.chipsList}>
+        <ul className={`${classes.chipsList} d-flex flex-row mt-2 mb-3`}>
           {guestChips.map(chip => {
               const label = chip.label;
               return (
@@ -227,11 +227,11 @@ const ScheduleActivityPage = props => {
               )
             }
           )}
-        </FormControl> : null
+        </ul> : null
       }
       {/* Form to add guests. */}
-      <div className={classes.root}>
-        <TextField label="Add Guest" variant="outlined" className={`${classes.input} ${classes.guestInput}`} 
+      <div className="d-flex flex-row">
+        <TextField label="Add Guest" variant="outlined" style={custom.guestInput} className="flex-grow-1"
           value={guest} onChange={handleGuestChange} error={guestError} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
@@ -252,8 +252,9 @@ const ScheduleActivityPage = props => {
       }
 
       <div className={classes.root}>
-      <Button disabled={activity.title ? false : true} variant="contained" color="primary" className={classes.largeButton} 
-        onClick={handleSubmit}>Create Event</Button>
+        <Button variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
+          Create Event
+        </Button>
       </div>
 
     </div>
