@@ -5,10 +5,11 @@ import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
 import { useStyles } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { isValidEmail } from '../hooks/formValidation';
+import { isValidEmail, validate } from '../hooks/formValidation';
 
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
         TextField, Chip, Radio, AccordionSummary, Accordion, AccordionDetails, Typography } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
 import swal from 'sweetalert';
 import 'react-datetime/css/react-datetime.css';
@@ -25,8 +26,18 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
-  // Errors
+  // Form errors
+  const [titleError, updateTitleError] = React.useState(false);
+  const [dateError, updateDateError] = React.useState(false);
   const [guestError, updateGuestError] = React.useState(false);
+  const [displayErrors, updateDisplayErrors] = React.useState(false);
+
+  // Error messages
+  const errors = [
+    {error: titleError, errorMsg: "Invalid title."},
+    {error: dateError, errorMsg: "Start time cannot be after end time."},
+    {error: guestError, errorMsg: "Invalid email address for guest."}
+  ];
 
   // Get object for css classes.
   const classes = useStyles();
@@ -123,14 +134,18 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   }
 
   const handleSubmit = () => {
-    if (isGuest) {
-      updateEventScheduled(window.location.origin);
+    if (!validate(title, startTime, endTime, updateTitleError, updateDateError)) { // no errors
+      if (isGuest) {
+        updateEventScheduled(window.location.origin);
+      } else {
+        const eventInfo = getEventInfo();
+        $.post('/createEvent', eventInfo)
+        .done(eventUrl => {
+          updateEventScheduled(eventUrl);
+        });
+      }
     } else {
-      const eventInfo = getEventInfo();
-      $.post('/createEvent', eventInfo)
-      .done(eventUrl => {
-        updateEventScheduled(eventUrl);
-      });
+      updateDisplayErrors(true);
     }
   }
 
@@ -139,7 +154,15 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     <Redirect to="/login" /> :
     eventScheduled !== "" ?
     <Redirect to="/" /> :
-    <div className="container py-5">
+    <div className="container pb-5">
+      {/* Alert errors if any. */}
+      {displayErrors && (titleError || dateError) ? 
+        <Alert severity="error" onClose={() => updateDisplayErrors(false)} className="mb-5">
+          <AlertTitle>Error</AlertTitle>
+          {errors.map(errorObj =>
+              errorObj.error ? <div>{errorObj.errorMsg} — <strong>check it out!</strong></div> : null
+          )}
+        </Alert> : null}
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
       <div className={classes.root}>

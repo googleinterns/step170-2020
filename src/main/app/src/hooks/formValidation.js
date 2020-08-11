@@ -6,4 +6,22 @@ const isValidEmail = email => {
   return re.test(email);
 }
 
-export { isValidEmail }
+const validate = (title, startTime, endTime, updateTitleError, updateDateError) => {
+  let errors = false;
+
+  // validate title
+  if (title === "") {
+    updateTitleError(true);
+    errors = true;
+  }
+
+  // validate times
+  if (startTime.getTime() > endTime.getTime()) {
+    updateDateError(true);
+    errors = true;
+  }
+
+  return errors;
+}
+
+export { isValidEmail, validate }
