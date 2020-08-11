@@ -1,13 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { GoogleLogin } from 'react-google-login'
+import {Button} from '@material-ui/core';
 
 import { handleLogin, handleLogout,
   handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
 import info from '../constants/keys';
 
 /** Displayed before the Schedule Activity Page if the user is not logged in already. */
-const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting}) => {
+const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting, updateIsGuest}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -17,7 +18,7 @@ const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserI
   return (
     isLoggedIn ?
     <Redirect to="/schedule-activity" /> :
-    <div className="d-flex justify-content-center">
+    <div className="d-flex justify-content-center flex-column align-items-center">
       <GoogleLogin
         clientId={clientID}
         render={renderProps => (
@@ -32,6 +33,9 @@ const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserI
         cookiePolicy={'single_host_origin'}
         isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
       />
+      {/* Allow guest signin */}
+      <p className="my-2">or</p>
+      <Button variant="contained" size="large" className="d-inline-block" onClick={() => updateIsGuest(true)}>Guest</Button>
     </div>
   )
 }
