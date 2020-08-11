@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStyles } from '../hooks/useStyles';
 import { Button, Card, CardActionArea, CardActions, CardContent, Typography, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 // This is a stateless, functional React component used to render each resource in a card format. 
 const GameCard = ({ data, updateActivity }) => {
@@ -17,9 +18,11 @@ const GameCard = ({ data, updateActivity }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" href="../schedule-activity" onClick= {() => updateActivity({activityKey: data.key, title: data.title})}>
-          Schedule event
-        </Button>
+        <Link to='/schedule-activity'>
+          <Button size="small" onClick= {() => updateActivity({activityKey: data.key, title: data.title})}>
+            Schedule event
+          </Button>
+        </Link>
       </CardActions>
     </Card>
   );
