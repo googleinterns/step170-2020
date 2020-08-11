@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { Redirect } from 'react-router-dom';
 import { MDBInput } from "mdbreact";
 import Datetime from "react-datetime";
-import { useStyles } from '../hooks/useStyles';
+import { useStyles, custom } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
@@ -20,7 +20,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
-  const [endTime, updateEndTime] = React.useState(new Date());
+  const [endTime, updateEndTime] = React.useState(new Date(Date.now() + (60000 * 30))); // Set end date 30mins ahead.
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
 
@@ -175,7 +175,7 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       />
       {/* Chip list to display added guests. */}
       {guestChips.length > 0 ?
-        <FormControl component="ul" className={classes.chipsList}>
+        <ul className={`${classes.chipsList} d-flex flex-row mt-2 mb-0`}>
           {guestChips.map(chip => 
             <li key={chip.key} className="d-inline-block">
               <Chip
@@ -184,12 +184,12 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
                 onDelete={() => handleChipDelete(chip.key)}
               />
           </li>)}
-        </FormControl> : null
+        </ul> : null
       }
       {/* Form to add guests. */}
       <div className={classes.root}>
-        <TextField label="Add Guest" variant="outlined" className={`${classes.input} ${classes.guestInput}`} 
-          value={guest} onChange={handleGuestChange} />
+        <TextField label="Add Guest" variant="outlined" className={`${classes.input}`} 
+          value={guest} onChange={handleGuestChange} style={custom.guestInput} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
 
@@ -209,8 +209,9 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       }
 
       <div className={classes.root}>
-      <Button variant="contained" color="primary" className={classes.largeButton} 
-        onClick={handleSubmit}>Create Event</Button>
+        <Button variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit}>
+          Create Event
+        </Button>
       </div>
 
     </div>
