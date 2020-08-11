@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { isValidEmail, validate } from '../hooks/formValidation';
 
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
-        TextField, Chip, Radio, AccordionSummary, Accordion, AccordionDetails, Typography } from '@material-ui/core';
+        TextField, Chip, Radio, CardContent, CardActions, Card, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
 import swal from 'sweetalert';
@@ -82,25 +82,47 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
     }
 
     return (
-    <Grid container spacing={3} className={classes.root}>
-      <Grid item xs>
-        <Grid container justify="center" >
-          {randomArray.map((element) => <Button key={element.key} onClick={() => { alertUpdateActivity(element) }} size ="large" color="secondary" variant="outlined" className={classes.radio}> {element.title} </Button>)}
+    <div className={classes.root}>
+      <Grid container spacing={3}>
+        {randomArray.map((element) => 
+          <Grid item xs>
+            <Card className={classes.root}>
+
+              <CardContent>
+                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                  {element.category}
+                </Typography>
+                <Typography variant="h6" component="h3">
+                  {element.title}
+                </Typography>
+                <Typography variant="body2" component="p">
+                  {activityType == "active" ? element.creator: activityType == "reading" ? element.description : element.notes}
+                </Typography>
+              </CardContent>
+
+              <CardActions>
+              <div>
+                <Button key={element.key} size="small" variant="contained" color="primary" href={element.url}> VIEW MORE </Button>
+                <Button key={element.key} size="small" color="secondary" variant="contained" onClick={() => { alertUpdateActivity(element) }}> Choose this activity</Button>
+              </div>
+              </CardActions>
+
+            </Card>
           </Grid>
+        )}
       </Grid>
-    </Grid>)
-    
+    </div>
+    )
 }
 
   const alertUpdateActivity = (element) => {
-    updateActivity(element);
+    updateActivity({activityKey: element.key, title: element.title});
     swal({
       title: "You clicked "+ element.title + "!",
       text: "Setting your activity! Have fun! Press Create Event to continue",
       icon: "success",
       button: "Close",
     });
-
   }
 
   // Remove guest specified key from guest chip list.
@@ -215,16 +237,13 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
       {/* Display activity title if an activity was selected. */}
       {activity.title ?
         <div className={classes.root} className="container">
-          <Accordion>
-            <AccordionSummary 
-              className={classes.summaryColor}
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes .heading}>{activity.title}</Typography>
-            </AccordionSummary>
-          </Accordion>
+          <Card className={classes.root}>
+            <CardContent>
+              <Typography variant="h5" component="h2">
+                {activity.title}
+              </Typography>
+            </CardContent>
+          </Card>
         </div>
      :
         generateRandomActivities(links)
