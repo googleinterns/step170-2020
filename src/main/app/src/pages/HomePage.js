@@ -22,8 +22,26 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
   }
    
   return (
-    <section className="section">
-      
+    <section className="container">
+      {/* Alert message for successfull event scheduling. */}
+      <Collapse in={eventScheduled !== ""} className="mb-4">
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                updateEventScheduled("");
+              }}>
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
+        </Alert>
+      </Collapse>
+
       {/* Added logo to homepage. */}
       <div className="container has-text-centered">
         <div>
@@ -55,25 +73,6 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
         <button className="button is-large is-danger is-rounded" >Browse</button>
         </Link>
       </div>
-
-      {/* Alert message for successfull event scheduling. */}
-      <Collapse in={eventScheduled !== ""}>
-        <Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                updateEventScheduled("");
-              }}>
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
-        </Alert>
-      </Collapse>
     </section>
   )
 }

@@ -35,6 +35,9 @@ const App = () => {
   // State for schedule activity form submitted.
   const [eventScheduled, updateEventScheduled] = React.useState("");
 
+  // Guest sign in
+  const [isGuest, updateIsGuest] = React.useState(false);
+
   // Populate links array with default serlet.
   if (!linksLoaded) {
     updateActivityLinks(updateLinks, servlet);
@@ -52,6 +55,14 @@ const App = () => {
     updateActivityLinks(updateLinks, servlet);
   },[activityType]);    // Adding [activityType] makes sure that the links are updated only as long as the activityType changes.
   
+  // Guest sigin in.
+  React.useEffect(() => {
+    if (isGuest) {
+      updateIsLoggedIn(true);
+      updateGreeting("Welcome Guest!");
+    }
+  },[isGuest]);
+
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} 
@@ -60,7 +71,7 @@ const App = () => {
         <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
           updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} eventScheduled={eventScheduled}
-          updateEventScheduled={updateEventScheduled} />
+          updateEventScheduled={updateEventScheduled} isGuest={isGuest} updateIsGuest={updateIsGuest} />
       </main>
     </Router>
   );
