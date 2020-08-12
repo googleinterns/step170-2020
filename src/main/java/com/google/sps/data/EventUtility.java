@@ -25,7 +25,15 @@ import java.util.Arrays;
 */
 public final class EventUtility {
 
-  private EventUtility(){}
+  private final DatastoreService datastore;
+
+  public EventUtility() {
+    datastore = DatastoreServiceFactory.getDatastoreService();
+  }
+
+  public EventUtility(DatastoreService datastore) {
+    this.datastore = datastore;
+  }
 
   private static final String eventCollectionId = "ActvityEvent";
 
