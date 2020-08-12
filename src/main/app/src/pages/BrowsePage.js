@@ -37,19 +37,19 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                 if (activityType === "games") {
                   return (
                     <div key={key}>
-                      <GameCard data={data} onClickFunction={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
+                      <GameCard data={data} updateActivityFunc={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
                 } else if (activityType === "reading") {
                   return (
                     <div key={key}>
-                      <ArticleCard data={data} onClickFunction={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
+                      <ArticleCard data={data} updateActivityFunc={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
                 } else if (activityType === "active") {
                   return (
                     <div key={key}>
-                      <VideoCard data={data} onClickFunction={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
+                      <VideoCard data={data} updateActivityFunc={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
                 }

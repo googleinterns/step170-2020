@@ -225,10 +225,10 @@ const ScheduleActivityPage = props => {
             return (
               <div key={key}> 
                 {activityType === "games" ? 
-                  <GameCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                  <GameCard data={element} updateActivityFunc={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
                   activityType === "reading" ? 
-                  <ArticleCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
-                  <VideoCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>}
+                  <ArticleCard data={element} updateActivityFunc={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> : 
+                  <VideoCard data={element} updateActivityFunc={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> }
               </div>   
             )
           })}
