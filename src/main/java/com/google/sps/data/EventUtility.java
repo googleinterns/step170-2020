@@ -69,7 +69,7 @@ public final class EventUtility {
   /*
   * Creates activity event object using event information.
   */
-  public static ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
+  public ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
     ActivityEvent event = new ActivityEvent(
       eventInfo.get("userId"), eventInfo.get("title"), Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
       getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests")));
@@ -80,10 +80,7 @@ public final class EventUtility {
   * Creates activity object using activity information retreived using
   * the datastore activity key.
   */
-  private static Activity getActivity(String activityKey) {
-    // Prepare database.
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
+  private Activity getActivity(String activityKey) {
     // Retrieve activity entity with specified key.
     Entity activityEntity = null;
     try {
