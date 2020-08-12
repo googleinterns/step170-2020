@@ -177,30 +177,20 @@ const ScheduleActivityPage = ({isLoggedIn, accessToken, userId, activity, links,
         </div>
      :
         <div className={classes.root} className="container">
-          {generateRandomActivities(links).map((element, key) => {
-            if (activityType === "games") {
-              return (
-                <div key={key}>
-                  <GameCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
-                </div>
-              );
-            } else if (activityType === "reading") {
-              return (
-                <div key={key}>
-                  <ArticleCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
-                </div>
-              );
-            } else if (activityType === "active") {
-              return (
-                <div key={key}>
-                  <VideoCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>
-                </div>
-              );
-            }
+          {generateRandomActivities(links).map((element, key) => { 
+            return (
+              <div key={key}> 
+                {activityType === "games" ? 
+                  <GameCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                  activityType === "reading" ? 
+                  <ArticleCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                  <VideoCard data={element} onClickFunction={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/>}
+              </div>   
+            )
           })}
-        </div>     
+        </div>   
       }
-
+      
       <div className={classes.root}>
       <Button variant="contained" color="primary" className={classes.largeButton} 
         onClick={handleSubmit}>Create Event</Button>
