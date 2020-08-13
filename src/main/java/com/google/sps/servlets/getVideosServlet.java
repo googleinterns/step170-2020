@@ -81,13 +81,8 @@ public class getVideosServlet extends HttpServlet {
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query("Video");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key videoEntityKey = KeyFactory.createKey("Video", entity.getKey().getId());
-      datastore.delete(videoEntityKey);
-    }
-
+    deleteResultsOfQueryFromDatastore(query, datastore);
+    
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
     BufferedReader reader = null;
@@ -181,5 +176,15 @@ public class getVideosServlet extends HttpServlet {
     
     response.setContentType("application/json");
     response.getWriter().println(json);
+  }
+
+  public static void deleteResultsOfQueryFromDatastore(Query query, DatastoreService datastore) {
+    
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key videoEntityKey = KeyFactory.createKey("Video", entity.getKey().getId());
+      datastore.delete(videoEntityKey);
+    }
   }
 }
