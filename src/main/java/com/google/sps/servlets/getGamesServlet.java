@@ -81,12 +81,7 @@ public class getGamesServlet extends HttpServlet {
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query("Game");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
-      datastore.delete(gameEntityKey);
-    }
+    deleteResultsOfGameFromDatastore(query, datastore);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -183,5 +178,15 @@ public class getGamesServlet extends HttpServlet {
 
     response.setContentType("application/json");
     response.getWriter().println(json);
+  }
+
+  public static void deleteResultsOfGameFromDatastore(Query query, DatastoreService datastore) {
+    
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
+      datastore.delete(gameEntityKey);
+    }
   }
 }
