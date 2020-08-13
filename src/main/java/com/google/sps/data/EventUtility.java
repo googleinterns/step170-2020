@@ -69,10 +69,10 @@ public final class EventUtility {
   /*
   * Creates activity event object using event information.
   */
-  public ActivityEvent getActivityEvent(Map<String, String> eventInfo) {
+  public ActivityEvent getActivityEvent(Map<String, String> eventInfo, Key activityKey) {
     ActivityEvent event = new ActivityEvent(
       eventInfo.get("userId"), eventInfo.get("title"), Long.valueOf(eventInfo.get("startTimestamp")), Long.valueOf(eventInfo.get("endTimestamp")),
-      getActivity(eventInfo.get("activityKey")), getGuests(eventInfo.get("guests")));
+      getActivity(activityKey, eventInfo.get("activityKey")), getGuests(eventInfo.get("guests")));
     return event;
   }
 
@@ -80,18 +80,18 @@ public final class EventUtility {
   * Creates activity object using activity information retreived using
   * the datastore activity key.
   */
-  private Activity getActivity(String activityKey) {
+  public Activity getActivity(Key activityKey, String activityKeyStr) {
     // Retrieve activity entity with specified key.
     Entity activityEntity = null;
     try {
-      activityEntity = datastore.get(KeyFactory.stringToKey(activityKey));
+      activityEntity = datastore.get(activityKey);
     } catch (EntityNotFoundException exception) {
       System.out.println("The entity requested wasn't found.");
     }
 
     String category = activityEntity.getKind() + "s";
     return new Activity(
-      activityKey,
+      activityKeyStr,
       (String) activityEntity.getProperty("title"),
       Activity.Category.valueOf(category.toUpperCase()),
       (String) activityEntity.getProperty("url")

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.api.services.calendar.model.Event;
 
 import com.google.sps.data.ActivityEvent;
@@ -37,7 +38,8 @@ public class CreateEventServlet extends HttpServlet {
     Map<String, String> eventInfo = getParameters(request);
 
     EventUtility eventUtility = new EventUtility();
-    ActivityEvent event = eventUtility.getActivityEvent(eventInfo);
+    ActivityEvent event = eventUtility.getActivityEvent(eventInfo, 
+      KeyFactory.stringToKey(eventInfo.get("activityKey")));
 
     // Create calendar event and send invite to guests
     GwtCalendarRpc calendar = new GwtCalendarRpc();
