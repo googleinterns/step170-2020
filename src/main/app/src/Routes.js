@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
-import ScheduleActivityPage from './pages/ScheduleActivityPage';
+import ScheduleActivityWrapper from './components/ScheduleActivityWrapper';
 import BrowsePage from './pages/BrowsePage';
 import HelpPage from './pages/HelpPage';
 import AboutPage from './pages/AboutPage';
@@ -16,7 +16,7 @@ const Routes = ({ activityType, updateActivityType, activity, updateActivity, up
       <Switch>
         <Route exact path='/' render={() => <HomePage activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} articleData={articleData}
           videoData={videoData} gameData={gameData} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>
-        <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage activityType={activityType} isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
+        <Route exact path='/schedule-activity' render={() => <ScheduleActivityWrapper activityType={activityType} isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
           activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} updateActivity={updateActivity} isGuest={isGuest} />}/>
         <Route exact path='/browse' render={() => <BrowsePage  activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} 
           updateServlet={updateServlet} links={links} articleData={articleData} videoData={videoData} gameData={gameData} />}/>
