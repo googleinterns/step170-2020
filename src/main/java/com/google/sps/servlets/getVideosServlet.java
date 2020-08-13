@@ -94,7 +94,7 @@ public class getVideosServlet extends HttpServlet {
 
     try {
       // Get hidden api key from gcloud secret manager.
-      String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "1");
+      String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "2");
       URL url = new URL(baseURL + youtubeapiKey);
       conn = (HttpURLConnection) url.openConnection();
 
