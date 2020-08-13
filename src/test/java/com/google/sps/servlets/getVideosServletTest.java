@@ -163,7 +163,7 @@ public class getVideosServletTest {
     assertEquals(2,results.countEntities());
 
     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-    getVideosServlet.deleteResultsOfQueryFromDatastore(query,ds);
+    getVideosServlet.deleteResultsOfVideoFromDatastore(query,ds);
 
     // Size is zero since all entities are deleted.
     assertEquals(0,ds.prepare(query).countEntities());
