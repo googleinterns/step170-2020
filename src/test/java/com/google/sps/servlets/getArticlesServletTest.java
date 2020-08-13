@@ -108,9 +108,6 @@ public class getArticlesServletTest {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Article> articles = new ArrayList<>();
 
-    // Make sure that the size of articles is initially zero before calling the servlet.
-    assertEquals(0,articles.size());
-
     //calling the servlet
     new getArticlesServlet().doPut(request, response);
 

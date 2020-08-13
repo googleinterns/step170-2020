@@ -106,9 +106,6 @@ public class getVideosServletTest {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Video> videos = new ArrayList<>();
 
-    // Make sure that the size of videos is initially zero before calling the servlet.
-    assertEquals(0,videos.size());
-
     //calling the servlet
     new getVideosServlet().doPut(request, response);
 
