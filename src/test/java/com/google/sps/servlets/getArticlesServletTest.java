@@ -139,7 +139,7 @@ public class getArticlesServletTest {
   }
 
   @Test
-  public void deleteResultsOfQueryFromDatastoreTest() throws Exception {
+  public void deleteResultsOfArticlesFromDatastoreTest() throws Exception {
 
     //mocking response and request to pass to servlet.
     HttpServletRequest request = mock(HttpServletRequest.class);
