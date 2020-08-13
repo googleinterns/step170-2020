@@ -20,8 +20,9 @@ import VideoCard from '../constants/VideoCard.js';
   If the user isn't already logged in, they wil be redirected to
   the login page. */
 const ScheduleActivityPage = props => {
-  const {isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
-        updateEventScheduled, updateActivity , activityType, isGuest} = props;
+  const { isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
+        updateEventScheduled, updateActivity , activityType, isGuest,
+        randomActivities, updateRandomActivities } = props;
   
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -69,11 +70,16 @@ const ScheduleActivityPage = props => {
     }
   }
 
-  const generateRandomActivities = (testData) => {
+  const generateRandomActivities = links => {
+
+    // Prevent random Activities from reloading if already set
+    if (randomActivities.length !== 0) {
+      return randomActivities;
+    }
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
     // Populate the array elements as 0 to testData's length. 
-    const arr = Array.from(Array(testData.length).keys());
+    const arr = Array.from(Array(links.length).keys());
 
     // randomArray is an array that will have any three random objects of testData. 
     const randomArray = new Array();
@@ -81,10 +87,11 @@ const ScheduleActivityPage = props => {
     // For loop to store three indices of testData into items array.
     for (let i = 0; i < 3; i++) {
       var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
-      randomArray.push(testData[arr[x]]);    // Storing the objects directly from the testData.
+      randomArray.push(links[arr[x]]);    // Storing the objects directly from the testData.
       arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
     }
 
+    updateRandomActivities(randomArray);
     return (randomArray);
   }
 
