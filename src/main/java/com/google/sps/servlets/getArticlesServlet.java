@@ -81,12 +81,7 @@ public class getArticlesServlet extends HttpServlet {
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query("Article");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
-      datastore.delete(articleEntityKey);
-    }
+    deleteResultsOfQueryFromDatastore(query, datastore);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -183,5 +178,15 @@ public class getArticlesServlet extends HttpServlet {
 
     response.setContentType("application/json");
     response.getWriter().println(json);
+  }
+
+  public static void deleteResultsOfQueryFromDatastore(Query query, DatastoreService datastore) {
+    
+    PreparedQuery results = datastore.prepare(query);
+
+    for (Entity entity : results.asIterable()) {
+      Key articleEntityKey = KeyFactory.createKey("Article", entity.getKey().getId());
+      datastore.delete(articleEntityKey);
+    }
   }
 }
