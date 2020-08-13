@@ -11,19 +11,19 @@ import LoginPage from './pages/LoginPage';
 /* Routes address bar to corresponding page components */
 const Routes = ({ activityType, updateActivityType, activity, updateActivity, updateServlet, links, isLoggedIn, updateIsLoggedIn, 
   accessToken, updateAccessToken, userId, updateUserId, greeting, updateGreeting,schedule_browse_button, changeButton, articleData, videoData, gameData,
-  eventScheduled, updateEventScheduled }) => {
+  eventScheduled, updateEventScheduled, isGuest, updateIsGuest }) => {
     return (
       <Switch>
         <Route exact path='/' render={() => <HomePage activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} articleData={articleData}
           videoData={videoData} gameData={gameData} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} />}/>
         <Route exact path='/schedule-activity' render={() => <ScheduleActivityPage activityType={activityType} isLoggedIn={isLoggedIn} accessToken={accessToken} userId={userId} 
-          activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} updateActivity={updateActivity}/>}/>
+          activity={activity} links={links} eventScheduled={eventScheduled} updateEventScheduled={updateEventScheduled} updateActivity={updateActivity} isGuest={isGuest} />}/>
         <Route exact path='/browse' render={() => <BrowsePage  activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} 
           updateServlet={updateServlet} links={links} articleData={articleData} videoData={videoData} gameData={gameData} />}/>
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
         <Route exact path='/login' render={() => <LoginPage isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} 
-          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} />} />
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} updateIsGuest={updateIsGuest} />} />
 
         <Route
           render={function() {

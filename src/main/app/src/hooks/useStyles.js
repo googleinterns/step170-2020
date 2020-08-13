@@ -25,18 +25,8 @@ const useStyles = makeStyles(theme => ({
   input: {
     flex: 1
   },
-  guestInput: {
-    paddingRight: '1rem'
-  },
   button: {paddingLeft: '1rem'},
-  largeButton: {
-    padding: '1rem 2rem',
-    margin: '0px auto',
-    fontSize: '1.1rem'
-  },
   chipsList: {
-    display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
     listStyle: 'none',
@@ -52,4 +42,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export { useStyles }
+const custom = {
+  guestInput: {
+    paddingRight: '1rem'
+  },
+  largeButton: {
+    padding: '1rem 2rem',
+    margin: '0px auto',
+    fontSize: '1.1rem'
+  },
+}
+
+export { useStyles, custom }
