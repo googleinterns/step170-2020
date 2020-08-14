@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
-public final class StoreActivityEventToDatastoreTests {
+public final class StoreActivityEventToDatastoreTest {
 
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
@@ -59,8 +59,8 @@ public final class StoreActivityEventToDatastoreTests {
     Map<String, String> activityEventProperties = new HashMap<>();
     activityEventProperties.put("userId", "userId");
     activityEventProperties.put("title", "title");
-    activityEventProperties.put("startTimestamp", "startTimestamp");
-    activityEventProperties.put("endTimestamp", "endTimestamp");
+    activityEventProperties.put("startTimestamp", "1597418784908");
+    activityEventProperties.put("endTimestamp", "1597418784908");
     activityEventProperties.put("activityKey", "activityKey");
     activityEventProperties.put("guests", "guest1,guest2,guest3");
     activityEventProperties.put("eventId", "eventId");
@@ -97,6 +97,6 @@ public final class StoreActivityEventToDatastoreTests {
     assertEquals(activityEventProperties.get("endTimestamp"), activityEvent.getProperty("endTimestamp"));
     assertEquals(activityEventProperties.get("activityKey"), activityEvent.getProperty("activityKey"));
     assertEquals(activityEventProperties.get("guests"), activityEvent.getProperty("guests"));
-    assertEquals(activityEventProperties.get("eventId"), "dfsdfs");
+    assertEquals(activityEventProperties.get("eventId"), activityEvent.getProperty("eventId"));
   }
 }
