@@ -42,7 +42,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Video;
-import com.google.sps.data.DeleteAllFromDatastore;
+import com.google.sps.servlets.DeleteAllFromDatastoreUtility;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -63,6 +63,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 public class getVideosServlet extends HttpServlet {
   private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=yoga&type=video&key=";
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
+  private static final String kind = new String("Video");
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -80,10 +81,9 @@ public class getVideosServlet extends HttpServlet {
   @Override
   public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query("Video");
+    Query query = new Query(kind);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    String s = new String("Video");
-    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, datastore,s);
+    DeleteAllFromDatastoreUtility.deleteResultsOfQueryFromDatastore(query, datastore,kind);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -142,7 +142,7 @@ public class getVideosServlet extends HttpServlet {
 
     for (int i = 0; i < numVideos; ++i) {
       JSONObject currentVideo = videoData.getJSONObject(i);
-      Entity videoEntity = new Entity("Video");
+      Entity videoEntity = new Entity(kind);
 
       videoEntity.setProperty("url", videoLinkBaseURL + (currentVideo.getJSONObject("id").getString("videoId")));
       videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
@@ -155,7 +155,7 @@ public class getVideosServlet extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Video");
+    Query query = new Query(kind);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);

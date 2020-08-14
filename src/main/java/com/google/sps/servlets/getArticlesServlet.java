@@ -42,7 +42,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Article;
-import com.google.sps.data.DeleteAllFromDatastore;
+import com.google.sps.servlets.DeleteAllFromDatastoreUtility;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -63,6 +63,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 public class getArticlesServlet extends HttpServlet {
   private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
   private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
+  private static final String kind = new String("Article");
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -80,10 +81,9 @@ public class getArticlesServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query("Article");
+    Query query = new Query(kind);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    String s = new String("Article");
-    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, datastore,s);
+    DeleteAllFromDatastoreUtility.deleteResultsOfQueryFromDatastore(query, datastore,kind);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -140,7 +140,7 @@ public class getArticlesServlet extends HttpServlet {
 
     for (int i = 0; i < numArticles; ++i) {
       JSONObject currentArticle = articleData.getJSONObject(i);
-      Entity articleEntity = new Entity("Article");
+      Entity articleEntity = new Entity(kind);
 
       articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
       articleEntity.setProperty("author", currentArticle.getString("author"));
@@ -155,7 +155,7 @@ public class getArticlesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Article");
+    Query query = new Query(kind);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);

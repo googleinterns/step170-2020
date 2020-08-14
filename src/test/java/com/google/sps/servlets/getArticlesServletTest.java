@@ -5,7 +5,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Article;
-import com.google.sps.data.DeleteAllFromDatastore;
+import com.google.sps.servlets.DeleteAllFromDatastoreUtility;
 import org.json.JSONObject;
 
 import org.junit.After;
@@ -161,7 +161,7 @@ public class getArticlesServletTest {
     assertEquals(2,results.countEntities());
 
     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, ds, kind);
+    DeleteAllFromDatastoreUtility.deleteResultsOfQueryFromDatastore(query, ds, kind);
 
     // Size is zero since all entities are deleted.
     assertEquals(0,ds.prepare(query).countEntities());
