@@ -104,4 +104,46 @@ public final class EventUtilityTest {
     assertEquals(title, activity.getTitle());
     assertEquals(url, activity.getUrl());
   }
+
+  @Test
+  public void testGetVideoActivity() throws EntityNotFoundException {
+    String type = "video";
+    String keyStr = "key";
+
+    // Create map of game entity properties
+    Map<String, String> properties = new HashMap<>();
+    String title = "video title";
+    String url = "video url";
+    properties.put("title", title);
+    properties.put("url", url);
+
+    Activity activity = getTestActivity(type, keyStr, properties);
+
+    // Check if values are the same
+    assertEquals(keyStr, activity.getKey());
+    assertEquals(Activity.Category.valueOf("VIDEOS"), activity.getCategory());
+    assertEquals(title, activity.getTitle());
+    assertEquals(url, activity.getUrl());
+  }
+
+  @Test
+  public void testGetArticleActivity() throws EntityNotFoundException {
+    String type = "article";
+    String keyStr = "key";
+
+    // Create map of game entity properties
+    Map<String, String> properties = new HashMap<>();
+    String title = "article title";
+    String url = "article url";
+    properties.put("title", title);
+    properties.put("url", url);
+
+    Activity activity = getTestActivity(type, keyStr, properties);
+
+    // Check if values are the same
+    assertEquals(keyStr, activity.getKey());
+    assertEquals(Activity.Category.valueOf("ARTICLES"), activity.getCategory());
+    assertEquals(title, activity.getTitle());
+    assertEquals(url, activity.getUrl());
+  }
 }
