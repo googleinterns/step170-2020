@@ -12,17 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.sps;
+package com.google.sps.data;
 
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-
 import static org.junit.Assert.assertEquals;
-// import static org.mockito.ArgumentMatchers.any;
-// import static org.mockito.Mockito.*;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -33,14 +30,11 @@ import static com.google.sps.data.EventUtility.getGuests;
 import com.google.sps.data.Activity;
 import com.google.sps.data.ActivityEvent;
 
-import com.google.appengine.api.datastore.EntityNotFoundException;
-
 import java.util.Map;
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
 public final class StoreActivityEventToDatastoreTest {
-
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
 
   @Before
@@ -90,13 +84,8 @@ public final class StoreActivityEventToDatastoreTest {
     // Retrieve the single activity event entity.
     Entity activityEvent = 	results.asSingleEntity();
 
-    // Check if entity has all assigned properties
-    assertEquals(activityEventProperties.get("userId"), activityEvent.getProperty("userId"));
-    assertEquals(activityEventProperties.get("title"), activityEvent.getProperty("title"));
-    assertEquals(activityEventProperties.get("startTimestamp"), activityEvent.getProperty("startTimestamp"));
-    assertEquals(activityEventProperties.get("endTimestamp"), activityEvent.getProperty("endTimestamp"));
-    assertEquals(activityEventProperties.get("activityKey"), activityEvent.getProperty("activityKey"));
-    assertEquals(activityEventProperties.get("guests"), activityEvent.getProperty("guests"));
-    assertEquals(activityEventProperties.get("eventId"), activityEvent.getProperty("eventId"));
+    // Check if the entity has all the assigned properties
+    for (String key : activityEventProperties.keySet())
+      assertEquals(activityEventProperties.get(key), activityEvent.getProperty(key));
   }
 }
