@@ -5,6 +5,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Game;
+import com.google.sps.data.DeleteAllFromDatastore;
 import org.json.JSONObject;
 
 import org.junit.After;
@@ -26,6 +27,10 @@ import static org.mockito.Mockito.*;
 public class getGamesServletTest {
 
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private final HttpServletRequest request = mock(HttpServletRequest.class);
+  private final HttpServletResponse response = mock(HttpServletResponse.class);
+  private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+  private final String kind = new String("Game");
 
   @Before
   public void setUp() {
@@ -39,8 +44,6 @@ public class getGamesServletTest {
 
   @Test
   public void doGetWithoutAnyGamesInMockDataStore() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
 
     String json = "[]\n";
 
@@ -59,14 +62,10 @@ public class getGamesServletTest {
     writer.flush();
 
     assertEquals(json, stringWriter.toString());
-}
+  }
 
   @Test
   public void doGetWithOneGameInMockDataStore() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
     Entity gameEntity = new Entity("Game");
     gameEntity.setProperty("title", "testTitle");
@@ -102,10 +101,7 @@ public class getGamesServletTest {
 
   @Test
   public void gettingGamesFromApiTest() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Game> games = new ArrayList<>();
 
     //calling the servlet
@@ -114,8 +110,8 @@ public class getGamesServletTest {
     //verify that request was never accessed
     verify(request, never()).getParameter(anyString());
 
-    Query query = new Query("Game");
-    PreparedQuery results = datastore.prepare(query);
+    Query query = new Query(kind);
+    PreparedQuery results = ds.prepare(query);
     
     for (Entity entity : results.asIterable()) {
 
@@ -139,12 +135,6 @@ public class getGamesServletTest {
   @Test
   public void deleteResultsOfGamesFromDatastoreTest() throws Exception {
 
-    //mocking response and request to pass to servlet.
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-
     Entity gameEntity = new Entity("Game");
     gameEntity.setProperty("title", "testTitle");
     gameEntity.setProperty("description", "testDescription");
@@ -165,16 +155,16 @@ public class getGamesServletTest {
     ds.put(gameEntity);
     ds.put(gameEntity1);
 
-    Query query = new Query("Game");
+    Query query = new Query(kind);
     PreparedQuery results = ds.prepare(query);
 
     // Checking if the datastore has these two entities. 
     assertEquals(2,results.countEntities());
 
     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-    getGamesServlet.deleteResultsOfGameFromDatastore(query,ds);
+    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, ds,kind);
 
     // Size is zero since all entities are deleted.
     assertEquals(0,ds.prepare(query).countEntities());
   }
- }
+}

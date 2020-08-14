@@ -42,6 +42,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.sps.data.Game;
+import com.google.sps.data.DeleteAllFromDatastore;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -81,7 +82,8 @@ public class getGamesServlet extends HttpServlet {
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query("Game");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    deleteResultsOfGameFromDatastore(query, datastore);
+    String s = new String("Game");
+    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, datastore,s);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -178,15 +180,5 @@ public class getGamesServlet extends HttpServlet {
 
     response.setContentType("application/json");
     response.getWriter().println(json);
-  }
-
-  public static void deleteResultsOfGameFromDatastore(Query query, DatastoreService datastore) {
-    
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
-      datastore.delete(gameEntityKey);
-    }
   }
 }

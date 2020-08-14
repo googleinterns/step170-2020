@@ -5,6 +5,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Video;
+import com.google.sps.data.DeleteAllFromDatastore;
 import org.json.JSONObject;
 
 import org.junit.After;
@@ -26,6 +27,10 @@ import static org.mockito.Mockito.*;
 public class getVideosServletTest {
 
   private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private final HttpServletRequest request = mock(HttpServletRequest.class);
+  private final HttpServletResponse response = mock(HttpServletResponse.class);
+  private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+  private final String kind = new String("Video");
 
   @Before
   public void setUp() {
@@ -39,9 +44,7 @@ public class getVideosServletTest {
 
   @Test
   public void doGetWithoutAnyVideosInMockDataStore() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
+    
     String json = "[]\n";
 
     //These lines mock response.getWriter()
@@ -63,10 +66,6 @@ public class getVideosServletTest {
 
   @Test
   public void doGetWithOneVideoInMockDataStore() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
     Entity videoEntity = new Entity("Video");
     videoEntity.setProperty("url", "testURL");
@@ -100,10 +99,7 @@ public class getVideosServletTest {
 
   @Test
   public void gettingVideosFromApiTest() throws Exception {
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     List<Video> videos = new ArrayList<>();
 
     //calling the servlet
@@ -112,8 +108,8 @@ public class getVideosServletTest {
     //verify that request was never accessed
     verify(request, never()).getParameter(anyString());
 
-    Query query = new Query("Video");
-    PreparedQuery results = datastore.prepare(query);
+    Query query = new Query(kind);
+    PreparedQuery results = ds.prepare(query);
     
     for (Entity entity : results.asIterable()) {
       String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
@@ -134,12 +130,6 @@ public class getVideosServletTest {
   @Test
   public void deleteResultsOfVideosFromDatastoreTest() throws Exception {
 
-    //mocking response and request to pass to servlet.
-    HttpServletRequest request = mock(HttpServletRequest.class);
-    HttpServletResponse response = mock(HttpServletResponse.class);
-
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-
     Entity videoEntity = new Entity("Video");
     videoEntity.setProperty("url", "testURL");
     videoEntity.setProperty("creator", "testCreator");
@@ -156,14 +146,14 @@ public class getVideosServletTest {
     ds.put(videoEntity);
     ds.put(videoEntity1);
 
-    Query query = new Query("Video");
+    Query query = new Query(kind);
     PreparedQuery results = ds.prepare(query);
 
     // Checking if the datastore has these two entities. 
     assertEquals(2,results.countEntities());
 
     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-    getVideosServlet.deleteResultsOfVideoFromDatastore(query,ds);
+    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, ds,kind);
 
     // Size is zero since all entities are deleted.
     assertEquals(0,ds.prepare(query).countEntities());

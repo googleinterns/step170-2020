@@ -42,6 +42,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Video;
+import com.google.sps.data.DeleteAllFromDatastore;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -81,7 +82,8 @@ public class getVideosServlet extends HttpServlet {
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query("Video");
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    deleteResultsOfVideoFromDatastore(query, datastore);
+    String s = new String("Video");
+    DeleteAllFromDatastore.deleteResultsOfQueryFromDatastore(query, datastore,s);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -176,15 +178,5 @@ public class getVideosServlet extends HttpServlet {
     
     response.setContentType("application/json");
     response.getWriter().println(json);
-  }
-
-  public static void deleteResultsOfVideoFromDatastore(Query query, DatastoreService datastore) {
-    
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key videoEntityKey = KeyFactory.createKey("Video", entity.getKey().getId());
-      datastore.delete(videoEntityKey);
-    }
   }
 }
