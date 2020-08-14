@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @RunWith(JUnit4.class)
-public final class EventUtilityTest {
+public final class RetrieveActivityFromDatastoreTests {
 
   private static DatastoreService getDatastoreMock(Entity entity) throws EntityNotFoundException {
     // Use mockito to generate a datastore mock.
