@@ -98,7 +98,7 @@ public final class EventUtility {
     );
   }
 
-  private static List<String> getGuests(String guests) {
+  public static List<String> getGuests(String guests) {
     return Arrays.asList(guests.split(","));
   }
 }
