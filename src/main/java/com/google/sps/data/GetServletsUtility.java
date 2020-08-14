@@ -1,4 +1,4 @@
-package com.google.sps.servlets;
+package com.google.sps.data;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -9,7 +9,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 // This class is to be used by the other three servlets to delete entities from datastore.
-public class DeleteAllFromDatastoreUtility {
+public class GetServletsUtility {
 
   /*
    * This function takes the query, kind, and datastore and deletes all the entities that match with the query and kind from the datastore.

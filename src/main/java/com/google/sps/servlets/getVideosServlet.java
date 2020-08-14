@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,7 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -42,7 +40,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.sps.data.Video;
-import com.google.sps.servlets.DeleteAllFromDatastoreUtility;
+import com.google.sps.data.GetServletsUtility;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -51,7 +49,6 @@ import com.google.appengine.api.datastore.KeyFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
@@ -63,7 +60,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 public class getVideosServlet extends HttpServlet {
   private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=yoga&type=video&key=";
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
-  private static final String kind = new String("Video");
+  private static final String KIND = new String("Video");
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -81,9 +78,9 @@ public class getVideosServlet extends HttpServlet {
   @Override
   public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query(kind);
+    Query query = new Query(KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    DeleteAllFromDatastoreUtility.deleteResultsOfQueryFromDatastore(query, datastore,kind);
+    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -142,7 +139,7 @@ public class getVideosServlet extends HttpServlet {
 
     for (int i = 0; i < numVideos; ++i) {
       JSONObject currentVideo = videoData.getJSONObject(i);
-      Entity videoEntity = new Entity(kind);
+      Entity videoEntity = new Entity(KIND);
 
       videoEntity.setProperty("url", videoLinkBaseURL + (currentVideo.getJSONObject("id").getString("videoId")));
       videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
@@ -155,7 +152,7 @@ public class getVideosServlet extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(kind);
+    Query query = new Query(KIND);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);

@@ -1,28 +1,26 @@
 package com.google.sps.servlets;
+
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
+
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Article;
-import com.google.sps.servlets.DeleteAllFromDatastoreUtility;
+import com.google.sps.data.GetServletsUtility;
 import org.json.JSONObject;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.mockito.Mockito.*;
 
 public class getArticlesServletTest {
 
@@ -161,7 +159,7 @@ public class getArticlesServletTest {
     assertEquals(2,results.countEntities());
 
     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-    DeleteAllFromDatastoreUtility.deleteResultsOfQueryFromDatastore(query, ds, kind);
+    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, ds, kind);
 
     // Size is zero since all entities are deleted.
     assertEquals(0,ds.prepare(query).countEntities());
