@@ -169,7 +169,7 @@ const ScheduleActivityPage = props => {
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
       <div className={classes.root}>
-      <TextField id="standard-basic" label="Add Title" className={classes.input} 
+      <TextField id="title-field" label="Add Title" className={classes.input} 
         value={title} onChange={handleTitleChange} />
       </div>
       {/* Datetime selection */}
@@ -243,7 +243,7 @@ const ScheduleActivityPage = props => {
       }
       
       <div className={classes.root}>
-        <Button variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
+        <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
           Create Event
         </Button>
       </div>
