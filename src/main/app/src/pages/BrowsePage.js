@@ -34,22 +34,22 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           <div className="row">
             <div className="data-container is-fullwidth">
               {links.map((data, key) => {
-                if (activityType == "games") {
+                if (activityType === "games") {
                   return (
                     <div key={key}>
-                      <GameCard data={data} updateActivity={updateActivity}/>
+                      <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
-                } else if (activityType == "reading") {
+                } else if (activityType === "reading") {
                   return (
                     <div key={key}>
-                      <ArticleCard data={data} updateActivity={updateActivity}/>
+                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
-                } else if (activityType == "active") {
+                } else if (activityType === "active") {
                   return (
                     <div key={key}>
-                      <VideoCard data={data} updateActivity={updateActivity}/>
+                      <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
                     </div>
                   );
                 }

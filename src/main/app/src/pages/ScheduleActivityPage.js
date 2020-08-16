@@ -6,20 +6,23 @@ import Datetime from "react-datetime";
 import { useStyles, custom } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { isValidEmail, validate } from '../hooks/formValidation';
-
 import {Grid, Button, FormControlLabel, Switch, FormControl, 
         TextField, Chip, Radio, CardContent, CardActions, Card, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
 import swal from 'sweetalert';
 import 'react-datetime/css/react-datetime.css';
+import GameCard from '../constants/GameCard.js';
+import ArticleCard from '../constants/ArticleCard.js';
+import VideoCard from '../constants/VideoCard.js';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
 const ScheduleActivityPage = props => {
-  const {isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
-        updateEventScheduled, updateActivity , activityType, isGuest} = props;
+  const { isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
+        updateEventScheduled, updateActivity , activityType, isGuest,
+        randomActivities, updateRandomActivities } = props;
   
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -67,11 +70,16 @@ const ScheduleActivityPage = props => {
     }
   }
 
-  const generateRandomActivities = (testData) => {
+  const generateRandomActivities = links => {
+
+    // Prevent random Activities from reloading if already set
+    if (randomActivities.length !== 0) {
+      return randomActivities;
+    }
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
     // Populate the array elements as 0 to testData's length. 
-    const arr = Array.from(Array(testData.length).keys());
+    const arr = Array.from(Array(links.length).keys());
 
     // randomArray is an array that will have any three random objects of testData. 
     const randomArray = new Array();
@@ -79,43 +87,13 @@ const ScheduleActivityPage = props => {
     // For loop to store three indices of testData into items array.
     for (let i = 0; i < 3; i++) {
       var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
-      randomArray.push(testData[arr[x]]);    // Storing the objects directly from the testData.
+      randomArray.push(links[arr[x]]);    // Storing the objects directly from the testData.
       arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
     }
 
-    return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        {randomArray.map((element) => 
-          <Grid item xs>
-            <Card className={classes.root}>
-
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary" gutterBottom>
-                  {element.category}
-                </Typography>
-                <Typography variant="h6" component="h3">
-                  {element.title}
-                </Typography>
-                <Typography variant="body2" component="p">
-                  {activityType == "active" ? element.creator: activityType == "reading" ? element.description : element.notes}
-                </Typography>
-              </CardContent>
-
-              <CardActions>
-              <div>
-                <Button key={element.key} size="small" variant="contained" color="primary" href={element.url}> VIEW MORE </Button>
-                <Button key={element.key} size="small" color="secondary" variant="contained" onClick={() => { alertUpdateActivity(element) }}> Choose this activity</Button>
-              </div>
-              </CardActions>
-
-            </Card>
-          </Grid>
-        )}
-      </Grid>
-    </div>
-    )
-}
+    updateRandomActivities(randomArray);
+    return (randomArray);
+  }
 
   const alertUpdateActivity = (element) => {
     updateActivity({activityKey: element.key, title: element.title});
@@ -126,6 +104,7 @@ const ScheduleActivityPage = props => {
       button: "Close",
     });
   }
+
 
   // Remove guest specified key from guest chip list.
   const handleChipDelete = key => {
@@ -248,9 +227,21 @@ const ScheduleActivityPage = props => {
           </Card>
         </div>
      :
-        generateRandomActivities(links)
+        <div className={classes.root} className="container">
+          {generateRandomActivities(links).map((element, key) => { 
+            return (
+              <div key={key}> 
+                {activityType === "games" ? 
+                  <GameCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                  activityType === "reading" ? 
+                  <ArticleCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> : 
+                  <VideoCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> }
+              </div>   
+            )
+          })}
+        </div>   
       }
-
+      
       <div className={classes.root}>
         <Button variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
           Create Event

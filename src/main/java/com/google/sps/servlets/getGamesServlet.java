@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.lang.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,15 +32,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.google.sps.data.Game;
+import com.google.sps.data.GetServletsUtility;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -62,6 +60,7 @@ import com.google.cloud.secretmanager.v1.SecretVersionName;
 public class getGamesServlet extends HttpServlet {
   private static final String baseURL = "https://api.airtable.com/v0/appdlpPF3wZ8scgvw/Imported%20table?api_key=";
   private static final Logger logger = Logger.getLogger(getGamesServlet.class.getName());
+  private static final String KIND = new String("Game");
 
   // This method is used to access the api key stored in gcloud secret manager.
   public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
@@ -79,14 +78,9 @@ public class getGamesServlet extends HttpServlet {
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query("Game");
+    Query query = new Query(KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    for (Entity entity : results.asIterable()) {
-      Key gameEntityKey = KeyFactory.createKey("Game", entity.getKey().getId());
-      datastore.delete(gameEntityKey);
-    }
+    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
     StringBuilder strBuf = new StringBuilder();  
     HttpURLConnection conn = null;        
@@ -143,7 +137,7 @@ public class getGamesServlet extends HttpServlet {
 
     for (int i = 0; i < numGames; ++i) {
       JSONObject currentGame = gameData.getJSONObject(i);
-      Entity gameEntity = new Entity("Game");
+      Entity gameEntity = new Entity(KIND);
       
       gameEntity.setProperty("title", currentGame.getJSONObject("fields").getString("title"));
       gameEntity.setProperty("description", currentGame.getJSONObject("fields").getString("description"));
@@ -158,7 +152,7 @@ public class getGamesServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query("Game");
+    Query query = new Query(KIND);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
