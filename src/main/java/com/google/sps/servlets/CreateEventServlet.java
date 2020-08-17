@@ -6,13 +6,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.api.services.calendar.model.Event;
 
 import com.google.sps.data.ActivityEvent;
-import static com.google.sps.data.GeneralUtility.getParameter;
-import static com.google.sps.data.EventUtility.getActivityEvent;
-import static com.google.sps.data.EventUtility.storeActivityEvent;
 import com.google.sps.data.Activity.Category;
+import com.google.sps.data.EventUtility;
+
+import static com.google.sps.data.GeneralUtility.getParameter;
+import static com.google.sps.data.EventUtility.storeActivityEvent;
+
 
 import java.util.Map;
 import java.util.HashMap;
@@ -33,7 +36,10 @@ public class CreateEventServlet extends HttpServlet {
 
     // Get event information
     Map<String, String> eventInfo = getParameters(request);
-    ActivityEvent event = getActivityEvent(eventInfo);
+
+    EventUtility eventUtility = new EventUtility();
+    ActivityEvent event = eventUtility.getActivityEvent(eventInfo, 
+      KeyFactory.stringToKey(eventInfo.get("activityKey")));
 
     // Create calendar event and send invite to guests
     GwtCalendarRpc calendar = new GwtCalendarRpc();
