@@ -6,6 +6,7 @@ import Line from './constants/Line';
 import ResourceCard from './constants/ResourceCard';
 import info from './constants/keys.js';
 import './css/app.css';
+import { tempData } from './test.js';
 
 import updateActivityLinks from './hooks/updateActivityLinks';
 
@@ -29,7 +30,7 @@ const App = () => {
   const [servlet, updateServlet] = React.useState(gameData); 
 
   // State for activities data retrieved from servlet
-  const [links, updateLinks] = React.useState([]);
+  const [links, updateLinks] = React.useState(tempData);
   const [linksLoaded, updateLinksLoaded] = React.useState(false);
 
   // State for schedule activity form submitted.
