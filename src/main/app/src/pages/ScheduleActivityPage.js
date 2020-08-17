@@ -210,7 +210,7 @@ const ScheduleActivityPage = props => {
       }
       {/* Form to add guests. */}
       <div className="d-flex flex-row">
-        <TextField label="Add Guest" variant="outlined" style={custom.guestInput} className="flex-grow-1"
+        <TextField label="Add Guest Email" variant="outlined" style={custom.guestInput} className="flex-grow-1"
           value={guest} onChange={handleGuestChange} error={guestError} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
@@ -218,7 +218,7 @@ const ScheduleActivityPage = props => {
       {/* Display activity title if an activity was selected. */}
       {activity.title ?
         <div className={classes.root} className="container">
-          <Card className={classes.root}>
+          <Card className={`${classes.root} mt-3`}>
             <CardContent>
               <Typography variant="h5" component="h2">
                 {activity.title}

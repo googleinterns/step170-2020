@@ -30,7 +30,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           </div>
         </div>
 
-        <div className="section-padding-large mb-3 mx-5">
+        <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
               {links.map((data, key) => {
