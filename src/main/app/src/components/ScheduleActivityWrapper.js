@@ -8,7 +8,8 @@ const ScheduleActivityWrapper = props => {
   // Todo: Move randomActivities state from the schedule activity page to here.
   const [randomActivities, updateRandomActivities] = React.useState([]);
   return (
-    <ScheduleActivityPage {...props} />
+    <ScheduleActivityPage {...props} randomActivities={randomActivities}
+      updateRandomActivities={updateRandomActivities} />
   )
 }
 
