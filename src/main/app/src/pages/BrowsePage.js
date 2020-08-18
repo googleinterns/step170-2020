@@ -33,26 +33,16 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <div className="section-padding-large mb-3 mx-5">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {links.map((data, key) => {
-                if (activityType === "games") {
-                  return (
-                    <div key={key}>
-                      <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                } else if (activityType === "reading") {
-                  return (
-                    <div key={key}>
-                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                } else if (activityType === "active") {
-                  return (
-                    <div key={key}>
-                      <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                }
+              {links && links.map((data, key) => { 
+                return (
+                  <div key={key}> 
+                    {activityType === "games" ? 
+                      <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
+                      activityType === "reading" ? 
+                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> : 
+                      <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> }
+                  </div>   
+                )
               })}
             </div> 
           </div> 
