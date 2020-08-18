@@ -4,51 +4,43 @@ import { Link } from 'react-router-dom';
 import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
+import filterActivities from '../hooks/browseActivitiesFilter.js';
 
 /* Component for browse page */
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData}) => {
 
   // State for game filters
-  const [linkFilters, updateLinksFilters] = React.useState({});             // this is the user entered input
-  const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks button. 
+  const [linkFilters, updateLinksFilters] = React.useState({});             // This is the user entered input. To access the number of people, do linkFilters.numOfPeople.
+  const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button. 
+  const [textBoxValue, settextBoxValue] = React.useState("");               // This state is to retain the value entered by the user un
 
+  /* 
+    This is the function that will be called when the filter button is clicked. 
+    This function calls the function that is declared in hooks folder to filter out games based on the entered value.
+  */
   const filterButtonClick = evt => {
-    updateFilteredLinks(links.filter(isWithinRange, linkFilters.numOfPlayers));
+   filterActivities(links, activityType, linkFilters, updateFilteredLinks);
   }
 
+  // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
   const filterResetClick = evt => {
-    updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: -1}));
+    console.log(linkFilters.numOfPlayers);
+    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.numOfPlayers));     // numOfPLayers -1 if filter was reseted. In this case, filteredData will be links. 
     updateFilteredLinks(links);
+    settextBoxValue("");
     console.log(linkFilters.numOfPlayers);
   }
 
   // This is the function that gets triggered on typing any number in the textfield for GAME filters.
   const handleGameFilterChange = evt => {
     updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: evt.target.value}));
+    settextBoxValue(evt.target.value);
   }
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     updateActivityType(evt.target.value);
     updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
-  }
-
-  // const placeholdertext = () => {
-  //   if(linkFilters.numOfPlayers!= undefined && linkFilters.numOfPlayers != -1)
-  //     return "" + linkFilters.numOfPlayers;
-  //   else
-  //     return "How many people are there?";
-  // }
-
-  function isWithinRange(game, input) {
-    
-    if( (game.minPlayer === 0 && game.maxPlayer === 0) ||                 // If there are no restrictions on the number of players
-        (game.minPlayer === 0 && game.maxPlayer >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
-        (game.maxPlayer === 0 && game.minPlayer <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
-        (game.minPlayer <= input && game.maxPlayer >= input)  ) {         // If both are non-zero, and the game players are within limit. 
-      return game;
-    } 
-    // Otherwise don't return. 
   }
 
   return (
@@ -67,12 +59,12 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           </div>
         </div>
 
-        <div className="field">
-          <div className="control">
-           <p> Filter out games based on the number of players:</p> <textarea onChange={handleGameFilterChange} className="textarea is-primary" placeholder="How many people are there?"></textarea> 
-           <button className="button is-danger" onClick={filterButtonClick}>Filter</button>
-           <button className="button is-info" onClick={filterResetClick} >Reset Filter</button>
-          </div>
+        {/* This division is for filtering the results based on the user entered input. */}
+        <p> Filter out games based on the number of players:</p> 
+        <div className="field is-grouped">
+          <p className="control is-expanded has-icons-left"><span className="icon"><i className="fas fa-filter"></i></span><input className="input" onChange={handleGameFilterChange} type="text" value={textBoxValue} placeholder="How many people are there with you? Eg. 0"></input> </p>
+          <p className="control"><button className="button is-danger" onClick={filterButtonClick}>Filter</button> </p>
+          <p className="control"><button className="button is-info" onClick={filterResetClick} >Reset Filter</button></p>
         </div>
 
         <div className="section-padding-large mb-3">
