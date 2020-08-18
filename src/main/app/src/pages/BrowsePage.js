@@ -41,7 +41,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   // }
 
   function isWithinRange(game, input) {
-     
+    
     if( (game.minPlayer === 0 && game.maxPlayer === 0) ||                 // If there are no restrictions on the number of players
         (game.minPlayer === 0 && game.maxPlayer >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
         (game.maxPlayer === 0 && game.minPlayer <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
@@ -52,7 +52,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   }
 
   return (
-    <section className="section-padding-large mb-3 mx-5">
+    <section className="section-padding-large mb-3">
       <div className = "container">
         {/*Combo box bar component */}
         <div className="field has-addons">
@@ -75,7 +75,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           </div>
         </div>
 
-        <div className="section-padding-large mb-3 mx-5">
+        <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
               {filteredLinks.map((data, key) => {

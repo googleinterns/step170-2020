@@ -162,14 +162,14 @@ const ScheduleActivityPage = props => {
       {displayErrors && (titleError || dateError) ? 
         <Alert severity="error" onClose={() => updateDisplayErrors(false)} className="mb-5">
           <AlertTitle>Error</AlertTitle>
-          {errors.map(errorObj =>
-              errorObj.error ? <div>{errorObj.errorMsg} — <strong>check it out!</strong></div> : null
+          {errors.map((errorObj, key) =>
+              errorObj.error ? <div key={key}>{errorObj.errorMsg} — <strong>check it out!</strong></div> : null
           )}
         </Alert> : null}
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
       <div className={classes.root}>
-      <TextField id="standard-basic" label="Add Title" className={classes.input} 
+      <TextField id="title-field" label="Add Title" className={classes.input} 
         value={title} onChange={handleTitleChange} />
       </div>
       {/* Datetime selection */}
@@ -210,7 +210,7 @@ const ScheduleActivityPage = props => {
       }
       {/* Form to add guests. */}
       <div className="d-flex flex-row">
-        <TextField label="Add Guest" variant="outlined" style={custom.guestInput} className="flex-grow-1"
+        <TextField label="Add Guest Email" variant="outlined" style={custom.guestInput} className="flex-grow-1"
           value={guest} onChange={handleGuestChange} error={guestError} />
         <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
       </div>
@@ -218,7 +218,7 @@ const ScheduleActivityPage = props => {
       {/* Display activity title if an activity was selected. */}
       {activity.title ?
         <div className={classes.root} className="container">
-          <Card className={classes.root}>
+          <Card className={`${classes.root} mt-3`}>
             <CardContent>
               <Typography variant="h5" component="h2">
                 {activity.title}
@@ -243,7 +243,7 @@ const ScheduleActivityPage = props => {
       }
       
       <div className={classes.root}>
-        <Button variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
+        <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
           Create Event
         </Button>
       </div>
