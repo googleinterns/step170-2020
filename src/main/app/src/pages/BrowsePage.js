@@ -70,7 +70,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {filteredLinks.map((data, key) => {
+              {filteredLinks && filteredLinks.map((data, key) => {
                 if (activityType === "games") {
                   return (
                     <div key={key}>

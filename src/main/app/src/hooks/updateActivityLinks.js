@@ -1,6 +1,5 @@
 /* Fetches data from database through web servlets.
    UpdateLinks is a function used to update the data of that activity. And the data is retrieved using this servlet's fetch request to './servlet-url' (dataLink) */
-import {testData} from '../test';
 
 const updateActivityLinks = (updateLinks, servlet) => {
   fetch(servlet)
