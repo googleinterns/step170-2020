@@ -34,11 +34,15 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
       It sets the filters differently depending on the activity type selected. */
   const handleFilterChange = evt => {
     const value = evt.target.value;
-    updateLinksFilters(Object.assign(linkFilters, 
-      activityType === "games" ? {numOfPlayers: value} :
-      activityType === "reading" ? {} :
-      {}
-    ));
+
+    if (value === "")
+      updateLinksFilters({});
+    else
+      updateLinksFilters(Object.assign(linkFilters, 
+        activityType === "games" ? {numOfPlayers: value} :
+        activityType === "reading" ? {} :
+        {}
+      ));
     settextBoxValue(evt.target.value);
   }
 
