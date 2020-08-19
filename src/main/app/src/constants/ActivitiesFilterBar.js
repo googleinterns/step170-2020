@@ -28,9 +28,23 @@ const ArticlesFilterBar = () => {
   return null;
 }
 
-const VideosFilterBar = () => {
+const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
   // Todo: render videos filter bar.
-  return null;
+  return (
+    <React.Fragment>
+      <div className="field is-grouped">
+        <div className="control is-expanded"><div className="select is-fullwidth">
+          <select name="VideoType" onChange={handleFilterChange} value={textBoxValue}>
+            <option value="*">{"All"}</option>
+            <option value="yoga">{"Yoga"}</option>
+            <option value="workout">{"Workout"}</option>
+            <option value="meditation">{"Meditation"}</option>
+          </select>
+        </div></div>
+        <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
+      </div>
+    </React.Fragment>
+  );
 }
 
 export {GamesFilterBar, ArticlesFilterBar, VideosFilterBar}

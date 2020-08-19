@@ -36,6 +36,8 @@ const filterGames = (game, filters) => {
 const filterArticles = (article, filters) => {}
 
 /** Todo: filter list of videos. */
-const filterVideos = (video, filters) => {}
+const filterVideos = (video, filters) => {
+  return filters.videoType === '*' || video.type === filters.videoType;
+}
 
 export default filterActivities;
