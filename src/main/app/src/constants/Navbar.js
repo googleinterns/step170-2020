@@ -14,6 +14,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
   const clientID = info[0].clientID;
   const discoveryDocs = info[0].discoveryDocs;
   const scope = info[0].scope;
+  const [isActive, setisActive] = React.useState(false);
 
   return (
     <div>
@@ -22,7 +23,9 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
         <div className="navbar-brand">
           <NavLink className="navbar-item" to="/"> WeTime <i className="fas fa-heartbeat"></i></NavLink>
           
-          <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <a onClick={() => {
+              setisActive(!isActive);
+            }} role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -30,7 +33,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
         </div>
 
         {/*Navbar tabs to other pages.*/}
-        <div id="navbarBasicExample" className="navbar-menu">
+        <div id="navbarBasicExample" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
           <div className="navbar-start">
             <NavLink className="navbar-item" to="/help"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></NavLink>
             <NavLink className="navbar-item" to="/about"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></NavLink> 
