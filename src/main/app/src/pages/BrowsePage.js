@@ -19,7 +19,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     This function calls the function that is declared in hooks folder to filter out games based on the entered value.
   */
   const filterButtonClick = evt => {
-   filterActivities(links, activityType, linkFilters, updateFilteredLinks);
+    filterActivities(links, activityType, linkFilters, updateFilteredLinks);
   }
 
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
