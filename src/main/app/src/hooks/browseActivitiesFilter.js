@@ -14,8 +14,11 @@ const filterActivities = (links, activityType, linkFilters, updateFilteredLinks)
           case "articles":
             filterArticles(link, linkFilters);
             break;
-          default:
+          case "videos":
             filterVideos(link, linkFilters);
+            break; 
+          default:
+            console.log('err', "ERROR: INVALID ACTIVITY TYPE!");
         }
       }
     ));
@@ -33,7 +36,7 @@ const filterGames = (game, filters) => {
     return (min === 0 && max === 0) ||                 // If there are no restrictions on the number of players
         (min === 0 && max >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
         (max === 0 && min <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
-        (min <= input && max >= input)         // If both are non-zero, and the game players are within limit. 
+        (min <= input && max >= input);         // If both are non-zero, and the game players are within limit. 
     
     // Otherwise don't return. 
 }
