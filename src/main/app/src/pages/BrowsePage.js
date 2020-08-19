@@ -24,11 +24,9 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
   const filterResetClick = evt => {
-    console.log(linkFilters.numOfPlayers);
     updateLinksFilters(Object.assign(linkFilters, delete linkFilters.numOfPlayers));     // numOfPLayers -1 if filter was reseted. In this case, filteredData will be links. 
     updateFilteredLinks(links);
     settextBoxValue("");
-    console.log(linkFilters.numOfPlayers);
   }
 
   // This is the function that gets triggered on typing any number in the textfield for GAME filters.
@@ -70,26 +68,16 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {filteredLinks && filteredLinks.map((data, key) => {
-                if (activityType === "games") {
-                  return (
-                    <div key={key}>
-                      <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                } else if (activityType === "reading") {
-                  return (
-                    <div key={key}>
-                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                } else if (activityType === "active") {
-                  return (
-                    <div key={key}>
-                      <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/>
-                    </div>
-                  );
-                }
+              {filteredLinks && filteredLinks.map((data, key) => { 
+                return (
+                  <div key={key}> 
+                    {activityType === "games" ? 
+                      <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
+                      activityType === "reading" ? 
+                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> : 
+                      <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> }
+                  </div>   
+                )
               })}
             </div> 
           </div> 
