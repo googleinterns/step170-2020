@@ -8,13 +8,13 @@ const gameTempData = [
 ];
 
 const videoTempData = [
-  {"id": "5101015804149760", "creator": "Fit Tuber",	"publishedAt": "2020-03-20T13:30:06Z", "title":	"15 Min Daily Yoga Routine for Beginners (Follow Along)", "url":	"https://www.youtube.com/watch?v=s2NQhpFGIOg"},	
-  {"id": "5647930295844864", "creator": "645AR",	"publishedAt": "2020-04-03T04:00:16Z", "title":	"645AR - Yoga (Official Audio)", "url":	"https://www.youtube.com/watch?v=uvSuYh1esmg"},	
-  {"id": "5116357293113344", "creator": "Taarak Mehta Ka Ooltah Chashmah",	"publishedAt": "2020-08-13T15:45:00Z", "title":	"NEW! Ep 2970 - Babita Teaches Jethalal Yoga! | Taarak Mehta Ka Ooltah Chashmah Comedy | तारक मेहता", "url":	"https://www.youtube.com/watch?v=g7BCb8vLA6c"},
-  {"id": "5688142262697984", "creator":	"yoga flocke - body art", "publishedAt":	"2019-05-12T20:48:07Z", "title": 	"Ashtanga Yoga - working the hip (leg behind the head)", "url":	"https://www.youtube.com/watch?v=wAfPba4NtzE"},	
-  {"id": "5646113927331840", "creator":	"Xuan Lan Yoga", "publishedAt":	"2019-06-20T18:00:05Z", "title": 	"Tu Primera Clase de Yoga (Nivel principiante)", "url":	"https://www.youtube.com/watch?v=WamU36hXiNw"},	
-  {"id": "5928667746140160", "creator":	"Yoga With Adriene", "publishedAt":	"2018-09-16T08:00:03Z", "title": 	"Sunrise Yoga - 15 Min Morning Yoga Practice - Yoga With Adriene", "url":	"https://www.youtube.com/watch?v=r7xsYgTeM2Q"},	
-  {"id": "5083571056279552", "creator":	"Yoga with Kassandra", "publishedAt":	"2018-09-20T11:47:56Z", "title": 	"10 min Morning Yoga Full Body Stretch", "url":	"https://www.youtube.com/watch?v=4pKly2JojMw"}
+  {"id": "5101015804149760", "creator": "Fit Tuber",	"publishedAt": "2020-03-20T13:30:06Z", "title":	"15 Min Daily Yoga Routine for Beginners (Follow Along)", "type": "yoga", "url":	"https://www.youtube.com/watch?v=s2NQhpFGIOg"},	
+  {"id": "5647930295844864", "creator": "645AR",	"publishedAt": "2020-04-03T04:00:16Z", "title":	"645AR - Meditation (Official Audio)", "type": "meditation", "url":	"https://www.youtube.com/watch?v=uvSuYh1esmg"},	
+  {"id": "5116357293113344", "creator": "Taarak Mehta Ka Ooltah Chashmah",	"publishedAt": "2020-08-13T15:45:00Z", "title":	"NEW! Ep 2970 - Babita Teaches Jethalal Yoga! | Taarak Mehta Ka Ooltah Chashmah Comedy | तारक मेहता", "type": "yoga", "url":	"https://www.youtube.com/watch?v=g7BCb8vLA6c"},
+  {"id": "5688142262697984", "creator":	"yoga flocke - body art", "publishedAt":	"2019-05-12T20:48:07Z", "title": 	"Ashtanga Workout - working the hip (leg behind the head)", "type": "workout", "url":	"https://www.youtube.com/watch?v=wAfPba4NtzE"},	
+  {"id": "5646113927331840", "creator":	"Xuan Lan Yoga", "publishedAt":	"2019-06-20T18:00:05Z", "title": 	"Tu Primera Clase de Meditation (Nivel principiante)", "type": "meditation", "url":	"https://www.youtube.com/watch?v=WamU36hXiNw"},	
+  {"id": "5928667746140160", "creator":	"Yoga With Adriene", "publishedAt":	"2018-09-16T08:00:03Z", "title": 	"Sunrise Yoga - 15 Min Morning Yoga Practice - Yoga With Adriene", "type": "yoga", "url":	"https://www.youtube.com/watch?v=r7xsYgTeM2Q"},	
+  {"id": "5083571056279552", "creator":	"Yoga with Kassandra", "publishedAt":	"2018-09-20T11:47:56Z", "title": 	"10 min Morning Workout Full Body Stretch", "type": "workout", "url":	"https://www.youtube.com/watch?v=4pKly2JojMw"}
 ];
 
 const articleTempData = [
