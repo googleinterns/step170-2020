@@ -52,6 +52,10 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
   }
 
+  React.useEffect(() => {
+    updateFilteredLinks(links);
+  },[links]);    // update filtered links to be links when user switches activity type.
+
   return (
     <section className="section-padding-large mb-3">
       <div className = "container">
