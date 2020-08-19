@@ -16,9 +16,9 @@ const filterActivities = (links, activityType, linkFilters, updateFilteredLinks)
             break;
           case "videos":
             filterVideos(link, linkFilters);
-            break; 
+            break;  
           default:
-            console.log('err', "ERROR: INVALID ACTIVITY TYPE!");
+            console.log('err',"ERROR: INVALID ACTIVITY TYPE!");
         }
       }
     ));
