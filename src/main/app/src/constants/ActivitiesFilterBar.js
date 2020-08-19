@@ -11,6 +11,7 @@ const FilterCommonSection = ({filterButtonClick, filterResetClick}) => {
   )
 }
 
+/** Games filter options. */
 const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
   return (
     <React.Fragment>
@@ -23,13 +24,27 @@ const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick
   )
 }
 
-const ArticlesFilterBar = () => {
-  // Todo: render articles filter bar.
-  return null;
+/** Articles filter options. */
+const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
+  return (
+    <React.Fragment>
+      <div className="field is-grouped">
+        <div className="control is-expanded"><div className="select is-fullwidth">
+          <select name="ArticleType" onChange={handleFilterChange} value={textBoxValue}>
+            <option value="*">{"All"}</option>
+            <option value="tech">{"Technology"}</option>
+            <option value="social">{"Social"}</option>
+            <option value="meditation">{"Meditation"}</option>
+          </select>
+        </div></div>
+        <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
+      </div>
+    </React.Fragment>
+  );
 }
 
+/** Videos filter options. */
 const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
-  // Todo: render videos filter bar.
   return (
     <React.Fragment>
       <div className="field is-grouped">

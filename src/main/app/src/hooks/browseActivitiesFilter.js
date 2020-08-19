@@ -7,7 +7,7 @@ const filterActivities = (links, activityType, linkFilters, updateFilteredLinks)
   else
     updateFilteredLinks(links.filter(link =>
       activityType === "games" ? filterGames(link, linkFilters) :
-      activityType === "articles" ? filterArticles(link, linkFilters) :
+      activityType === "reading" ? filterArticles(link, linkFilters) :
       filterVideos(link, linkFilters)
     ));
 }
@@ -32,10 +32,12 @@ const filterGames = (game, filters) => {
     // Otherwise don't return. 
 }
 
-/** Todo: filter list of articles. */
-const filterArticles = (article, filters) => {}
+/** Filter list of articles. */
+const filterArticles = (article, filters) => {
+  return filters.articleType === '*' || article.type === filters.articleType;
+}
 
-/** Todo: filter list of videos. */
+/** Filter list of videos. */
 const filterVideos = (video, filters) => {
   return filters.videoType === '*' || video.type === filters.videoType;
 }

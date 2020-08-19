@@ -40,7 +40,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     else
       updateLinksFilters(Object.assign(linkFilters, 
         activityType === "games" ? {numOfPlayers: value} :
-        activityType === "reading" ? {} :
+        activityType === "reading" ? {articleType: value} :
         {videoType: value}
       ));
     settextBoxValue(evt.target.value);
