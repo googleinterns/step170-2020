@@ -1,15 +1,24 @@
 /** This hook filters the activities displayed on the browse page. */
 
 // This calls the appropriate filter based on activityType, or does nothing if no filter is set. 
-const filterActivities = (links, activityType, linkFilters, updateFilteredLinks) => {
+const filterActivities = (links, activityType, activityTypes, linkFilters, updateFilteredLinks) => {
   if (Object.keys(linkFilters).length === 0)
     updateFilteredLinks(links);
-  else
-    updateFilteredLinks(links.filter(link =>
-      activityType === "games" ? filterGames(link, linkFilters) :
-      activityType === "reading" ? filterArticles(link, linkFilters) :
-      filterVideos(link, linkFilters)
-    ));
+  else {
+    switch(activityType) {
+      case activityTypes.GAMES:
+        updateFilteredLinks(links.filter(link => filterGames(link, linkFilters)));
+        break;
+      case activityTypes.VIDEOS:
+        updateFilteredLinks(links.filter(link => filterVideos(link, linkFilters)));
+        break;
+      case activityTypes.ARTICLES:
+        updateFilteredLinks(links.filter(link => filterArticles(link, linkFilters)));
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
+  }
 }
 
 /** 

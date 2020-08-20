@@ -8,7 +8,8 @@ import filterActivities from '../hooks/browseActivitiesFilter.js';
 import {GamesFilterBar, ArticlesFilterBar, VideosFilterBar} from '../constants/ActivitiesFilterBar';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData}) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, 
+  articleData, videoData, gameData, activityTypes }) => {
 
   // State for game filters
   const [linkFilters, updateLinksFilters] = React.useState({});             // This is the user entered input. To access the number of people, do linkFilters.numOfPeople.
@@ -20,7 +21,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     This function calls the function that is declared in hooks folder to filter out games based on the entered value.
   */
   const filterButtonClick = evt => {
-   filterActivities(links, activityType, linkFilters, updateFilteredLinks);
+   filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
   }
 
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
@@ -37,19 +38,41 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
     if (value === "")
       updateLinksFilters({});
-    else
-      updateLinksFilters(Object.assign(linkFilters, 
-        activityType === "games" ? {numOfPlayers: value} :
-        activityType === "reading" ? {articleType: value} :
-        {videoType: value}
-      ));
+    else {
+      switch(activityType) {
+        case activityTypes.GAMES:
+          updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: value}));
+          break;
+        case activityTypes.VIDEOS:
+          updateLinksFilters(Object.assign(linkFilters, {videoType: value}));
+          break;
+        case activityTypes.ARTICLES:
+          updateLinksFilters(Object.assign(linkFilters, {articleType: value}));
+          break;
+        default:
+          console.log("Error: Invalid activity type selection.");
+      }
+    }
     settextBoxValue(evt.target.value);
   }
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
-    updateActivityType(evt.target.value);
-    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
+    const value = evt.target.value;
+    updateActivityType(value);
+    switch(value) {
+      case activityTypes.GAMES:
+        updateServlet(gameData);
+        break;
+      case activityTypes.VIDEOS:
+        updateServlet(videoData);
+        break;
+      case activityTypes.ARTICLES:
+        updateServlet(articleData);
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
   }
 
   React.useEffect(() => {
@@ -65,8 +88,8 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
             <div className="select is-fullwidth">
               <select name="Activity" onChange={handleActivitySelection} value={activityType}>
                 <option value="games">{"Games"}</option>
-                <option value="reading">{"Reading"}</option>
-                <option value="active">{"Active"}</option>
+                <option value="videos">{"Active"}</option>
+                <option value="articles">{"Reading"}</option>
               </select>
             </div>
           </div>
