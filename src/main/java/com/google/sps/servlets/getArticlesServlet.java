@@ -139,12 +139,18 @@ public class getArticlesServlet extends HttpServlet {
       JSONObject currentArticle = articleData.getJSONObject(i);
       Entity articleEntity = new Entity(KIND);
 
+      // Get length of content.
+      String content = currentArticle.getString("content");
+      String contentTruncatedNum = content.substring(203, (content.length()-7)); 
+      int contentLength = 200 + Integer.parseInt(contentTruncatedNum);
+
       articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
       articleEntity.setProperty("author", currentArticle.getString("author"));
       articleEntity.setProperty("title", currentArticle.getString("title"));
       articleEntity.setProperty("description", currentArticle.getString("description"));
       articleEntity.setProperty("url", currentArticle.getString("url"));
       articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
+      articleEntity.setProperty("length", contentLength);
 
       datastore.put(articleEntity);
     }
@@ -167,8 +173,9 @@ public class getArticlesServlet extends HttpServlet {
       String description = (String) entity.getProperty("description");
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      long length = (long) entity.getProperty("length");
 
-      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt);
+      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, length);
       articles.add(newArticle);
     }
 
