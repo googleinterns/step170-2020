@@ -23,12 +23,14 @@ public final class Video extends Activity {
 
   private final String creator;
   private final String publishedAt;
+  private final String duration;
 
-  public Video(String key, String title, String creator, String url, String publishedAt) {
+  public Video(String key, String title, String creator, String url, String publishedAt, String duration) {
     // Initialize activity fields
     super(key, title, Activity.Category.VIDEOS, url);
 
     this.creator = creator;
     this.publishedAt = publishedAt;
+    this.duration = duration;
   }
 }

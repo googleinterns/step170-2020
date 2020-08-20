@@ -75,23 +75,9 @@ public class getVideosServlet extends HttpServlet {
     }
   }
 
-  @Override
-  public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Deletes queries from last doPut so the datastore results can be updated.
-    Query query = new Query(KIND);
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
-
-    StringBuilder strBuf = new StringBuilder();  
-    HttpURLConnection conn = null;        
-    BufferedReader reader = null;
-
+  public String getStringFromAPI(URL url, StringBuilder strBuf, HttpURLConnection conn, BufferedReader reader, HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
-      // Get hidden api key from gcloud secret manager.
-      String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "2");
-      URL url = new URL(baseURL + youtubeapiKey);
       conn = (HttpURLConnection) url.openConnection();
-
       conn.setRequestMethod("GET");
       conn.setRequestProperty("Accept", "application/json");
 
@@ -110,11 +96,11 @@ public class getVideosServlet extends HttpServlet {
     } catch (MalformedURLException e) {
         response.setContentType("text/html");
         response.getWriter().println("URL is not correctly formatted");
-        return;        
+        return "URL is not correctly formatted";        
     } catch (IOException e) {
         response.setContentType("text/html");
         response.getWriter().println("Cannot retrieve information from provided URL");
-        return;
+        return "Cannot retrieve information from provided URL";
     } finally {
         if (reader != null) {
           try {
@@ -126,22 +112,47 @@ public class getVideosServlet extends HttpServlet {
         if (conn != null) {
           conn.disconnect();
         }
+        return strBuf.toString();
     }
+  }
 
-    String videos = strBuf.toString();
+  @Override
+  public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Deletes queries from last doPut so the datastore results can be updated.
+    Query query = new Query(KIND);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
+
+    // Get string from api
+    String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
+    URL url = new URL(baseURL + youtubeapiKey);
+    StringBuilder strBuf = new StringBuilder();  
+    String videos = getStringFromAPI(url, strBuf, null, null, request, response);
 
     // Formats data using the video entity to be stored in the database.
     JSONObject obj = new JSONObject(videos);
     JSONArray videoData = obj.getJSONArray("items");
     int numVideos = videoData.length();
     
+    String contentDetailsURL = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=";
     String videoLinkBaseURL = "https://www.youtube.com/watch?v=";
 
     for (int i = 0; i < numVideos; ++i) {
       JSONObject currentVideo = videoData.getJSONObject(i);
       Entity videoEntity = new Entity(KIND);
 
-      videoEntity.setProperty("url", videoLinkBaseURL + (currentVideo.getJSONObject("id").getString("videoId")));
+      // Get video details from api.
+      String videoId = currentVideo.getJSONObject("id").getString("videoId"); // Get videoId.
+      URL getContentDetailsURL = new URL(contentDetailsURL + videoId + "&key=" + youtubeapiKey);
+      StringBuilder videoStrBuf = new StringBuilder();  
+      String videoDetails = getStringFromAPI(getContentDetailsURL, videoStrBuf, null, null, request, response);
+
+      // Get duration from parsed string from api.
+      JSONObject videoDetailObj = new JSONObject(videoDetails);
+      String duration = videoDetailObj.getJSONArray("items").getJSONObject(0).getJSONObject("contentDetails").getString("duration");
+      
+      videoEntity.setProperty("duration", duration);
+      videoEntity.setProperty("url", videoLinkBaseURL + videoId);
       videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
       videoEntity.setProperty("title", currentVideo.getJSONObject("snippet").getString("title"));
       videoEntity.setProperty("publishedAt", currentVideo.getJSONObject("snippet").getString("publishedAt"));
@@ -165,8 +176,9 @@ public class getVideosServlet extends HttpServlet {
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      String duration = (String) entity.getProperty("duration");
 
-      Video newVideo = new Video(entityKey, title, creator, url, publishedAt);
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
       videos.add(newVideo);
     }
 
