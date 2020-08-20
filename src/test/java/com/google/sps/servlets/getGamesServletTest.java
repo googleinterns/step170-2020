@@ -112,7 +112,6 @@ public class getGamesServletTest {
     PreparedQuery results = ds.prepare(query);
     
     for (Entity entity : results.asIterable()) {
-
       String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
       String title = (String) entity.getProperty("title");
       String description = (String) entity.getProperty("description");
