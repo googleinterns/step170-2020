@@ -52,6 +52,8 @@ import org.json.JSONObject;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
+import com.google.sps.servlets.getSecretKey;
+import com.google.sps.servlets.getStringFromAPI;
 
 /** 
 * This servlet is used to update the database with well-being related activity links.
@@ -62,75 +64,28 @@ public class getArticlesServlet extends HttpServlet {
   private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
   private static final String KIND = new String("Article");
 
-  // This method is used to access the api key stored in gcloud secret manager.
-  public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
-    try (SecretManagerServiceClient client = SecretManagerServiceClient.create()){
-      SecretVersionName secretVersionName = SecretVersionName.of(projectId, secretId, versionId);
-
-      // Access the secret version.
-      AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);
-
-      // Return the secret payload as a string.
-      return response.getPayload().getData().toStringUtf8();
-    }
-  }
-
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Security: prevent access of doPut from console. 
+    if (!request.getHeader("User-Agent").equals("AppEngine-Google; (+http://code.google.com/appengine)")) {
+      response.setContentType("text/html");
+      response.getWriter().println("Permission denied");
+      return;
+    }
+
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query(KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
-    StringBuilder strBuf = new StringBuilder();  
-    HttpURLConnection conn = null;        
-    BufferedReader reader = null;
+    // Get string from api.
+    String newsapiKey = getSecretKey.accessSecretVersion("298755462", "news_api_key", "1");
+    URL url = new URL(baseURL + newsapiKey);
+    StringBuilder strBuf = new StringBuilder();
+    String articles = getStringFromAPI.getStringFromAPIMethod(url, strBuf, null, null, logger, request, response);
+    if (articles.equals("end")) return; // Returns if exception caught.  
 
-    try {
-      // Get hidden api key from gcloud secret manager.
-      String newsapiKey = accessSecretVersion("298755462", "news_api_key", "1");
-      URL url = new URL(baseURL + newsapiKey);
-      conn = (HttpURLConnection) url.openConnection();
-
-      conn.setRequestMethod("GET");
-      conn.setRequestProperty("Accept", "application/json");
-
-      if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        throw new RuntimeException("HTTP GET Request Failed with Error code : "
-          + conn.getResponseCode());
-      }
-      
-      // Using IO Stream with Buffer to increase efficiency.
-      reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-      String output = null;
-
-      while ((output = reader.readLine()) != null) {
-        strBuf.append(output);
-      }
-    } catch (MalformedURLException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("URL is not correctly formatted");
-        return;        
-    } catch (IOException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("Cannot retrieve information from provided URL");
-        return;
-    } finally {
-        if (reader != null) {
-          try {
-            reader.close();
-          } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage());
-          }
-        }
-        if (conn != null) {
-          conn.disconnect();
-        }
-    }
-
-    String articles = strBuf.toString();
-
-    // Formats data using the aritcle entity to be stored in the database.
+    // Put data from api string into database.
     JSONObject obj = new JSONObject(articles);
     JSONArray articleData = obj.getJSONArray("articles");
     int numArticles = articleData.length();

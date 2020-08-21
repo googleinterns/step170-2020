@@ -14,15 +14,15 @@
 
 package com.google.sps.servlets;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.lang.*;
+import java.time.Duration;
+import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.*;
-import java.time.Duration;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.BufferedReader;
@@ -53,6 +53,8 @@ import org.json.JSONObject;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;
+import com.google.sps.servlets.getSecretKey;
+import com.google.sps.servlets.getStringFromAPI;
 
 /** 
 * This servlet is used to update the database with well-being related video activity links.
@@ -63,74 +65,28 @@ public class getVideosServlet extends HttpServlet {
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
   private static final String KIND = new String("Video");
 
-  // This method is used to access the api key stored in gcloud secret manager.
-  public String accessSecretVersion(String projectId, String secretId, String versionId) throws IOException {
-    try (SecretManagerServiceClient client = SecretManagerServiceClient.create()){
-      SecretVersionName secretVersionName = SecretVersionName.of(projectId, secretId, versionId);
-
-      // Access the secret version.
-      AccessSecretVersionResponse response = client.accessSecretVersion(secretVersionName);
-
-      // Return the secret payload as a string.
-      return response.getPayload().getData().toStringUtf8();
-    }
-  }
-
-  public String getStringFromAPI(URL url, StringBuilder strBuf, HttpURLConnection conn, BufferedReader reader, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try {
-      conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      conn.setRequestProperty("Accept", "application/json");
-
-      if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
-        throw new RuntimeException("HTTP GET Request Failed with Error code : "
-          + conn.getResponseCode());
-      }
-      
-      // Using IO Stream with Buffer to increase efficiency.
-      reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-      String output = null;
-
-      while ((output = reader.readLine()) != null) {
-        strBuf.append(output);
-      }
-    } catch (MalformedURLException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("URL is not correctly formatted");
-        return "URL is not correctly formatted";        
-    } catch (IOException e) {
-        response.setContentType("text/html");
-        response.getWriter().println("Cannot retrieve information from provided URL");
-        return "Cannot retrieve information from provided URL";
-    } finally {
-        if (reader != null) {
-          try {
-            reader.close();
-          } catch (IOException e) {
-            logger.log(Level.WARNING, e.getMessage());
-          }
-        }
-        if (conn != null) {
-          conn.disconnect();
-        }
-        return strBuf.toString();
-    }
-  }
-
   @Override
   public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // Security: prevent access of doPut from console. 
+    if (!request.getHeader("User-Agent").equals("AppEngine-Google; (+http://code.google.com/appengine)")) {
+      response.setContentType("text/html");
+      response.getWriter().println("Permission denied");
+      return;
+    }
+    
     // Deletes queries from last doPut so the datastore results can be updated.
     Query query = new Query(KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
-    // Get string from api
-    String youtubeapiKey = accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
+    // Get string from api.
+    String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
     URL url = new URL(baseURL + youtubeapiKey);
     StringBuilder strBuf = new StringBuilder();  
-    String videos = getStringFromAPI(url, strBuf, null, null, request, response);
+    String videos = getStringFromAPI.getStringFromAPIMethod(url, strBuf, null, null, logger, request, response);
+    if (videos.equals("end")) return; // Returns if exception caught.
 
-    // Formats data using the video entity to be stored in the database.
+    // Put data from api string into database.
     JSONObject obj = new JSONObject(videos);
     JSONArray videoData = obj.getJSONArray("items");
     int numVideos = videoData.length();
@@ -146,7 +102,8 @@ public class getVideosServlet extends HttpServlet {
       String videoId = currentVideo.getJSONObject("id").getString("videoId"); // Get videoId.
       URL getContentDetailsURL = new URL(contentDetailsURL + videoId + "&key=" + youtubeapiKey);
       StringBuilder videoStrBuf = new StringBuilder();  
-      String videoDetails = getStringFromAPI(getContentDetailsURL, videoStrBuf, null, null, request, response);
+      String videoDetails = getStringFromAPI.getStringFromAPIMethod(getContentDetailsURL, videoStrBuf, null, null, logger, request, response);
+      if (videos.equals("end")) return; // Returns if exception caught.
 
       // Get duration from parsed string from api.
       JSONObject videoDetailObj = new JSONObject(videoDetails);
