@@ -27,15 +27,15 @@ const filterActivities = (links, activityType, activityTypes, linkFilters, updat
 */
 const filterGames = (game, filters) => {
   var input = parseInt(filters.numOfPlayers,10);
-    var min = parseInt(game.minPlayer,10);
-    var max = parseInt(game.maxPlayer,10);
-    
-    return (min === 0 && max === 0) ||                 // If there are no restrictions on the number of players
-        (min === 0 && max >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
-        (max === 0 && min <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
-        (min <= input && max >= input);         // If both are non-zero, and the game players are within limit. 
-    
-    // Otherwise don't return. 
+  var min = parseInt(game.minPlayer,10);
+  var max = parseInt(game.maxPlayer,10);
+  
+  return (min === 0 && max === 0) ||                 // If there are no restrictions on the number of players
+      (min === 0 && max >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
+      (max === 0 && min <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
+      (min <= input && max >= input);         // If both are non-zero, and the game players are within limit. 
+  
+  // Otherwise don't return. 
 }
 
 /** Filter list of articles. */
