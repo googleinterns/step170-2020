@@ -115,8 +115,9 @@ public class getVideosServletTest {
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      long duration = (long) entity.getProperty("duration");
 
-      Video newVideo = new Video(entityKey, title, creator, url, publishedAt);
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
       videos.add(newVideo);
     }
 

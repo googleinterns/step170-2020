@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.*;
+import java.time.Duration;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.BufferedReader;
@@ -150,8 +151,11 @@ public class getVideosServlet extends HttpServlet {
       // Get duration from parsed string from api.
       JSONObject videoDetailObj = new JSONObject(videoDetails);
       String duration = videoDetailObj.getJSONArray("items").getJSONObject(0).getJSONObject("contentDetails").getString("duration");
+
+      // Convert duration string into seconds.
+      long durationInSeconds = Duration.parse(duration).getSeconds();
       
-      videoEntity.setProperty("duration", duration);
+      videoEntity.setProperty("duration", durationInSeconds);
       videoEntity.setProperty("url", videoLinkBaseURL + videoId);
       videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
       videoEntity.setProperty("title", currentVideo.getJSONObject("snippet").getString("title"));
@@ -176,7 +180,7 @@ public class getVideosServlet extends HttpServlet {
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
-      String duration = (String) entity.getProperty("duration");
+      long duration = (long) entity.getProperty("duration");
 
       Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
       videos.add(newVideo);

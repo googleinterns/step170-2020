@@ -23,9 +23,9 @@ public final class Video extends Activity {
 
   private final String creator;
   private final String publishedAt;
-  private final String duration;
+  private final long duration;
 
-  public Video(String key, String title, String creator, String url, String publishedAt, String duration) {
+  public Video(String key, String title, String creator, String url, String publishedAt, long duration) {
     // Initialize activity fields
     super(key, title, Activity.Category.VIDEOS, url);
 
