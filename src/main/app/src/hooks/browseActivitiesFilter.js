@@ -1,27 +1,24 @@
 /** This hook filters the activities displayed on the browse page. */
 
 // This calls the appropriate filter based on activityType, or does nothing if no filter is set. 
-const filterActivities = (links, activityType, linkFilters, updateFilteredLinks) => {
+const filterActivities = (links, activityType, activityTypes, linkFilters, updateFilteredLinks) => {
   if (Object.keys(linkFilters).length === 0)
     updateFilteredLinks(links);
-  else
-    updateFilteredLinks(links.filter(link =>
-      {
-        switch (activityType) {
-          case "games":
-            filterGames(link, linkFilters);
-            break;
-          case "articles":
-            filterArticles(link, linkFilters);
-            break;
-          case "videos":
-            filterVideos(link, linkFilters);
-            break; 
-          default:
-            console.log('err', "ERROR: INVALID ACTIVITY TYPE!");
-        }
-      }
-    ));
+  else {
+    switch(activityType) {
+      case activityTypes.GAMES:
+        updateFilteredLinks(links.filter(link => filterGames(link, linkFilters)));
+        break;
+      case activityTypes.VIDEOS:
+        updateFilteredLinks(links.filter(link => filterVideos(link, linkFilters)));
+        break;
+      case activityTypes.ARTICLES:
+        updateFilteredLinks(links.filter(link => filterArticles(link, linkFilters)));
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
+  }
 }
 
 /** 
@@ -41,10 +38,14 @@ const filterGames = (game, filters) => {
     // Otherwise don't return. 
 }
 
-/** Todo: filter list of articles. */
-const filterArticles = (article, filters) => {}
+/** Filter list of articles. */
+const filterArticles = (article, filters) => {
+  return filters.articleType === '*' || article.type === filters.articleType;
+}
 
-/** Todo: filter list of videos. */
-const filterVideos = (video, filters) => {}
+/** Filter list of videos. */
+const filterVideos = (video, filters) => {
+  return filters.videoType === '*' || video.type === filters.videoType;
+}
 
 export default filterActivities;

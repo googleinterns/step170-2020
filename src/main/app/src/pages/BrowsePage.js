@@ -5,9 +5,11 @@ import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import filterActivities from '../hooks/browseActivitiesFilter.js';
+import {GamesFilterBar, ArticlesFilterBar, VideosFilterBar} from '../constants/ActivitiesFilterBar';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, articleData, videoData, gameData}) => {
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, 
+  articleData, videoData, gameData, activityTypes }) => {
 
   // State for game filters
   const [linkFilters, updateLinksFilters] = React.useState({});             // This is the user entered input. To access the number of people, do linkFilters.numOfPeople.
@@ -19,7 +21,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     This function calls the function that is declared in hooks folder to filter out games based on the entered value.
   */
   const filterButtonClick = evt => {
-    filterActivities(links, activityType, linkFilters, updateFilteredLinks);
+   filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
   }
 
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
@@ -29,17 +31,53 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     settextBoxValue("");
   }
 
-  // This is the function that gets triggered on typing any number in the textfield for GAME filters.
-  const handleGameFilterChange = evt => {
-    updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: evt.target.value}));
+  /** This is the function that gets triggered on typing any value in the filter textfield.
+      It sets the filters differently depending on the activity type selected. */
+  const handleFilterChange = evt => {
+    const value = evt.target.value;
+
+    if (value === "")
+      updateLinksFilters({});
+    else {
+      switch(activityType) {
+        case activityTypes.GAMES:
+          updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: value}));
+          break;
+        case activityTypes.VIDEOS:
+          updateLinksFilters(Object.assign(linkFilters, {videoType: value}));
+          break;
+        case activityTypes.ARTICLES:
+          updateLinksFilters(Object.assign(linkFilters, {articleType: value}));
+          break;
+        default:
+          console.log("Error: Invalid activity type selection.");
+      }
+    }
     settextBoxValue(evt.target.value);
   }
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
-    updateActivityType(evt.target.value);
-    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
+    const value = evt.target.value;
+    updateActivityType(value);
+    switch(value) {
+      case activityTypes.GAMES:
+        updateServlet(gameData);
+        break;
+      case activityTypes.VIDEOS:
+        updateServlet(videoData);
+        break;
+      case activityTypes.ARTICLES:
+        updateServlet(articleData);
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
   }
+
+  React.useEffect(() => {
+    updateFilteredLinks(links);
+  },[links]);    // update filtered links to be links when user switches activity type.
 
   return (
     <section className="section-padding-large mb-3">
@@ -50,20 +88,20 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
             <div className="select is-fullwidth">
               <select name="Activity" onChange={handleActivitySelection} value={activityType}>
                 <option value="games">{"Games"}</option>
-                <option value="reading">{"Reading"}</option>
-                <option value="active">{"Active"}</option>
+                <option value="videos">{"Active"}</option>
+                <option value="articles">{"Reading"}</option>
               </select>
             </div>
           </div>
         </div>
 
         {/* This division is for filtering the results based on the user entered input. */}
-        <p> Filter out games based on the number of players:</p> 
-        <div className="field is-grouped">
-          <p className="control is-expanded has-icons-left"><span className="icon"><i className="fas fa-filter"></i></span><input className="input" onChange={handleGameFilterChange} type="text" value={textBoxValue} placeholder="How many people are there with you? Eg. 0"></input> </p>
-          <p className="control"><button className="button is-danger" onClick={filterButtonClick}>Filter</button> </p>
-          <p className="control"><button className="button is-info" onClick={filterResetClick} >Reset Filter</button></p>
-        </div>
+        {activityType === "games" ? 
+          <GamesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
+          activityType === "reading" ? 
+          <ArticlesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
+          <VideosFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} />
+        }
 
         <div className="section-padding-large mb-3">
           <div className="row">
@@ -71,7 +109,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
               {filteredLinks && filteredLinks.map((data, key) => { 
                 return (
                   <div key={key}> 
-                    {activityType === "games" ? 
+                    {activityType === "games" ?
                       <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
                       activityType === "reading" ? 
                       <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> : 
