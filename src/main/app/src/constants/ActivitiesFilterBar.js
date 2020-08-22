@@ -54,6 +54,9 @@ const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClic
             <option value="yoga">{"Yoga"}</option>
             <option value="workout">{"Workout"}</option>
             <option value="meditation">{"Meditation"}</option>
+            <option value="short">{"Videos less than 15 minutes"}</option>
+            <option value="medium">{"Videos greater than 15 minutes and less than 30 minutes"}</option>
+            <option value="large">{"Videos greater than 30 minutes"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
