@@ -26,6 +26,12 @@ const App = () => {
 
   // State for activity selection and data
   const [activityType, updateActivityType] = React.useState("games");
+  // For activity type enumeration.
+  const activityTypes = {
+    GAMES: 'games',
+    ARTICLES: 'articles',
+    VIDEOS: 'videos'
+  }
   const [servlet, updateServlet] = React.useState(gameData); 
 
   // State for activities data retrieved from servlet
@@ -71,7 +77,7 @@ const App = () => {
         <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
           updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} eventScheduled={eventScheduled}
-          updateEventScheduled={updateEventScheduled} isGuest={isGuest} updateIsGuest={updateIsGuest} />
+          updateEventScheduled={updateEventScheduled} isGuest={isGuest} updateIsGuest={updateIsGuest} activityTypes={activityTypes} />
       </main>
     </Router>
   );

@@ -9,12 +9,26 @@ import '../css/home.css';
 import logo from '../assets/logo.png';
 
 /* Component for home page */
-const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData, videoData, gameData, eventScheduled, updateEventScheduled, updateActivity }) => {
+const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData, 
+  videoData, gameData, eventScheduled, updateEventScheduled, updateActivity, activityTypes }) => {
 
   // Update activty selection state based on dropdown
   const handleActivitySelection = evt => {
-    updateActivityType(evt.target.value);
-    updateServlet(evt.target.value == "active" ? videoData : evt.target.value == "reading" ? articleData : gameData);
+    const value = evt.target.value;
+    updateActivityType(value);
+    switch(value) {
+      case activityTypes.GAMES:
+        updateServlet(gameData);
+        break;
+      case activityTypes.VIDEOS:
+        updateServlet(videoData);
+        break;
+      case activityTypes.ARTICLES:
+        updateServlet(articleData);
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
   }
   
   const emptyActivity = () => {
@@ -55,8 +69,8 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
           <div className="select is-info is-fullwidth title is-2">
             <select className="is-focused" onChange={handleActivitySelection} value={activityType}>
               <option value="games">{"Games"}</option>
-              <option value="active">{"Active"}</option>
-              <option value="reading">{"Reading"}</option>
+              <option value="videos">{"Active"}</option>
+              <option value="articles">{"Reading"}</option>
             </select>
           </div>
         </div>
