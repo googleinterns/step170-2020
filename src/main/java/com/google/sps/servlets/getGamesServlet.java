@@ -81,8 +81,7 @@ public class getGamesServlet extends HttpServlet {
     // Get string from api.
     String airtableapiKey = getSecretKey.accessSecretVersion("298755462", "airtable_api_key", "1");
     URL url = new URL(baseURL + airtableapiKey); 
-    StringBuilder strBuf = new StringBuilder(); 
-    String games = getStringFromAPI.getStringFromAPIMethod(url, strBuf, null, null, logger, request, response);
+    String games = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
     if (games.equals("end")) return; // Returns if exception caught.
 
     // Put data from api string into database.

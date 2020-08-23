@@ -14,8 +14,7 @@
 
 package com.google.sps.servlets;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.lang.*;
 import java.time.Duration;
 import java.io.IOException;
@@ -61,7 +60,9 @@ import com.google.sps.servlets.getStringFromAPI;
 */
 @WebServlet("/videoData")
 public class getVideosServlet extends HttpServlet {
-  private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=yoga&type=video&key=";
+  private static final String baseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&order=viewCount&q=";
+  private static final String contentDetailsURL = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=";
+  private static final String videoLinkBaseURL = "https://www.youtube.com/watch?v=";
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
   private static final String KIND = new String("Video");
 
@@ -79,46 +80,64 @@ public class getVideosServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
-    // Get string from api.
+    // Map to store strings and catagory types
+    HashMap<String, String> videoMap = new HashMap<String, String>();
+
+    // Get yoga video string from api.
     String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
-    URL url = new URL(baseURL + youtubeapiKey);
-    StringBuilder strBuf = new StringBuilder();  
-    String videos = getStringFromAPI.getStringFromAPIMethod(url, strBuf, null, null, logger, request, response);
-    if (videos.equals("end")) return; // Returns if exception caught.
+    URL yogaUrl = new URL(baseURL + "yoga" + "&type=video&key=" + youtubeapiKey); 
+    String yogaVideos = getStringFromAPI.getStringFromAPIMethod(yogaUrl, null, null, logger, request, response);
+    if (yogaVideos.equals("end")) return; // Returns if exception caught.
+    videoMap.put("yoga", yogaVideos);
 
-    // Put data from api string into database.
-    JSONObject obj = new JSONObject(videos);
-    JSONArray videoData = obj.getJSONArray("items");
-    int numVideos = videoData.length();
-    
-    String contentDetailsURL = "https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=";
-    String videoLinkBaseURL = "https://www.youtube.com/watch?v=";
+    // Get workout video string from api.
+    URL workoutUrl = new URL(baseURL + "workout" + "&type=video&key=" + youtubeapiKey); 
+    String workoutVideos = getStringFromAPI.getStringFromAPIMethod(workoutUrl, null, null, logger, request, response);
+    if (workoutVideos.equals("end")) return; // Returns if exception caught.
+    videoMap.put("workout", workoutVideos);
 
-    for (int i = 0; i < numVideos; ++i) {
-      JSONObject currentVideo = videoData.getJSONObject(i);
-      Entity videoEntity = new Entity(KIND);
+    // Get meditation video string from api.
+    URL meditationUrl = new URL(baseURL + "meditation" + "&type=video&key=" + youtubeapiKey);
+    String meditationVideos = getStringFromAPI.getStringFromAPIMethod(meditationUrl, null, null, logger, request, response);
+    if (meditationVideos.equals("end")) return; // Returns if exception caught.
+    videoMap.put("meditation", meditationVideos);
 
-      // Get video details from api.
-      String videoId = currentVideo.getJSONObject("id").getString("videoId"); // Get videoId.
-      URL getContentDetailsURL = new URL(contentDetailsURL + videoId + "&key=" + youtubeapiKey);
-      StringBuilder videoStrBuf = new StringBuilder();  
-      String videoDetails = getStringFromAPI.getStringFromAPIMethod(getContentDetailsURL, videoStrBuf, null, null, logger, request, response);
-      if (videos.equals("end")) return; // Returns if exception caught.
+    // have a for loop to go through each string, convert to JSON objects, store and then set
+    for (Map.Entry<String, String> entry : videoMap.entrySet()) {
+      String category = entry.getKey();
+      String videos = entry.getValue();
 
-      // Get duration from parsed string from api.
-      JSONObject videoDetailObj = new JSONObject(videoDetails);
-      String duration = videoDetailObj.getJSONArray("items").getJSONObject(0).getJSONObject("contentDetails").getString("duration");
+      // Put data from api string into database.
+      JSONObject obj = new JSONObject(videos);
+      JSONArray videoData = obj.getJSONArray("items");
+      int numVideos = videoData.length();
 
-      // Convert duration string into seconds.
-      long durationInSeconds = Duration.parse(duration).getSeconds();
+      for (int i = 0; i < numVideos; ++i) {
+        JSONObject currentVideo = videoData.getJSONObject(i);
+        Entity videoEntity = new Entity(KIND);
+
+        // Get video details from api.
+        String videoId = currentVideo.getJSONObject("id").getString("videoId"); // Get videoId.
+        URL getContentDetailsURL = new URL(contentDetailsURL + videoId + "&key=" + youtubeapiKey);
+        String videoDetails = getStringFromAPI.getStringFromAPIMethod(getContentDetailsURL, null, null, logger, request, response);
+        if (videos.equals("end")) return; // Returns if exception caught.
+
+        // Get duration from parsed string from api.
+        JSONObject videoDetailObj = new JSONObject(videoDetails);
+        String duration = videoDetailObj.getJSONArray("items").getJSONObject(0).getJSONObject("contentDetails").getString("duration");
+
+        // Convert duration string into seconds.
+        long durationInSeconds = Duration.parse(duration).getSeconds();
       
-      videoEntity.setProperty("duration", durationInSeconds);
-      videoEntity.setProperty("url", videoLinkBaseURL + videoId);
-      videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
-      videoEntity.setProperty("title", currentVideo.getJSONObject("snippet").getString("title"));
-      videoEntity.setProperty("publishedAt", currentVideo.getJSONObject("snippet").getString("publishedAt"));
+        videoEntity.setProperty("videoCategory", category);
+        videoEntity.setProperty("duration", durationInSeconds);
+        videoEntity.setProperty("url", videoLinkBaseURL + videoId);
+        videoEntity.setProperty("creator", currentVideo.getJSONObject("snippet").getString("channelTitle"));
+        videoEntity.setProperty("title", currentVideo.getJSONObject("snippet").getString("title"));
+        videoEntity.setProperty("publishedAt", currentVideo.getJSONObject("snippet").getString("publishedAt"));
 
-      datastore.put(videoEntity);
+        datastore.put(videoEntity);
+      }
     }
   }
   
@@ -137,9 +156,10 @@ public class getVideosServlet extends HttpServlet {
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      String videoCategory = (String) entity.getProperty("videoCategory");
       long duration = (long) entity.getProperty("duration");
 
-      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, videoCategory, duration);
       videos.add(newVideo);
     }
 

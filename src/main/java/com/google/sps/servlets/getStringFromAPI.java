@@ -1,5 +1,6 @@
 package com.google.sps.servlets;
 
+import java.lang.*;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,8 +19,11 @@ import java.net.URLEncoder;
 
 public class getStringFromAPI extends HttpServlet {
   // This method is used to get the string output from the api.
-  public static String getStringFromAPIMethod(URL url, StringBuilder strBuf, HttpURLConnection conn, BufferedReader reader, 
+  public static String getStringFromAPIMethod(URL url, HttpURLConnection conn, BufferedReader reader, 
     Logger logger, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+    StringBuilder strBuf = new StringBuilder();
+      
     try {
       conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
