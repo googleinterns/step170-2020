@@ -102,7 +102,7 @@ public class getVideosServlet extends HttpServlet {
     if (meditationVideos.equals("end")) return; // Returns if exception caught.
     videoMap.put("meditation", meditationVideos);
 
-    // have a for loop to go through each string, convert to JSON objects, store and then set
+    // Loop for going through each string, converting to JSON objects, then put in datastore.
     for (Map.Entry<String, String> entry : videoMap.entrySet()) {
       String category = entry.getKey();
       String videos = entry.getValue();
