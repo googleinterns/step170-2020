@@ -68,8 +68,10 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
       case activityTypes.ARTICLES:
         if (name === "ArticleType")
           updateArticleType(value);
-        else
+        else if (name === "ArticleLength")
           updateArticleLength(value);
+        else
+          console.log("Error: Unrecognized article filter modified.");
         break;
       default:
         console.log("Error: Invalid activity type selection.");
