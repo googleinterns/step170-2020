@@ -6,7 +6,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
   const [numOfPLayers, updateNumOfPlayers] = React.useState("");
   const [videoType, updateVideoType] = React.useState("*");
   const [articleType, updateArticleType] = React.useState("*");
-  const [articleLength, updateArticleLength] = React.useState("short");
+  const [articleLength, updateArticleLength] = React.useState("*");
 
   /*
     This is the function that will be called when the filter button is clicked.
@@ -44,7 +44,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         break;
       case activityTypes.ARTICLES:
         updateArticleType("*");
-        updateArticleLength("short");
+        updateArticleLength("*");
         break;
       default:
         console.log("Error: Invalid activity type selection.");
@@ -124,7 +124,7 @@ const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetCl
       <div className="field is-grouped">
         <div className="control is-expanded"><div className="select is-fullwidth">
           <select name="ArticleType" onChange={handleFilterChange} value={articleType}>
-            <option value="*">{"All"}</option>
+            <option value="*">{"All [Article Type]"}</option>
             <option value="tech">{"Technology"}</option>
             <option value="social">{"Social"}</option>
             <option value="meditation">{"Meditation"}</option>
@@ -132,7 +132,7 @@ const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetCl
         </div></div>
         <div className="control is-expanded"><div className="select is-fullwidth">
           <select name="ArticleLength" onChange={handleFilterChange} value={articleLength}>
-            <option value="*">{"All"}</option>
+            <option value="*">{"All [Article Length]"}</option>
             <option value="short">{"Short [3 mins or less]"}</option>
             <option value="medium">{"Medium [4-9 mins]"}</option>
             <option value="long">{"Long [10 mins or more]"}</option>
