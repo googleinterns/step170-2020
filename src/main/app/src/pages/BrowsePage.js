@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom';
 import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
-import filterActivities from '../hooks/browseActivitiesFilter.js';
-import {GamesFilterBar, ArticlesFilterBar, VideosFilterBar} from '../constants/ActivitiesFilterBar';
+import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, 
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
   articleData, videoData, gameData, activityTypes }) => {
 
   // State for game filters
@@ -65,7 +64,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     }
     settextBoxValue(evt.target.value);    
   }
-
+  
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     const value = evt.target.value;
@@ -106,29 +105,25 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         </div>
 
         {/* This division is for filtering the results based on the user entered input. */}
-        {activityType === "games" ? 
-          <GamesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
-          activityType === "reading" ? 
-          <ArticlesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
-          <VideosFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} />
-        }
+        <ActivitiesFilterBar activityType={activityType} activityTypes={activityTypes}
+          links={links} updateFilteredLinks={updateFilteredLinks} />
 
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {filteredLinks && filteredLinks.map((data, key) => { 
+              {filteredLinks && filteredLinks.map((data, key) => {
                 return (
-                  <div key={key}> 
+                  <div key={key}>
                     {activityType === "games" ?
                       <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
-                      activityType === "reading" ? 
-                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> : 
+                      activityType === "reading" ?
+                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
                       <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> }
-                  </div>   
+                  </div>
                 )
               })}
-            </div> 
-          </div> 
+            </div>
+          </div>
         </div>
       </div>
     </section>

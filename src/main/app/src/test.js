@@ -20,11 +20,11 @@ const videoTempData = [
 
 const articleTempData = [
   {"id": "5712818124881920",	"creator": "Cherlynn Low", "type": "tech", "description":	"Samsung has made many, many smartwatches. And through all that experience the company has refined its Tizen software so much that it has completely ditched Google’s Wear OS. The Galaxy Watch 3 is the latest effort to keep up with reigning smartwatch",	"publishedAt": "2020-08-14T14:00:51Z", "publisher":	"Engadget", 
-  "title":	"Galaxy Watch 3 review: The best non-Apple smartwatch", "url": "https://www.engadget.com/samsung-galaxy-watch-3-review-specs-bezel-ecg-trip-detection-140051465.html"},
+  "length": "1232", "title":	"Galaxy Watch 3 review: The best non-Apple smartwatch", "url": "https://www.engadget.com/samsung-galaxy-watch-3-review-specs-bezel-ecg-trip-detection-140051465.html"},
   {"id": "5725698161377280",	"creator": "Nicole Gallucci", "type": "social", "description": "August 8 is International Female Orgasm Day, and we're celebrating with an entire week dedicated to exploring the business and pleasure of porn. Most people understandably associate the word 'porn' with sexually explicit, super NSFW material. But no",	"publishedAt": "2020-08-14T22:00:00Z", "publisher":	"Mashable", 
-  "title":	"The best porn alternatives that are entirely SFW", "url":	"https://mashable.com/article/best-safe-for-work-porn/"},
+  "length": "4023", "title":	"The best porn alternatives that are entirely SFW", "url":	"https://mashable.com/article/best-safe-for-work-porn/"},
   {"id": "5749929888710656",	"creator": "Beth Skwarecki", "type": "meditation", "description": "on Vitals, shared by Beth Skwarecki to Lifehacker	Meditation has known benefits, both research-backed and anecdotal. But few things in this life work for everybody, and there’s reason to believe that meditation may make some people’s mental health worse. If that’s you, I hereby give you permission t",	"publishedAt": "2020-08-17T18:00:00Z", 
-  "publisher":	"Lifehacker.com", "title":	"Mindfulness Meditation Isn't For Everyone", "url": "https://vitals.lifehacker.com/mindfulness-medita"}
+  "length": "7332", "publisher":	"Lifehacker.com", "title":	"Mindfulness Meditation Isn't For Everyone", "url": "https://vitals.lifehacker.com/mindfulness-medita"}
 ];
 
 export {gameTempData, videoTempData, articleTempData}

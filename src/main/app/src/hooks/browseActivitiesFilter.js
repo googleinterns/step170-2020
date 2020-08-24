@@ -40,7 +40,28 @@ const filterGames = (game, filters) => {
 
 /** Filter list of articles. */
 const filterArticles = (article, filters) => {
-  return filters.articleType === '*' || article.type === filters.articleType;
+   let isWithArticleLength;
+  // Get second equivilent of article lengths (short, medium, or long).
+  switch(filters.articleLength) {
+    case "*":
+      isWithArticleLength = length => true;
+      break;
+    case "short":
+      isWithArticleLength = length => length >= 0 && length <= 2000;
+      break;
+    case "medium":
+      isWithArticleLength = length => length > 2000 && length <= 6000;
+      break;
+    case "long":
+      isWithArticleLength = length => length > 6000;
+      break;
+    default:
+      console.log("Article length not recognized.");
+  }
+
+  // Filter by article type and length
+  return (filters.articleType === "*" || filters.articleType === article.type)
+    && isWithArticleLength(Number(article.length));
 }
 
 /** 
