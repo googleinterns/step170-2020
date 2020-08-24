@@ -4,8 +4,9 @@ import filterActivities from '../hooks/browseActivitiesFilter.js';
 const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFilteredLinks}) => {
   // Filter states
   const [numOfPLayers, updateNumOfPlayers] = React.useState("");
-  const [videoType, updateVideoType] = React.useState("");
-  const [articleType, updateArticleType] = React.useState("");
+  const [videoType, updateVideoType] = React.useState("*");
+  const [articleType, updateArticleType] = React.useState("*");
+  const [articleLength, updateArticleLength] = React.useState("short");
 
   /*
     This is the function that will be called when the filter button is clicked.
@@ -23,6 +24,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         break;
       case activityTypes.ARTICLES:
         linkFilters.articleType = articleType;
+        linkFilters.articleLength = articleLength;
         break;
       default:
         console.log("Error: Invalid activity type selection.");
@@ -42,6 +44,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         break;
       case activityTypes.ARTICLES:
         updateArticleType("*");
+        updateArticleLength("short");
         break;
       default:
         console.log("Error: Invalid activity type selection.");
@@ -53,6 +56,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
       It sets the filters differently depending on the activity type selected. */
   const handleFilterChange = evt => {
     const value = evt.target.value;
+    const name = evt.target.name;
 
     switch(activityType) {
       case activityTypes.GAMES:
@@ -62,7 +66,10 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         updateVideoType(value);
         break;
       case activityTypes.ARTICLES:
-        updateArticleType(value);
+        if (name === "ArticleType")
+          updateArticleType(value);
+        else
+          updateArticleLength(value);
         break;
       default:
         console.log("Error: Invalid activity type selection.");
@@ -80,7 +87,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
       const videoProps = Object.assign(props, {videoType: videoType});
       return <VideosFilterBar {...videoProps} />
     case activityTypes.ARTICLES:
-      const articleProps = Object.assign(props, {articleType: articleType});
+      const articleProps = Object.assign(props, {articleType: articleType, articleLength: articleLength});
       return <ArticlesFilterBar {...articleProps} />
     default:
       return null;
@@ -111,7 +118,7 @@ const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick
 }
 
 /** Articles filter options. */
-const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, articleType}) => {
+const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, articleType, articleLength}) => {
   return (
     <React.Fragment>
       <div className="field is-grouped">
@@ -121,6 +128,14 @@ const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetCl
             <option value="tech">{"Technology"}</option>
             <option value="social">{"Social"}</option>
             <option value="meditation">{"Meditation"}</option>
+          </select>
+        </div></div>
+        <div className="control is-expanded"><div className="select is-fullwidth">
+          <select name="ArticleLength" onChange={handleFilterChange} value={articleLength}>
+            <option value="*">{"All"}</option>
+            <option value="short">{"Short [3 mins or less]"}</option>
+            <option value="medium">{"Medium [4-9 mins]"}</option>
+            <option value="long">{"Long [10 mins or more]"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
