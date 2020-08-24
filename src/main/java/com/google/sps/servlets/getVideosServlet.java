@@ -66,6 +66,16 @@ public class getVideosServlet extends HttpServlet {
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
   private static final String KIND = new String("Video");
 
+  public static HashMap<String, String> getVideoStringFromAPI (String youtubeapiKey, ArrayList<String> videoCategoryNames, HashMap<String, String> videoMap, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    for (int i = 0; i < videoCategoryNames.size(); ++i) {
+      URL url = new URL(baseURL + videoCategoryNames.get(i) + "&type=video&key=" + youtubeapiKey); 
+      String videos = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
+      if (videos == null) return null; // Returns if exception caught.
+      videoMap.put(videoCategoryNames.get(i), videos);
+    }
+    return videoMap;
+  }
+
   @Override
   public void doPut (HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Security: prevent access of doPut from console. 
@@ -80,27 +90,16 @@ public class getVideosServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
-    // Map to store strings and catagory types
+    // Map to store strings and catagory types.
     HashMap<String, String> videoMap = new HashMap<String, String>();
 
-    // Get yoga video string from api.
+    // Arraylist to store the types of videos we want to get from youtube.
+    ArrayList<String> videoCategoryNames = new ArrayList<String>(Arrays.asList("yoga", "workout", "meditation"));
+
+    // Get yoga, workout, meditation video strings from api.
     String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
-    URL yogaUrl = new URL(baseURL + "yoga" + "&type=video&key=" + youtubeapiKey); 
-    String yogaVideos = getStringFromAPI.getStringFromAPIMethod(yogaUrl, null, null, logger, request, response);
-    if (yogaVideos == null) return; // Returns if exception caught.
-    videoMap.put("yoga", yogaVideos);
-
-    // Get workout video string from api.
-    URL workoutUrl = new URL(baseURL + "workout" + "&type=video&key=" + youtubeapiKey); 
-    String workoutVideos = getStringFromAPI.getStringFromAPIMethod(workoutUrl, null, null, logger, request, response);
-    if (workoutVideos == null) return; // Returns if exception caught.
-    videoMap.put("workout", workoutVideos);
-
-    // Get meditation video string from api.
-    URL meditationUrl = new URL(baseURL + "meditation" + "&type=video&key=" + youtubeapiKey);
-    String meditationVideos = getStringFromAPI.getStringFromAPIMethod(meditationUrl, null, null, logger, request, response);
-    if (meditationVideos == null) return; // Returns if exception caught.
-    videoMap.put("meditation", meditationVideos);
+    if (videoMap == null) return; // Return if exception caught. 
+    videoMap = getVideoStringFromAPI(youtubeapiKey, videoCategoryNames, videoMap, request, response);
 
     // Loop for going through each string, converting to JSON objects, then put in datastore.
     for (Map.Entry<String, String> entry : videoMap.entrySet()) {
