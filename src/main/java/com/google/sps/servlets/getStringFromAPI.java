@@ -44,11 +44,11 @@ public class getStringFromAPI extends HttpServlet {
     } catch (MalformedURLException e) {
         response.setContentType("text/html");
         response.getWriter().println("URL is not correctly formatted");   
-        return "end";    
+        return null;    
     } catch (IOException e) {
         response.setContentType("text/html");
         response.getWriter().println("Cannot retrieve information from provided URL");
-        return "end";
+        return null;
     } finally {
         if (reader != null) {
           try {

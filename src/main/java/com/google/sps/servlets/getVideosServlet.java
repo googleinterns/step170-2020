@@ -87,19 +87,19 @@ public class getVideosServlet extends HttpServlet {
     String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
     URL yogaUrl = new URL(baseURL + "yoga" + "&type=video&key=" + youtubeapiKey); 
     String yogaVideos = getStringFromAPI.getStringFromAPIMethod(yogaUrl, null, null, logger, request, response);
-    if (yogaVideos.equals("end")) return; // Returns if exception caught.
+    if (yogaVideos == null) return; // Returns if exception caught.
     videoMap.put("yoga", yogaVideos);
 
     // Get workout video string from api.
     URL workoutUrl = new URL(baseURL + "workout" + "&type=video&key=" + youtubeapiKey); 
     String workoutVideos = getStringFromAPI.getStringFromAPIMethod(workoutUrl, null, null, logger, request, response);
-    if (workoutVideos.equals("end")) return; // Returns if exception caught.
+    if (workoutVideos == null) return; // Returns if exception caught.
     videoMap.put("workout", workoutVideos);
 
     // Get meditation video string from api.
     URL meditationUrl = new URL(baseURL + "meditation" + "&type=video&key=" + youtubeapiKey);
     String meditationVideos = getStringFromAPI.getStringFromAPIMethod(meditationUrl, null, null, logger, request, response);
-    if (meditationVideos.equals("end")) return; // Returns if exception caught.
+    if (meditationVideos == null) return; // Returns if exception caught.
     videoMap.put("meditation", meditationVideos);
 
     // Loop for going through each string, converting to JSON objects, then put in datastore.
@@ -120,7 +120,7 @@ public class getVideosServlet extends HttpServlet {
         String videoId = currentVideo.getJSONObject("id").getString("videoId"); // Get videoId.
         URL getContentDetailsURL = new URL(contentDetailsURL + videoId + "&key=" + youtubeapiKey);
         String videoDetails = getStringFromAPI.getStringFromAPIMethod(getContentDetailsURL, null, null, logger, request, response);
-        if (videos.equals("end")) return; // Returns if exception caught.
+        if (videoDetails == null) return; // Returns if exception caught.
 
         // Get duration from parsed string from api.
         JSONObject videoDetailObj = new JSONObject(videoDetails);
