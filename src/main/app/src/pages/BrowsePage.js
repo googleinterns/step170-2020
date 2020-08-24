@@ -7,7 +7,6 @@ import VideoCard from '../constants/VideoCard.js';
 import filterActivities from '../hooks/browseActivitiesFilter.js';
 import {GamesFilterBar, ArticlesFilterBar, VideosFilterBar} from '../constants/ActivitiesFilterBar';
 
-
 /* Component for browse page */
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, 
   articleData, videoData, gameData, activityTypes }) => {
@@ -49,7 +48,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         case activityTypes.VIDEOS:
           // If the activity length is the filter that needs to be taken care of. 
           // These three drop down options come together as one in videoLength inside linkFilters. 
-          if(value==="short" || value === "medium" || value==="large") {
+          if (value === "short" || value === "medium" || value ==="large") {
             updateLinksFilters(Object.assign(linkFilters, {videoLength: value}));
           }
           else {
