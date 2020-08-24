@@ -10,8 +10,61 @@ import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
   articleData, videoData, gameData, activityTypes }) => {
 
-  const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button.
+  // State for game filters
+  const [linkFilters, updateLinksFilters] = React.useState({});             // This is the user entered input. To access the number of people, do linkFilters.numOfPeople.
+  const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button. 
+  const [textBoxValue, settextBoxValue] = React.useState("");               // This state is to retain the value entered by the user un
 
+  /* 
+    This is the function that will be called when the filter button is clicked. 
+    This function calls the function that is declared in hooks folder to filter out games based on the entered value.
+  */
+  const filterButtonClick = evt => {
+    filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
+  }
+
+  // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
+  const filterResetClick = evt => {
+    // When the Reset button is clicked, delete all the filters such that linkFilters has no fields anymore, and filteredLinks points to links itself.
+    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.numOfPlayers)); 
+    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.videoLength));
+    updateFilteredLinks(links);
+    settextBoxValue("");
+  }
+
+  /** This is the function that gets triggered on typing any value in the filter textfield.
+      It sets the filters differently depending on the activity type selected. */
+  const handleFilterChange = evt => {
+    const value = evt.target.value;
+
+    if (value === "")
+      updateLinksFilters({});
+    else {
+      switch(activityType) {
+        case activityTypes.GAMES:
+          updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: value}));
+          break;
+        case activityTypes.VIDEOS:
+          // If the activity length is the filter that needs to be taken care of. 
+          // These three drop down options come together as one in videoLength inside linkFilters. 
+          if (value === "short" || value === "medium" || value ==="large") {
+            updateLinksFilters(Object.assign(linkFilters, {videoLength: value}));
+          }
+          else {
+            updateLinksFilters(Object.assign(linkFilters, delete linkFilters.videoLength));
+            // Code to handle other filters of activityType= Videos, in addition to deleting the length field from the filter.
+          }
+          break;
+        case activityTypes.ARTICLES:
+          updateLinksFilters(Object.assign(linkFilters, {articleType: value}));
+          break;
+        default:
+          console.log("Error: Invalid activity type selection.");
+      }
+    }
+    settextBoxValue(evt.target.value);    
+  }
+  
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     const value = evt.target.value;
