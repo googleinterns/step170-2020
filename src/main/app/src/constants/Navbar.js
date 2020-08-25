@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {GoogleLogin, GoogleLogout} from 'react-google-login';
 import { handleLogin, handleLogout,
   handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
-
+import logo from '../assets/wetime_logo.png';
 import info from './keys.js';
 import 'bulma/css/bulma.css';
 
@@ -21,7 +21,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
       <div className="container">
         <div className="navbar-brand">
-          <NavLink className="navbar-item" to="/"> WeTime <i className="fas fa-heartbeat"></i></NavLink>
+          <NavLink className="navbar-item" to="/"><img src={logo} alt="Logo"></img></NavLink>
           
           <a onClick={() => {setisActive(!isActive);}} role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
@@ -33,8 +33,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
         {/*Navbar tabs to other pages.*/}
         <div id="navbarBasicExample" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
           <div className="navbar-start">
-            <NavLink className="navbar-item" to="/help"><span className="icon"><i className="fas fa-question-circle"></i></span><span> Help </span></NavLink>
-            <NavLink className="navbar-item" to="/about"><span className="icon"><i className="fas fa-address-card"></i></span><span> About</span></NavLink> 
+            <NavLink className="navbar-item" to="/help"><h6> Help </h6></NavLink>
+            <NavLink className="navbar-item" to="/about"><h6> About </h6></NavLink> 
           </div>
         </div>
 
