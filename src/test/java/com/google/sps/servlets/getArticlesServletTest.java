@@ -72,11 +72,12 @@ public class getArticlesServletTest {
     articleEntity.setProperty("description", "testDescription");
     articleEntity.setProperty("url", "testUrl");
     articleEntity.setProperty("publishedAt", "testPublishedAt");
+    articleEntity.setProperty("length", 0);
 
     ds.put(articleEntity);
     String entityKey = KeyFactory.createKeyString(articleEntity.getKey().getKind(), articleEntity.getKey().getId());
 
-    String json = "[{\"publisher\":\"testPublisher\",\"author\":\"testAuthor\",\"description\":\"testDescription\",\"publishedAt\":\"testPublishedAt\",\"key\":\"" +
+    String json = "[{\"publisher\":\"testPublisher\",\"author\":\"testAuthor\",\"description\":\"testDescription\",\"publishedAt\":\"testPublishedAt\",\"length\":0,\"key\":\"" +
             entityKey +
             "\",\"title\":\"testTitle\",\"category\":\"ARTICLES\",\"url\":\"testUrl\"}]\n";
 

@@ -10,6 +10,8 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.sps.data.Video;
 import com.google.sps.data.GetServletsUtility;
+import com.google.sps.servlets.getSecretKey;
+import com.google.sps.servlets.getStringFromAPI;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -70,13 +72,14 @@ public class getVideosServletTest {
     videoEntity.setProperty("creator", "testCreator");
     videoEntity.setProperty("title", "testTitle");
     videoEntity.setProperty("publishedAt", "testPublishedAt");
+    videoEntity.setProperty("videoCategory", "testVideoCategory");
+    videoEntity.setProperty("duration", 0);
 
     ds.put(videoEntity);
     String entityKey = KeyFactory.createKeyString(videoEntity.getKey().getKind(), videoEntity.getKey().getId());
 
-    String json = "[{\"creator\":\"testCreator\",\"publishedAt\":\"testPublishedAt\",\"key\":\"" +
-            entityKey +
-            "\",\"title\":\"testTitle\",\"category\":\"VIDEOS\",\"url\":\"testURL\"}]\n";
+    String json = "[{\"creator\":\"testCreator\",\"publishedAt\":\"testPublishedAt\",\"videoCategory\":\"testVideoCategory\",\"duration\":0,\"key\":\"" 
+        + entityKey + "\",\"title\":\"testTitle\",\"category\":\"VIDEOS\",\"url\":\"testURL\"}]\n";
 
     //These lines mock response.getWriter()
     StringWriter stringWriter = new StringWriter();
@@ -115,9 +118,10 @@ public class getVideosServletTest {
       String creator = (String) entity.getProperty("creator");
       String title = (String) entity.getProperty("title");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      String videoCategory = (String) entity.getProperty("videoCategory");
       long duration = (long) entity.getProperty("duration");
 
-      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, videoCategory, duration);
       videos.add(newVideo);
     }
 
