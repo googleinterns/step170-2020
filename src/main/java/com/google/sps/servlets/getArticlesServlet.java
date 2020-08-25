@@ -81,9 +81,8 @@ public class getArticlesServlet extends HttpServlet {
     // Get string from api.
     String newsapiKey = getSecretKey.accessSecretVersion("298755462", "news_api_key", "1");
     URL url = new URL(baseURL + newsapiKey);
-    StringBuilder strBuf = new StringBuilder();
-    String articles = getStringFromAPI.getStringFromAPIMethod(url, strBuf, null, null, logger, request, response);
-    if (articles.equals("end")) return; // Returns if exception caught.  
+    String articles = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
+    if (articles == null) return; // Returns if exception caught.  
 
     // Put data from api string into database.
     JSONObject obj = new JSONObject(articles);
