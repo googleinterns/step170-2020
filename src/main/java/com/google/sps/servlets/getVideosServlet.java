@@ -66,7 +66,7 @@ public class getVideosServlet extends HttpServlet {
   private static final Logger logger = Logger.getLogger(getVideosServlet.class.getName());
   private static final String KIND = new String("Video");
 
-  public static HashMap<String, String> getVideoStringFromAPI (String youtubeapiKey, ArrayList<String> videoCategoryNames, HashMap<String, String> videoMap, HttpServletRequest request, HttpServletResponse response) throws IOException {
+  private static HashMap<String, String> getVideoStringFromAPI (String youtubeapiKey, ArrayList<String> videoCategoryNames, HashMap<String, String> videoMap, HttpServletRequest request, HttpServletResponse response) throws IOException {
     for (int i = 0; i < videoCategoryNames.size(); ++i) {
       URL url = new URL(baseURL + videoCategoryNames.get(i) + "&type=video&key=" + youtubeapiKey); 
       String videos = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
