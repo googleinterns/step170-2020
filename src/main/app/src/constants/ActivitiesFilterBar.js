@@ -1,5 +1,100 @@
 import React from 'react';
+import filterActivities from '../hooks/browseActivitiesFilter.js';
 
+const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFilteredLinks}) => {
+  // Filter states
+  const [numOfPLayers, updateNumOfPlayers] = React.useState("");
+  const [videoType, updateVideoType] = React.useState("*");
+  const [articleType, updateArticleType] = React.useState("*");
+  const [articleLength, updateArticleLength] = React.useState("*");
+
+  /*
+    This is the function that will be called when the filter button is clicked.
+    This function calls the function that is declared in hooks folder to filter out games based on the entered value.
+  */
+  const filterButtonClick = evt => {
+    const linkFilters = {}
+    
+    switch(activityType) {
+      case activityTypes.GAMES:
+        linkFilters.numOfPLayers = numOfPLayers;
+        break;
+      case activityTypes.VIDEOS:
+        linkFilters.videoType = videoType;
+        break;
+      case activityTypes.ARTICLES:
+        linkFilters.articleType = articleType;
+        linkFilters.articleLength = articleLength;
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
+
+    filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
+  }
+
+  // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
+  const filterResetClick = evt => {
+    switch(activityType) {
+      case activityTypes.GAMES:
+        updateNumOfPlayers("");
+        break;
+      case activityTypes.VIDEOS:
+        updateVideoType("*");
+        break;
+      case activityTypes.ARTICLES:
+        updateArticleType("*");
+        updateArticleLength("*");
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
+    updateFilteredLinks(links);
+  }
+
+  /** This is the function that gets triggered on typing any value in the filter textfield.
+      It sets the filters differently depending on the activity type selected. */
+  const handleFilterChange = evt => {
+    const value = evt.target.value;
+    const name = evt.target.name;
+
+    switch(activityType) {
+      case activityTypes.GAMES:
+        updateNumOfPlayers(value);
+        break;
+      case activityTypes.VIDEOS:
+        updateVideoType(value);
+        break;
+      case activityTypes.ARTICLES:
+        if (name === "ArticleType")
+          updateArticleType(value);
+        else if (name === "ArticleLength")
+          updateArticleLength(value);
+        else
+          console.log("Error: Unrecognized article filter modified.");
+        break;
+      default:
+        console.log("Error: Invalid activity type selection.");
+    }
+  }
+
+  const props = {handleFilterChange: handleFilterChange, filterButtonClick: filterButtonClick,
+    filterResetClick: filterResetClick};
+
+  switch(activityType) {
+    case activityTypes.GAMES:
+      const gameProps = Object.assign(props, {numOfPLayers: numOfPLayers});
+      return <GamesFilterBar {...gameProps} />
+    case activityTypes.VIDEOS:
+      const videoProps = Object.assign(props, {videoType: videoType});
+      return <VideosFilterBar {...videoProps} />
+    case activityTypes.ARTICLES:
+      const articleProps = Object.assign(props, {articleType: articleType, articleLength: articleLength});
+      return <ArticlesFilterBar {...articleProps} />
+    default:
+      return null;
+  }
+}
 /** Render filter section of browse page depending on activity type selected. */
 
 const FilterCommonSection = ({filterButtonClick, filterResetClick}) => {
@@ -12,12 +107,12 @@ const FilterCommonSection = ({filterButtonClick, filterResetClick}) => {
 }
 
 /** Games filter options. */
-const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
+const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, numOfPlayers}) => {
   return (
     <React.Fragment>
-      <p> Filter out games based on the number of players:</p> 
+      <p> Filter out games based on the number of players:</p>
       <div className="field is-grouped">
-        <p className="control is-expanded has-icons-left"><span className="icon"><i className="fas fa-filter"></i></span><input className="input" onChange={handleFilterChange} type="text" value={textBoxValue} placeholder="How many people are there with you? Eg. 0"></input></p>
+        <p className="control is-expanded has-icons-left"><span className="icon"><i className="fas fa-filter"></i></span><input className="input" onChange={handleFilterChange} type="text" value={numOfPlayers} placeholder="How many people are there with you? Eg. 0"></input></p>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
       </div>
     </React.Fragment>
@@ -25,16 +120,24 @@ const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick
 }
 
 /** Articles filter options. */
-const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
+const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, articleType, articleLength}) => {
   return (
     <React.Fragment>
       <div className="field is-grouped">
         <div className="control is-expanded"><div className="select is-fullwidth">
-          <select name="ArticleType" onChange={handleFilterChange} value={textBoxValue}>
-            <option value="*">{"All"}</option>
+          <select name="ArticleType" onChange={handleFilterChange} value={articleType}>
+            <option value="*">{"All [Article Type]"}</option>
             <option value="tech">{"Technology"}</option>
             <option value="social">{"Social"}</option>
             <option value="meditation">{"Meditation"}</option>
+          </select>
+        </div></div>
+        <div className="control is-expanded"><div className="select is-fullwidth">
+          <select name="ArticleLength" onChange={handleFilterChange} value={articleLength}>
+            <option value="*">{"All [Article Length]"}</option>
+            <option value="short">{"Short [3 mins or less]"}</option>
+            <option value="medium">{"Medium [4-9 mins]"}</option>
+            <option value="long">{"Long [10 mins or more]"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
@@ -44,16 +147,19 @@ const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetCl
 }
 
 /** Videos filter options. */
-const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, textBoxValue}) => {
+const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, videoType}) => {
   return (
     <React.Fragment>
       <div className="field is-grouped">
         <div className="control is-expanded"><div className="select is-fullwidth">
-          <select name="VideoType" onChange={handleFilterChange} value={textBoxValue}>
+          <select name="VideoType" onChange={handleFilterChange} value={videoType}>
             <option value="*">{"All"}</option>
             <option value="yoga">{"Yoga"}</option>
             <option value="workout">{"Workout"}</option>
             <option value="meditation">{"Meditation"}</option>
+            <option value="short">{"Videos less than 15 minutes"}</option>
+            <option value="medium">{"Videos greater than 15 minutes and less than 30 minutes"}</option>
+            <option value="large">{"Videos greater than 30 minutes"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
@@ -62,4 +168,4 @@ const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClic
   );
 }
 
-export {GamesFilterBar, ArticlesFilterBar, VideosFilterBar}
+export default ActivitiesFilterBar

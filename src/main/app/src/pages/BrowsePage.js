@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom';
 import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
-import filterActivities from '../hooks/browseActivitiesFilter.js';
-import {GamesFilterBar, ArticlesFilterBar, VideosFilterBar} from '../constants/ActivitiesFilterBar';
+import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 
 /* Component for browse page */
-const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet, 
+const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
   articleData, videoData, gameData, activityTypes }) => {
 
   // State for game filters
@@ -21,12 +20,14 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     This function calls the function that is declared in hooks folder to filter out games based on the entered value.
   */
   const filterButtonClick = evt => {
-   filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
+    filterActivities(links, activityType, activityTypes, linkFilters, updateFilteredLinks);
   }
 
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
   const filterResetClick = evt => {
-    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.numOfPlayers));     // numOfPLayers -1 if filter was reseted. In this case, filteredData will be links. 
+    // When the Reset button is clicked, delete all the filters such that linkFilters has no fields anymore, and filteredLinks points to links itself.
+    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.numOfPlayers)); 
+    updateLinksFilters(Object.assign(linkFilters, delete linkFilters.videoLength));
     updateFilteredLinks(links);
     settextBoxValue("");
   }
@@ -44,7 +45,15 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           updateLinksFilters(Object.assign(linkFilters, {numOfPlayers: value}));
           break;
         case activityTypes.VIDEOS:
-          updateLinksFilters(Object.assign(linkFilters, {videoType: value}));
+          // If the activity length is the filter that needs to be taken care of. 
+          // These three drop down options come together as one in videoLength inside linkFilters. 
+          if (value === "short" || value === "medium" || value ==="large") {
+            updateLinksFilters(Object.assign(linkFilters, {videoLength: value}));
+          }
+          else {
+            updateLinksFilters(Object.assign(linkFilters, delete linkFilters.videoLength));
+            // Code to handle other filters of activityType= Videos, in addition to deleting the length field from the filter.
+          }
           break;
         case activityTypes.ARTICLES:
           updateLinksFilters(Object.assign(linkFilters, {articleType: value}));
@@ -53,9 +62,9 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           console.log("Error: Invalid activity type selection.");
       }
     }
-    settextBoxValue(evt.target.value);
+    settextBoxValue(evt.target.value);    
   }
-
+  
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     const value = evt.target.value;
@@ -96,29 +105,25 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         </div>
 
         {/* This division is for filtering the results based on the user entered input. */}
-        {activityType === "games" ? 
-          <GamesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
-          activityType === "reading" ? 
-          <ArticlesFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} /> :
-          <VideosFilterBar handleFilterChange={handleFilterChange} filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} textBoxValue={textBoxValue} />
-        }
+        <ActivitiesFilterBar activityType={activityType} activityTypes={activityTypes}
+          links={links} updateFilteredLinks={updateFilteredLinks} />
 
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {filteredLinks && filteredLinks.map((data, key) => { 
+              {filteredLinks && filteredLinks.map((data, key) => {
                 return (
-                  <div key={key}> 
+                  <div key={key}>
                     {activityType === "games" ?
                       <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
-                      activityType === "reading" ? 
-                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> : 
+                      activityType === "reading" ?
+                      <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
                       <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> }
-                  </div>   
+                  </div>
                 )
               })}
-            </div> 
-          </div> 
+            </div>
+          </div>
         </div>
       </div>
     </section>
