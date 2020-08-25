@@ -98,66 +98,74 @@ public class getVideosServletTest {
     assertEquals(json, stringWriter.toString());
   }
 
-//   @Test
-//   public void gettingVideosFromApiTest() throws Exception {
+  @Test
+  public void gettingVideosFromApiTest() throws Exception {
 
-//     List<Video> videos = new ArrayList<>();
+    List<Video> videos = new ArrayList<>();
 
-//     //calling the servlet
-//     new getVideosServlet().doPut(request, response);
+    // Stubbing the request to not fail while calling the servlet. 
+    when(request.getHeader("User-Agent")).thenReturn("AppEngine-Google; (+http://code.google.com/appengine)");   
 
-//     //verify that request was never accessed
-//     verify(request, never()).getParameter(anyString());
+    //calling the servlet
+    new getVideosServlet().doPut(request, response);
 
-//     Query query = new Query(kind);
-//     PreparedQuery results = ds.prepare(query);
+    //verify that request was never accessed
+    verify(request, never()).getParameter(anyString());
+
+    Query query = new Query(kind);
+    PreparedQuery results = ds.prepare(query);
     
-//     for (Entity entity : results.asIterable()) {
-//       String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
-//       String url = (String) entity.getProperty("url");
-//       String creator = (String) entity.getProperty("creator");
-//       String title = (String) entity.getProperty("title");
-//       String publishedAt = (String) entity.getProperty("publishedAt");
-//       long duration = (long) entity.getProperty("duration");
+    for (Entity entity : results.asIterable()) {
+      String entityKey = KeyFactory.createKeyString(entity.getKey().getKind(), entity.getKey().getId());
+      String url = (String) entity.getProperty("url");
+      String creator = (String) entity.getProperty("creator");
+      String title = (String) entity.getProperty("title");
+      String publishedAt = (String) entity.getProperty("publishedAt");
+      String videoCategory = (String) entity.getProperty("videoCategory");
+      long duration = (long) entity.getProperty("duration");
 
-//       Video newVideo = new Video(entityKey, title, creator, url, publishedAt, duration);
-//       videos.add(newVideo);
-//     }
+      Video newVideo = new Video(entityKey, title, creator, url, publishedAt, videoCategory, duration);
+      videos.add(newVideo);
+    }
 
-//     // After calling the API, the size of videos can never be zero. 
-//     assertNotEquals(0,videos.size());
+    // After calling the API, the size of videos can never be zero. 
+    assertNotEquals(0,videos.size());
 
-//   }
+  }
 
-//   @Test
-//   public void deleteResultsOfVideosFromDatastoreTest() throws Exception {
+  @Test
+  public void deleteResultsOfVideosFromDatastoreTest() throws Exception {
 
-//     Entity videoEntity = new Entity("Video");
-//     videoEntity.setProperty("url", "testURL");
-//     videoEntity.setProperty("creator", "testCreator");
-//     videoEntity.setProperty("title", "testTitle");
-//     videoEntity.setProperty("publishedAt", "testPublishedAt");
+    Entity videoEntity = new Entity("Video");
+    videoEntity.setProperty("url", "testURL");
+    videoEntity.setProperty("creator", "testCreator");
+    videoEntity.setProperty("title", "testTitle");
+    videoEntity.setProperty("publishedAt", "testPublishedAt");
+    videoEntity.setProperty("videoCategory", "testVideoCategory");
+    videoEntity.setProperty("duration", 0);
 
-//     Entity videoEntity1 = new Entity("Video");
-//     videoEntity1.setProperty("url", "testURL1");
-//     videoEntity1.setProperty("creator", "testCreator1");
-//     videoEntity1.setProperty("title", "testTitle1");
-//     videoEntity1.setProperty("publishedAt", "testPublishedAt1");
+    Entity videoEntity1 = new Entity("Video");
+    videoEntity1.setProperty("url", "testURL1");
+    videoEntity1.setProperty("creator", "testCreator1");
+    videoEntity1.setProperty("title", "testTitle1");
+    videoEntity1.setProperty("publishedAt", "testPublishedAt1");
+    videoEntity.setProperty("videoCategory", "testVideoCategory1");
+    videoEntity.setProperty("duration", 1);
     
-//     // Adding two entities to our mock datastore
-//     ds.put(videoEntity);
-//     ds.put(videoEntity1);
+    // Adding two entities to our mock datastore
+    ds.put(videoEntity);
+    ds.put(videoEntity1);
 
-//     Query query = new Query(kind);
-//     PreparedQuery results = ds.prepare(query);
+    Query query = new Query(kind);
+    PreparedQuery results = ds.prepare(query);
 
-//     // Checking if the datastore has these two entities. 
-//     assertEquals(2,results.countEntities());
+    // Checking if the datastore has these two entities. 
+    assertEquals(2,results.countEntities());
 
-//     // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
-//     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, ds,kind);
+    // Calling a function, that given a query and datastore, deletes all the entities of that kind from the datastore.
+    GetServletsUtility.deleteResultsOfQueryFromDatastore(query, ds,kind);
 
-//     // Size is zero since all entities are deleted.
-//     assertEquals(0,ds.prepare(query).countEntities());
-//   }
+    // Size is zero since all entities are deleted.
+    assertEquals(0,ds.prepare(query).countEntities());
+  }
 }
