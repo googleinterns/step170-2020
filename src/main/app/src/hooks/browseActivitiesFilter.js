@@ -40,7 +40,7 @@ const filterGames = (game, filters) => {
 
 /** Filter list of articles. */
 const filterArticles = (article, filters) => {
-   let isWithArticleLength;
+  let isWithArticleLength;
   // Get second equivilent of article lengths (short, medium, or long).
   switch(filters.articleLength) {
     case "*":
@@ -71,18 +71,29 @@ const filterArticles = (article, filters) => {
   Large length videos- (>=1801)
 */
 const filterVideos = (video, filters) => {
-  var input = filters.videoLength; 
-  var duration = parseInt(video.duration);  
-  
-  if("short".localeCompare(input) === 0 ) {     
-    return (duration >= 0 && duration <= 900);
+  let isWithinVideoDuration;
+
+  switch(filters.videoDuration) {
+    case "*":
+      isWithinVideoDuration = duration => true;
+      break;
+    case "short":
+      isWithinVideoDuration = duration => duration >= 0 && duration <= 900;
+      break;
+    case "medium":
+      isWithinVideoDuration = duration => duration >= 901 && duration <= 1800;
+      break;
+    case "large":
+      isWithinVideoDuration = duration => duration>=1801;
+      break;
+    default:
+      console.log("Video length not recognized.");
   }
-  else if("medium".localeCompare(input) === 0 ) {
-    return (duration >= 901 && duration <= 1800);
-  }
-  else if("large".localeCompare(input) === 0) {
-    return (duration>=1801);     
-  }
+
+  // Filter by videoDuration and videoCategory
+  return (filters.videoCategory === "*" || filters.videoCategory === video.videoCategory)
+    && isWithinVideoDuration(Number(video.duration));
+
 }
 
 export default filterActivities;
