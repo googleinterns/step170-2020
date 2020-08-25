@@ -21,11 +21,11 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         linkFilters.numOfPLayers = numOfPLayers;
         break;
       case activityTypes.VIDEOS:
-        linkFilters.videoCategory = videoCategory;
-        linkFilters.videoDuration = videoDuration;
+        linkFilters.videoCategory = videoCategory;                // Yoga, Meditation, workout.
+        linkFilters.videoDuration = videoDuration;                // Length of the video.
         break;
       case activityTypes.ARTICLES:
-        linkFilters.articleType = articleType;          // Meditation, Technology, Social... 
+        linkFilters.articleType = articleType;          // Meditation, Technology, Social. 
         linkFilters.articleLength = articleLength;     
         break;
       default:
@@ -173,9 +173,9 @@ const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClic
         <div className="control is-expanded"><div className="select is-fullwidth">
           <select name="VideoDuration" onChange={handleFilterChange} value={videoDuration}>
             <option value="*">{"All [Video Duration]"}</option>
-            <option value="short">{"Videos less than 15 minutes"}</option>
-            <option value="medium">{"Videos greater than 15 minutes and less than 30 minutes"}</option>
-            <option value="large">{"Videos greater than 30 minutes"}</option>
+            <option value="short">{"Less than 15 minutes"}</option>
+            <option value="medium">{"Greater than 15 minutes and less than 30 minutes"}</option>
+            <option value="large">{"Greater than 30 minutes"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />
