@@ -6,7 +6,7 @@ import Datetime from "react-datetime";
 import { useStyles, custom } from '../hooks/useStyles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { isValidEmail, validate } from '../hooks/formValidation';
-import {Grid, Button, FormControlLabel, Switch, FormControl, 
+import {Grid, Button, FormControlLabel, Switch, FormControl,
         TextField, Chip, Radio, CardContent, CardActions, Card, Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import FaceIcon from '@material-ui/icons/Face';
@@ -15,15 +15,16 @@ import 'react-datetime/css/react-datetime.css';
 import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
+import LoadingIndicator from '../constants/LoadingIndicator';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
 const ScheduleActivityPage = props => {
-  const { isLoggedIn, accessToken, userId, activity, links, eventScheduled, 
+  const { isLoggedIn, accessToken, userId, activity, links, eventScheduled,
         updateEventScheduled, updateActivity , activityType, isGuest,
         randomActivities, updateRandomActivities } = props;
-  
+
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
@@ -35,14 +36,18 @@ const ScheduleActivityPage = props => {
   const [titleError, updateTitleError] = React.useState(false);
   const [dateError, updateDateError] = React.useState(false);
   const [guestError, updateGuestError] = React.useState(false);
+  const [servletError, updateServletError] = React.useState(false);
   const [displayErrors, updateDisplayErrors] = React.useState(false);
 
   // Error messages
   const errors = [
     {error: titleError, errorMsg: "Invalid title."},
     {error: dateError, errorMsg: "Start time cannot be after end time."},
-    {error: guestError, errorMsg: "Invalid email address for guest."}
+    {error: guestError, errorMsg: "Invalid email address for guest."},
+    {error: servletError, errorMsg: "An error occured on our servers. Please try again in a few minutes."}
   ];
+
+  const [loading, updateLoading] = React.useState(false);
 
   // Get object for css classes.
   const classes = useStyles();
@@ -78,15 +83,15 @@ const ScheduleActivityPage = props => {
     }
 
     // arr that has all the indices at first, but then removes the indices thare taken into consideration.
-    // Populate the array elements as 0 to testData's length. 
+    // Populate the array elements as 0 to testData's length.
     const arr = Array.from(Array(links.length).keys());
 
-    // randomArray is an array that will have any three random objects of testData. 
+    // randomArray is an array that will have any three random objects of testData.
     const randomArray = new Array();
 
     // For loop to store three indices of testData into items array.
     for (let i = 0; i < 3; i++) {
-      var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)]. 
+      var x = Math.floor(Math.random() * arr.length);   // This is the randomly generated number from [0, (arr.length -1)].
       randomArray.push(links[arr[x]]);    // Storing the objects directly from the testData.
       arr.splice(x,1);    // Remember! This deletes an element so the size will decrease by 1.
     }
@@ -141,10 +146,17 @@ const ScheduleActivityPage = props => {
       if (isGuest) {
         updateEventScheduled(window.location.origin);
       } else {
+        updateLoading(true);
         const eventInfo = getEventInfo();
         $.post('/createEvent', eventInfo)
         .done(eventUrl => {
           updateEventScheduled(eventUrl);
+        })
+        .fail(() => {
+          // Stop loading and display error message if request failed.
+          updateLoading(false);
+          updateDisplayErrors(true);
+          updateServletError(true);
         });
       }
     } else {
@@ -159,27 +171,27 @@ const ScheduleActivityPage = props => {
     <Redirect to="/" /> :
     <div className="container pb-5">
       {/* Alert errors if any. */}
-      {displayErrors && (titleError || dateError) ? 
+      {displayErrors && (titleError || dateError || servletError) ?
         <Alert severity="error" onClose={() => updateDisplayErrors(false)} className="mb-5">
           <AlertTitle>Error</AlertTitle>
           {errors.map((errorObj, key) =>
-              errorObj.error ? <div key={key}>{errorObj.errorMsg} — <strong>check it out!</strong></div> : null
+              errorObj.error ? <div key={key}>{errorObj.errorMsg}</div> : null
           )}
         </Alert> : null}
       <h1 className="text-center">Schedule Activity</h1>
       {/* Title input */}
       <div className={classes.root}>
-      <TextField id="title-field" label="Add Title" className={classes.input} 
+      <TextField id="title-field" label="Add Title" className={classes.input}
         value={title} onChange={handleTitleChange} />
       </div>
       {/* Datetime selection */}
       <div className="row py-5">
         <div className="col-6">
-          <Datetime inputProps={{placeholder: 'Start Time'}} 
+          <Datetime inputProps={{placeholder: 'Start Time'}}
             value={startTime} onChange={moment => updateStartTime(moment.toDate())} />
         </div>
         <div className="col-6">
-          <Datetime inputProps={{placeholder: 'End Time'}} 
+          <Datetime inputProps={{placeholder: 'End Time'}}
             value={endTime} onChange={moment => updateEndTime(moment.toDate())}/>
         </div>
       </div>
@@ -228,25 +240,28 @@ const ScheduleActivityPage = props => {
         </div>
      :
         <div className={classes.root} className="container">
-          {generateRandomActivities(links).map((element, key) => { 
+          {generateRandomActivities(links).map((element, key) => {
             return (
-              <div key={key}> 
-                {activityType === "games" ? 
+              <div key={key}>
+                {activityType === "games" ?
                   <GameCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
-                  activityType === "reading" ? 
-                  <ArticleCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> : 
+                  activityType === "reading" ?
+                  <ArticleCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
                   <VideoCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> }
-              </div>   
+              </div>
             )
           })}
-        </div>   
+        </div>
       }
-      
+
       <div className={classes.root}>
         <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
           Create Event
         </Button>
       </div>
+
+      {/** Show loading indicator once user presses the form submit button. */}
+      {loading ? <LoadingIndicator /> : null}
 
     </div>
   )
