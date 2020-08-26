@@ -36,57 +36,59 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
   }
    
   return (
-    <section className="container">
-      {/* Alert message for successfull event scheduling. */}
-      <Collapse in={eventScheduled !== ""} className="mb-4">
-        <Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                updateEventScheduled("");
-              }}>
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
-        </Alert>
-      </Collapse>
+    <section className= "sectionbg" >
+      <section className="container">
+        {/* Alert message for successfull event scheduling. */}
+        <Collapse in={eventScheduled !== ""} className="mb-4">
+          <Alert
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  updateEventScheduled("");
+                }}>
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
+          </Alert>
+        </Collapse>
 
-      {/* Added logo to homepage. */}
-      <div className="container has-text-centered">
-        <div>
-          <img src={logo} alt="Logo" width="800" height="100"/>
-         </div>
-      </div>
-
-      {/*This container consists of the activities dropdown. */}
-      <div className="container has-text-centered">
-        <div className="control is-centered">
-          <div className="select is-info is-fullwidth title is-2">
-            <select className="is-focused" onChange={handleActivitySelection} value={activityType}>
-              <option value="games">{"Games"}</option>
-              <option value="videos">{"Active"}</option>
-              <option value="articles">{"Reading"}</option>
-            </select>
+        {/* Added logo to homepage. */}
+        <div className="container has-text-centered">
+          <div>
+            <img src={logo} alt="Logo" width="800" height="100"/>
           </div>
         </div>
-      </div>
 
-      <br/>
+        {/*This container consists of the activities dropdown. */}
+        <div className="container has-text-centered">
+          <div className="control is-centered">
+            <div className="select is-info is-fullwidth title is-2">
+              <select className="is-focused" onChange={handleActivitySelection} value={activityType}>
+                <option value="games">{"Games"}</option>
+                <option value="videos">{"Active"}</option>
+                <option value="articles">{"Reading"}</option>
+              </select>
+            </div>
+          </div>
+        </div>
 
-      {/* This container consists of the buttons to schedule and browse. */}
-      <div className="container has-text-centered is-centered">
-        <Link to='/schedule-activity'>
-        <button value="schedule" className="button is-large is-success is-rounded" onClick={emptyActivity}>Schedule an event</button>
-        </Link>
-        <Link to='/browse'>
-        <button value="browse" className="button is-large is-danger is-rounded" >Browse</button>
-        </Link>
-      </div>
+        <br/>
+
+        {/* This container consists of the buttons to schedule and browse. */}
+        <div className="container has-text-centered is-centered">
+          <Link to='/schedule-activity'>
+          <button value="schedule" className="button is-large is-success is-rounded" onClick={emptyActivity}>Schedule an event</button>
+          </Link>
+          <Link to='/browse'>
+          <button value="browse" className="button is-large is-danger is-rounded" >Browse</button>
+          </Link>
+        </div>
+      </section>
     </section>
   )
 }

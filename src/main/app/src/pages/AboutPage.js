@@ -2,11 +2,12 @@ import React from 'react';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Container from 'react-bootstrap/Container';
 import Line from '../constants/Line';
+import '../css/home.css';
 
 /* Component for About page */
 const AboutPage = () => {
   return (
-    <section className= "section">
+    <section className= "sectionbg">
       <div className="container">
 
         <Jumbotron fluid style={{background:'linear-gradient(to bottom, #2C3E50 0%, #000000 100%)', color:'white'}}>
