@@ -8,7 +8,7 @@ import { handleLogin, handleLogout,
 import info from '../constants/keys';
 
 /** Displayed before the Schedule Activity Page if the user is not logged in already. */
-const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting, updateIsGuest}) => {
+const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting, updateIsGuest, updateUserEmail}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -26,7 +26,7 @@ const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserI
             <i className="fab fa-google fa-fw"></i>Login with Google
           </button>
         )}
-        onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+        onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
         onFailure={res => handleLoginFail(res)}
         discoveryDocs={discoveryDocs}
         scope={scope}

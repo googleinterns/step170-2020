@@ -8,7 +8,7 @@ import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
-const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting}) => {
+const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, updateUserEmail, greeting, updateGreeting}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -18,7 +18,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
 
   return (
     <div>
-    <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
+    <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation">
       <div className="container">
         <div className="navbar-brand">
           <NavLink className="navbar-item" to="/"><img style={{border:0}} src={logo} alt="Logo"></img></NavLink>
@@ -51,7 +51,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
                     <i className="fab fa-google fa-fw"></i>Login with Google
                   </button>
                 )}
-                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
                 onFailure={res => handleLoginFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
@@ -66,7 +66,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
                     <i className="fas fa-sign-out-alt fa-fw"></i>Logout
                   </button>
                 )}
-                onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId)}
+                onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
                 onFailure={res => handleLogoutFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
@@ -80,7 +80,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
 
     <div className = "container">
       <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
-    </div> 
+    </div>
 
    </div>
   )

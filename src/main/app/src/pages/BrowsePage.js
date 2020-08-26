@@ -63,7 +63,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                   <div key={key}>
                     {activityType === "games" ?
                       <GameCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
-                      activityType === "reading" ?
+                      activityType === "articles" ?
                       <ArticleCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> :
                       <VideoCard data={data} updateScheduleActivity={updateActivity} parameters={{activityKey: data.key, title: data.title}} buttonText={"Schedule Activity"}/> }
                   </div>

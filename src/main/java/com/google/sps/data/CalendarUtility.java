@@ -76,7 +76,7 @@ public final class CalendarUtility {
     // Create token response object
     TokenResponse tokenObj = new TokenResponse();
     tokenObj.setAccessToken(token);
-
+    
     // Set access token into calendar scope.
     GoogleAuthorizationCodeFlow flow = newFlow();
     flow.createAndStoreCredential(tokenObj, userId);
