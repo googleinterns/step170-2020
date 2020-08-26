@@ -11,7 +11,7 @@ import LoginPage from './pages/LoginPage';
 /* Routes address bar to corresponding page components */
 const Routes = ({ activityType, updateActivityType, activity, updateActivity, updateServlet, links, isLoggedIn, updateIsLoggedIn,
   accessToken, updateAccessToken, userId, updateUserId, greeting, updateGreeting,schedule_browse_button, changeButton, articleData, videoData, gameData,
-  eventScheduled, updateEventScheduled, isGuest, updateIsGuest, activityTypes }) => {
+  eventScheduled, updateEventScheduled, isGuest, updateIsGuest, activityTypes, userEmail, updateUserEmail }) => {
     return (
       <Switch>
         <Route exact path='/' render={() => <HomePage activity={activity} activityType={activityType} updateActivityType={updateActivityType} updateActivity={updateActivity} updateServlet={updateServlet} articleData={articleData}

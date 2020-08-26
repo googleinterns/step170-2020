@@ -4,7 +4,7 @@
 const updateActivityLinks = (updateLinks, servlet) => {
   fetch(servlet)
   .then((resp) => resp.json())
-  .then(data => {
+  .then(data => { 
     // Modify the links that have the data according to the activity (the servlet that is called).
     updateLinks(data);
   }).catch(err => {
