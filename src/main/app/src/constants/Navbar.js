@@ -21,7 +21,7 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
     <nav className="navbar is-spaced is-dark" role="navigation" aria-label="main navigation"> 
       <div className="container">
         <div className="navbar-brand">
-          <NavLink className="navbar-item" to="/"><img src={logo} alt="Logo"></img></NavLink>
+          <NavLink className="navbar-item" to="/"><img style={{border:0}} src={logo} alt="Logo"></img></NavLink>
           
           <a onClick={() => {setisActive(!isActive);}} role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
