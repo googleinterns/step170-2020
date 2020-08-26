@@ -15,6 +15,7 @@ import 'react-datetime/css/react-datetime.css';
 import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
+import LoadingIndicator from '../constants/LoadingIndicator';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
@@ -43,6 +44,8 @@ const ScheduleActivityPage = props => {
     {error: dateError, errorMsg: "Start time cannot be after end time."},
     {error: guestError, errorMsg: "Invalid email address for guest."}
   ];
+
+  const [loading, updateLoading] = React.useState(false);
 
   // Get object for css classes.
   const classes = useStyles();
@@ -141,6 +144,7 @@ const ScheduleActivityPage = props => {
       if (isGuest) {
         updateEventScheduled(window.location.origin);
       } else {
+        updateLoading(true);
         const eventInfo = getEventInfo();
         $.post('/createEvent', eventInfo)
         .done(eventUrl => {
@@ -248,6 +252,9 @@ const ScheduleActivityPage = props => {
         </Button>
       </div>
 
+      {/** Show loading indicator once user presses the form submit button. */}
+      {loading ? <LoadingIndicator /> : null}
+      
     </div>
   )
 }

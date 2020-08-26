@@ -72,16 +72,18 @@ public final class CalendarUtility {
   */
   public static Calendar loadCalendarClient(String token) throws IOException {
     String userId = "user";
-
+    System.out.println("3");
     // Create token response object
     TokenResponse tokenObj = new TokenResponse();
     tokenObj.setAccessToken(token);
-
+    System.out.println("4");
     // Set access token into calendar scope.
     GoogleAuthorizationCodeFlow flow = newFlow();
+    System.out.println("5");
     flow.createAndStoreCredential(tokenObj, userId);
-    
+    System.out.println("6");
     Credential credential = flow.loadCredential(userId);
+    System.out.println("7");
     return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
   }
 
