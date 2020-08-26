@@ -27,20 +27,21 @@ const filterActivities = (links, activityType, activityTypes, linkFilters, updat
 */
 const filterGames = (game, filters) => {
   var input = parseInt(filters.numOfPlayers,10);
-    var min = parseInt(game.minPlayer,10);
-    var max = parseInt(game.maxPlayer,10);
-    
-    return (min === 0 && max === 0) ||                 // If there are no restrictions on the number of players
-        (min === 0 && max >= input) ||              // If no restriciton on minPlayer, but there is a max limit satisfied
-        (max === 0 && min <= input) ||              // If no restriction on maxPLayer, but minimum limit is satisfied
-        (min <= input && max >= input);         // If both are non-zero, and the game players are within limit. 
-    
-    // Otherwise don't return. 
+  var min = parseInt(game.minPlayer,10);
+  var max = parseInt(game.maxPlayer,10);
+  
+  return (min === 0 && max === 0) ||                  // If there are no restrictions on the number of players
+    (min === 0 && max >= input) ||                    // If no restriciton on minPlayer, but there is a max limit satisfied
+    (max === 0 && min <= input) ||                    // If no restriction on maxPLayer, but minimum limit is satisfied
+    (min <= input && max >= input);                   // If both are non-zero, and the game players are within limit. 
+  
+  // Otherwise don't return. 
 }
 
 /** Filter list of articles. */
 const filterArticles = (article, filters) => {
    let isWithinArticleLength;
+
   // Get second equivilent of article lengths (short, medium, or long).
   switch(filters.articleLength) {
     case "*":
@@ -64,9 +65,36 @@ const filterArticles = (article, filters) => {
     && isWithinArticleLength(Number(article.length));
 }
 
-/** Filter list of videos. */
+/** 
+  Filter list of videos.
+  Short videos duration  -  [0,900]
+  Medium length videos - [901,1800]
+  Large length videos- (>=1801)
+*/
 const filterVideos = (video, filters) => {
-  return filters.videoType === '*' || video.type === filters.videoType;
+  let isWithinVideoDuration;
+
+  switch(filters.videoDuration) {
+    case "*":
+      isWithinVideoDuration = duration => true;
+      break;
+    case "short":
+      isWithinVideoDuration = duration => duration >= 0 && duration <= 900;
+      break;
+    case "medium":
+      isWithinVideoDuration = duration => duration >= 901 && duration <= 1800;
+      break;
+    case "large":
+      isWithinVideoDuration = duration => duration>=1801;
+      break;
+    default:
+      console.log("Video length not recognized.");
+  }
+
+  // Filter by videoDuration and videoCategory
+  return (filters.videoCategory === "*" || filters.videoCategory === video.videoCategory)
+    && isWithinVideoDuration(Number(video.duration));
+
 }
 
 export default filterActivities;

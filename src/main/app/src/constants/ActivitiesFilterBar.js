@@ -4,7 +4,8 @@ import filterActivities from '../hooks/browseActivitiesFilter.js';
 const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFilteredLinks}) => {
   // Filter states
   const [numOfPLayers, updateNumOfPlayers] = React.useState("");
-  const [videoType, updateVideoType] = React.useState("*");
+  const [videoCategory, updateVideoCategory] = React.useState("*");
+  const [videoDuration, updateVideoDuration] = React.useState("*");
   const [articleType, updateArticleType] = React.useState("*");
   const [articleLength, updateArticleLength] = React.useState("*");
 
@@ -20,11 +21,12 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         linkFilters.numOfPLayers = numOfPLayers;
         break;
       case activityTypes.VIDEOS:
-        linkFilters.videoType = videoType;
+        linkFilters.videoCategory = videoCategory;                // Yoga, Meditation, workout.
+        linkFilters.videoDuration = videoDuration;                // Length of the video.
         break;
       case activityTypes.ARTICLES:
-        linkFilters.articleType = articleType;
-        linkFilters.articleLength = articleLength;
+        linkFilters.articleType = articleType;          // Meditation, Technology, Social. 
+        linkFilters.articleLength = articleLength;     
         break;
       default:
         console.log("Error: Invalid activity type selection.");
@@ -40,7 +42,8 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         updateNumOfPlayers("");
         break;
       case activityTypes.VIDEOS:
-        updateVideoType("*");
+        updateVideoCategory("*");
+        updateVideoDuration("*");
         break;
       case activityTypes.ARTICLES:
         updateArticleType("*");
@@ -59,32 +62,42 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
     const name = evt.target.name;
 
     switch(activityType) {
+
       case activityTypes.GAMES:
         updateNumOfPlayers(value);
         break;
+
       case activityTypes.VIDEOS:
-        updateVideoType(value);
+        if (name === "VideoCategory")
+          updateVideoCategory(value);
+        else if (name === "VideoDuration")
+          updateVideoDuration(value);
+        else
+          console.log("Error: Unrecognized video filter modified.");
         break;
+
       case activityTypes.ARTICLES:
         if (name === "ArticleType")
           updateArticleType(value);
-        else
+        else if (name === "ArticleLength")
           updateArticleLength(value);
+        else
+          console.log("Error: Unrecognized article filter modified.");
         break;
+
       default:
         console.log("Error: Invalid activity type selection.");
     }
   }
 
-  const props = {handleFilterChange: handleFilterChange, filterButtonClick: filterButtonClick,
-    filterResetClick: filterResetClick};
+  const props = {handleFilterChange: handleFilterChange, filterButtonClick: filterButtonClick, filterResetClick: filterResetClick};
 
   switch(activityType) {
     case activityTypes.GAMES:
       const gameProps = Object.assign(props, {numOfPLayers: numOfPLayers});
       return <GamesFilterBar {...gameProps} />
     case activityTypes.VIDEOS:
-      const videoProps = Object.assign(props, {videoType: videoType});
+      const videoProps = Object.assign(props, {videoCategory: videoCategory, videoDuration: videoDuration});
       return <VideosFilterBar {...videoProps} />
     case activityTypes.ARTICLES:
       const articleProps = Object.assign(props, {articleType: articleType, articleLength: articleLength});
@@ -145,16 +158,24 @@ const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetCl
 }
 
 /** Videos filter options. */
-const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, videoType}) => {
+const VideosFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, videoCategory, videoDuration}) => {
   return (
     <React.Fragment>
       <div className="field is-grouped">
         <div className="control is-expanded"><div className="select is-fullwidth">
-          <select name="VideoType" onChange={handleFilterChange} value={videoType}>
-            <option value="*">{"All"}</option>
+          <select name="VideoCategory" onChange={handleFilterChange} value={videoCategory}>
+            <option value="*">{"All [Video Category]"}</option>
             <option value="yoga">{"Yoga"}</option>
             <option value="workout">{"Workout"}</option>
             <option value="meditation">{"Meditation"}</option>
+          </select>
+        </div></div>
+        <div className="control is-expanded"><div className="select is-fullwidth">
+          <select name="VideoDuration" onChange={handleFilterChange} value={videoDuration}>
+            <option value="*">{"All [Video Duration]"}</option>
+            <option value="short">{"Less than 15 minutes"}</option>
+            <option value="medium">{"Greater than 15 minutes and less than 30 minutes"}</option>
+            <option value="large">{"Greater than 30 minutes"}</option>
           </select>
         </div></div>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />

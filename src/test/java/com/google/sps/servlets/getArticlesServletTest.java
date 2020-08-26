@@ -58,7 +58,6 @@ public class getArticlesServletTest {
 
     //flush the writer response
     writer.flush();
-
     assertEquals(json, stringWriter.toString());
 }
 
@@ -72,11 +71,12 @@ public class getArticlesServletTest {
     articleEntity.setProperty("description", "testDescription");
     articleEntity.setProperty("url", "testUrl");
     articleEntity.setProperty("publishedAt", "testPublishedAt");
+    articleEntity.setProperty("length", 0);
 
     ds.put(articleEntity);
     String entityKey = KeyFactory.createKeyString(articleEntity.getKey().getKind(), articleEntity.getKey().getId());
 
-    String json = "[{\"publisher\":\"testPublisher\",\"author\":\"testAuthor\",\"description\":\"testDescription\",\"publishedAt\":\"testPublishedAt\",\"key\":\"" +
+    String json = "[{\"publisher\":\"testPublisher\",\"author\":\"testAuthor\",\"description\":\"testDescription\",\"publishedAt\":\"testPublishedAt\",\"length\":0,\"key\":\"" +
             entityKey +
             "\",\"title\":\"testTitle\",\"category\":\"ARTICLES\",\"url\":\"testUrl\"}]\n";
 
@@ -101,7 +101,10 @@ public class getArticlesServletTest {
   public void gettingArticlesFromApiTest() throws Exception {
 
     List<Article> articles = new ArrayList<>();
-
+    
+    // Stubbing the request to not fail while calling the servlet. 
+    when(request.getHeader("User-Agent")).thenReturn("AppEngine-Google; (+http://code.google.com/appengine)");   
+    
     //calling the servlet
     new getArticlesServlet().doPut(request, response);
 
@@ -119,8 +122,9 @@ public class getArticlesServletTest {
       String description = (String) entity.getProperty("description");
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      Long length = (long) entity.getProperty("length");
 
-      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt);
+      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, length);
       articles.add(newArticle);
     }
 
@@ -139,6 +143,7 @@ public class getArticlesServletTest {
     articleEntity.setProperty("description", "testDescription");
     articleEntity.setProperty("url", "testUrl");
     articleEntity.setProperty("publishedAt", "testPublishedAt");
+    articleEntity.setProperty("length", 1);
 
     Entity articleEntity1 = new Entity("Article");
     articleEntity1.setProperty("publisher", "testPublisher2");
@@ -147,6 +152,7 @@ public class getArticlesServletTest {
     articleEntity1.setProperty("description", "testDescription2");
     articleEntity1.setProperty("url", "testUrl2");
     articleEntity1.setProperty("publishedAt", "testPublishedAt2");
+    articleEntity1.setProperty("length", 2);
     
     // Adding two entities to our mock datastore
     ds.put(articleEntity);

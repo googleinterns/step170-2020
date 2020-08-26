@@ -102,6 +102,9 @@ public class getGamesServletTest {
 
     List<Game> games = new ArrayList<>();
 
+    // Stubbing the request to not fail while calling the servlet. 
+    when(request.getHeader("User-Agent")).thenReturn("AppEngine-Google; (+http://code.google.com/appengine)");   
+    
     //calling the servlet
     new getGamesServlet().doPut(request, response);
 
