@@ -16,13 +16,14 @@ const gameData = './gameData';
 
 /* Component for entire application */
 const App = () => {
-  
+
   // State for login/logout status
   const [isLoggedIn, updateIsLoggedIn] = React.useState(false);
 
   // State for google auth credentials.
   const [accessToken, updateAccessToken] = React.useState("");
   const [userId, updateUserId] = React.useState("");
+  const [userEmail, updateUserEmail] = React.useState("");
 
   // State for activity selection and data
   const [activityType, updateActivityType] = React.useState("games");
@@ -32,7 +33,7 @@ const App = () => {
     ARTICLES: 'articles',
     VIDEOS: 'videos'
   }
-  const [servlet, updateServlet] = React.useState(gameData); 
+  const [servlet, updateServlet] = React.useState(gameData);
 
   // State for activities data retrieved from servlet
   const [links, updateLinks] = React.useState([]);
@@ -60,7 +61,7 @@ const App = () => {
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
   },[activityType]);    // Adding [activityType] makes sure that the links are updated only as long as the activityType changes.
-  
+
   // Guest sigin in.
   React.useEffect(() => {
     if (isGuest) {
@@ -71,13 +72,13 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId} 
-        greeting={greeting} updateGreeting={updateGreeting} />
+      <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId}
+        greeting={greeting} updateGreeting={updateGreeting} updateUserEmail={updateUserEmail} />
       <main style={{ marginTop: '0.5rem' }}>
-        <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn} 
-          updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId} 
+        <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn}
+          updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId}
           updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} articleData={articleData} videoData={videoData} gameData={gameData} eventScheduled={eventScheduled}
-          updateEventScheduled={updateEventScheduled} isGuest={isGuest} updateIsGuest={updateIsGuest} activityTypes={activityTypes} />
+          updateEventScheduled={updateEventScheduled} isGuest={isGuest} updateIsGuest={updateIsGuest} activityTypes={activityTypes} userEmail={userEmail} updateUserEmail={updateUserEmail} />
       </main>
     </Router>
   );

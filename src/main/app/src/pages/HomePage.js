@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import 'bulma/css/bulma.css';
 import '../css/home.css';
-import logo from '../assets/logo.png';
+import logo from '../assets/wetime_logo.png';
 
 /* Component for home page */
 const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData, 
@@ -58,14 +58,14 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
 
       {/* Added logo to homepage. */}
       <div className="container has-text-centered">
-        <div>
-          <img src={logo} alt="Logo" width="800" height="100"/>
+        <div className="my-5">
+          <img className="none" style={{border:0}} src={logo} alt="Logo" width="800" height="100"/>
+          <h4>WeTime helps you schedule and find activities for group bonding and self-care.</h4>
         </div>
       </div>
 
       {/*This container consists of the activities dropdown. */}
-      <div className="container has-text-centered">
-        <div className="control is-centered">
+      <div className="container has-text-centered control is-centered">
           <div className="select is-info is-fullwidth title is-2">
             <select className="is-focused" onChange={handleActivitySelection} value={activityType}>
               <option value="games">{"Games"}</option>
@@ -73,7 +73,6 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
               <option value="articles">{"Reading"}</option>
             </select>
           </div>
-        </div>
       </div>
 
       <br/>
@@ -81,10 +80,10 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
       {/* This container consists of the buttons to schedule and browse. */}
       <div className="container has-text-centered is-centered">
         <Link to='/schedule-activity'>
-        <button value="schedule" className="button is-large is-success is-rounded" onClick={emptyActivity}>Schedule an event</button>
+        <button value="schedule" className="button is-large is-info mx-2" onClick={emptyActivity}>Schedule an event</button>
         </Link>
         <Link to='/browse'>
-        <button value="browse" className="button is-large is-danger is-rounded" >Browse</button>
+        <button value="browse" className="button is-large is-danger mx-2" >Browse</button>
         </Link>
       </div>
     </section>

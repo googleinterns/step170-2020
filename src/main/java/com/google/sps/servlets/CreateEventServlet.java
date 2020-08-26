@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Key;
 import com.google.api.services.calendar.model.Event;
 
 import com.google.sps.data.ActivityEvent;
@@ -38,8 +39,16 @@ public class CreateEventServlet extends HttpServlet {
     Map<String, String> eventInfo = getParameters(request);
 
     EventUtility eventUtility = new EventUtility();
-    ActivityEvent event = eventUtility.getActivityEvent(eventInfo, 
-      KeyFactory.stringToKey(eventInfo.get("activityKey")));
+    Key activityKey = null;
+    try {
+      activityKey = KeyFactory.stringToKey(eventInfo.get("activityKey"));
+    } catch (IllegalArgumentException ex) {
+      System.out.println(eventInfo.get("activityKey"));
+      System.out.println("Activity submitted could not be found in datastore.");
+      return;
+    }
+    
+    ActivityEvent event = eventUtility.getActivityEvent(eventInfo, activityKey);
 
     // Create calendar event and send invite to guests
     GwtCalendarRpc calendar = new GwtCalendarRpc();
