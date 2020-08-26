@@ -23,7 +23,7 @@ import LoadingIndicator from '../constants/LoadingIndicator';
 const ScheduleActivityPage = props => {
   const { isLoggedIn, accessToken, userId, activity, links, eventScheduled,
         updateEventScheduled, updateActivity , activityType, isGuest,
-        randomActivities, updateRandomActivities } = props;
+        randomActivities, updateRandomActivities, userEmail } = props;
 
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
@@ -128,6 +128,8 @@ const ScheduleActivityPage = props => {
       guests.push(guest.label);
       return guests;
     }, []);
+    // Add user's email to guest list.
+    guestArray.push(userEmail);
     const guests = guestArray.join(",");
 
     return {
