@@ -1,21 +1,19 @@
 body {
   font-family: 'Open Sans';
   font-size: 1.5em;
-  
   background: linear-gradient(-45deg, #FFFF7A, #F7A6A6, #9AD2F0, #23CCB5);
-	background-size: 400% 400%;
-	animation: gradient 5s ease infinite;
-
+  background-size: 400% 400%;
+  animation: gradient 5s ease infinite;
 }
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+  0% {
+  background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
