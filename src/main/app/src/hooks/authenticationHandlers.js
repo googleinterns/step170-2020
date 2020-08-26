@@ -1,10 +1,9 @@
 // Handle successful login
 const handleLogin = (res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId) => {
   updateIsLoggedIn(true);
-  console.log(res);
-  updateGreeting("Welcome " + res.profileObj.name +"!");
   updateAccessToken(res.accessToken);
   updateUserId(res.Da);
+  updateGreeting("Welcome " + res.profileObj.name +"!");
 }
 
 // Handle successful logout
