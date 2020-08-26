@@ -7,7 +7,7 @@ import '../css/home.css';
 /* Component for About page */
 const AboutPage = () => {
   return (
-    <section className= "sectionbg">
+    <section className= "section">
       <div className="container">
 
         <Jumbotron fluid style={{background:'linear-gradient(to bottom, #2C3E50 0%, #000000 100%)', color:'white'}}>
