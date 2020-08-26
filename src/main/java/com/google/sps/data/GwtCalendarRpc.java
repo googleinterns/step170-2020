@@ -51,10 +51,10 @@ public class GwtCalendarRpc {
       for (String attendee: event.getGuests()) {
         attendees.add(new EventAttendee().setEmail(attendee));
       }
-      System.out.println("2");
+
       // Get user calendar service
       com.google.api.services.calendar.Calendar client = CalendarUtility.loadCalendarClient(token);
-      System.out.println("8");
+
       Event insertedEvent = client.events().insert(calendarId, new Event()
         .setSummary(event.getTitle())
         .setDescription(event.getActivity().getUrl())

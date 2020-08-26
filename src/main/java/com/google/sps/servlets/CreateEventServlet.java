@@ -50,7 +50,6 @@ public class CreateEventServlet extends HttpServlet {
     
     ActivityEvent event = eventUtility.getActivityEvent(eventInfo, activityKey);
 
-    System.out.println("1");
     // Create calendar event and send invite to guests
     GwtCalendarRpc calendar = new GwtCalendarRpc();
     Event insertedEvent = calendar.insertEvent(event, eventInfo.get("accessToken"));
