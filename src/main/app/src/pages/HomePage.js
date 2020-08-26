@@ -9,7 +9,7 @@ import '../css/home.css';
 import logo from '../assets/wetime_logo.png';
 
 /* Component for home page */
-const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData, 
+const HomePage = ({ activity, activityType, updateActivityType, updateServlet, articleData,
   videoData, gameData, eventScheduled, updateEventScheduled, updateActivity, activityTypes }) => {
 
   // Update activty selection state based on dropdown
@@ -30,11 +30,11 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
         console.log("Error: Invalid activity type selection.");
     }
   }
-  
+
   const emptyActivity = () => {
     {updateActivity({})}    // emptying activity so that it changes when reaching homePage
   }
-   
+
   return (
     <section className="container">
       {/* Alert message for successfull event scheduling. */}
@@ -52,7 +52,7 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
             </IconButton>
           }
         >
-          Event successfully scheduled! <a href={eventScheduled}>Click here</a> to view it on your calendar.
+          Event successfully scheduled! <a href={eventScheduled} target="_blank">Click here</a> to view it on your calendar.
         </Alert>
       </Collapse>
 

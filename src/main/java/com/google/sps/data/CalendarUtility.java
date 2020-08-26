@@ -32,7 +32,7 @@ public final class CalendarUtility {
   */
   private static final AppEngineDataStoreFactory DATA_STORE_FACTORY =
     AppEngineDataStoreFactory.getDefaultInstance();
-  
+
   /** Global instance of the HTTP transport. */
   private static final HttpTransport HTTP_TRANSPORT = new UrlFetchTransport();
 
@@ -76,11 +76,11 @@ public final class CalendarUtility {
     // Create token response object
     TokenResponse tokenObj = new TokenResponse();
     tokenObj.setAccessToken(token);
-    
+
     // Set access token into calendar scope.
     GoogleAuthorizationCodeFlow flow = newFlow();
     flow.createAndStoreCredential(tokenObj, userId);
-    
+
     Credential credential = flow.loadCredential(userId);
     return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
   }
