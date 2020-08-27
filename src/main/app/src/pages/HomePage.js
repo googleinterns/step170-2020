@@ -80,10 +80,10 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
       {/* This container consists of the buttons to schedule and browse. */}
       <div className="container has-text-centered is-centered">
         <Link to='/schedule-activity'>
-        <button value="schedule" className="button is-large is-info mx-2" onClick={emptyActivity}>Schedule an event</button>
+          <button value="schedule" className="button is-large is-info mx-2" onClick={emptyActivity}>Schedule an event</button>
         </Link>
         <Link to='/browse'>
-        <button value="browse" className="button is-large is-danger mx-2" >Browse</button>
+          <button value="browse" className="button is-large is-danger mx-2" >Browse</button>
         </Link>
       </div>
     </section>
