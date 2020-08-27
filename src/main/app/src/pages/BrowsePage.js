@@ -22,7 +22,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   const getPageLinks = () => {
     const links = [];
     let countLinks = activitiesPerPage;
-    for (let idx=pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks >= 0; idx++) {
+    for (let idx=pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks > 0; idx++) {
       links.push(filteredLinks[idx]);
       countLinks--;
     }
@@ -32,7 +32,6 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   const handleActivitiesPerPageChange = evt => {
     updateActivitiesPerPage(parseInt(evt.target.value, 10));
     updatePageNumber(0);
-    udpatePageFilteredLinks(getPageLinks());
   }
 
   const [pageFilteredLinks, udpatePageFilteredLinks] = React.useState(getPageLinks()); // links for current page only.
@@ -71,6 +70,14 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     udpatePageFilteredLinks(getPageLinks());
   }, [filteredLinks, pageNumber]); // update page links when user switches pages.
 
+  React.useEffect(() => {
+    udpatePageFilteredLinks(getPageLinks());
+  }, [activitiesPerPage]); // add / remove page links when activities per page changes.
+
+  React.useEffect(() => {
+    updatePageNumber(0);
+  }, [filteredLinks]); // reset page number to zero when activity type changes.
+
   return (
     <section className="section-padding-large mb-3">
       <div className = "container">
@@ -93,7 +100,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
         <div className="section-padding-large mb-3">
           <div className="row">
-            <div className="data-container is-fullwidth">
+            <div className="data-container is-fullwidth w-100">
               {!loading && filteredLinks && pageFilteredLinks.map((data, key) => {
                 return (
                   <div key={key}>
@@ -107,8 +114,9 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
               })}
             </div>
             {/** Pagination menu. */}
-            <TablePagination component="div" className="mx-auto" count={filteredLinks.length} page={pageNumber} onChangePage={(evt, page) => updatePageNumber(page)}
-              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} />
+            {!loading ? <TablePagination component="div" className="mx-auto" count={filteredLinks.length} page={pageNumber} onChangePage={(evt, page) => updatePageNumber(page)}
+              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} /> : null}
+
           </div>
         </div>
       </div>
