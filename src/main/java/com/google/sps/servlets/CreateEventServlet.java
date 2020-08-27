@@ -43,11 +43,10 @@ public class CreateEventServlet extends HttpServlet {
     try {
       activityKey = KeyFactory.stringToKey(eventInfo.get("activityKey"));
     } catch (IllegalArgumentException ex) {
-      System.out.println(eventInfo.get("activityKey"));
       System.out.println("Activity submitted could not be found in datastore.");
       return;
     }
-    
+
     ActivityEvent event = eventUtility.getActivityEvent(eventInfo, activityKey);
 
     // Create calendar event and send invite to guests
