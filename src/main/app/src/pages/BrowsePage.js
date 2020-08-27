@@ -6,6 +6,7 @@ import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 import LoadingIndicator from '../constants/LoadingIndicator';
+import TablePagination from '@material-ui/core/TablePagination';
 
 /* Component for browse page */
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
@@ -13,6 +14,28 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
   const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button.
   const [loading, updateLoading] = React.useState(false); // Controls display of loading indicator.
+
+  const [pageNumber, updatePageNumber] = React.useState(0); // Page number of pagination
+  const [activitiesPerPage, updateActivitiesPerPage] = React.useState(10);
+
+  // Gets the activities to display for the current page number
+  const getPageLinks = () => {
+    const links = [];
+    let countLinks = activitiesPerPage;
+    for (let idx=pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks >= 0; idx++) {
+      links.push(filteredLinks[idx]);
+      countLinks--;
+    }
+    return links;
+  }
+
+  const handleActivitiesPerPageChange = evt => {
+    updateActivitiesPerPage(parseInt(evt.target.value, 10));
+    updatePageNumber(0);
+    udpatePageFilteredLinks(getPageLinks());
+  }
+
+  const [pageFilteredLinks, udpatePageFilteredLinks] = React.useState(getPageLinks()); // links for current page only.
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
@@ -44,6 +67,10 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
     updateLoading(false);
   },[links]);    // update filtered links to be links when user switches activity type.
 
+  React.useEffect(() => {
+    udpatePageFilteredLinks(getPageLinks());
+  }, [filteredLinks, pageNumber]); // update page links when user switches pages.
+
   return (
     <section className="section-padding-large mb-3">
       <div className = "container">
@@ -67,7 +94,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {!loading && filteredLinks && filteredLinks.map((data, key) => {
+              {!loading && filteredLinks && pageFilteredLinks.map((data, key) => {
                 return (
                   <div key={key}>
                     {activityType === "games" ?
@@ -79,6 +106,9 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                 )
               })}
             </div>
+            {/** Pagination menu. */}
+            <TablePagination component="div" className="mx-auto" count={filteredLinks.length} page={pageNumber} onChangePage={(evt, page) => updatePageNumber(page)}
+              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} />
           </div>
         </div>
       </div>
