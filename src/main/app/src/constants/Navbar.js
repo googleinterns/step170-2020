@@ -62,9 +62,23 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
               <GoogleLogout
                 clientId={clientID}
                 render={renderProps => (
-                  <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="button is-primary" id="signout_button">
-                    <i className="fas fa-sign-out-alt fa-fw"></i>Logout
-                  </button>
+                <div className="dropdown is-right is-hoverable">
+                  <div className="dropdown-trigger">
+                    <button className="button is-warning" aria-haspopup="true" aria-controls="dropdown-menu">
+                      <span><i className="fas fa-user"></i> Hello {greeting}!</span>
+                      <span className="icon is-small">
+                        <i className="fas fa-angle-down" aria-hidden="true"></i>
+                      </span>
+                    </button>
+                  </div>
+                  <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div className="dropdown-content">
+                      <a onClick={renderProps.onClick} disabled={renderProps.disabled} className="is-primary dropdown-item" id="signout_button">
+                        <span> <i className="fas fa-sign-out-alt fa-fw"></i>Logout</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
                 )}
                 onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
                 onFailure={res => handleLogoutFail(res)}
@@ -77,10 +91,6 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
         </div>
       </div>
     </nav>
-
-    <div className = "container">
-      <span className="is-italic" style={{color: "grey",lineHeight: '3.5'}} > {greeting}</span>
-    </div>
 
    </div>
   )
