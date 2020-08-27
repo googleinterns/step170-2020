@@ -5,16 +5,24 @@ import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
+import LoadingIndicator from '../constants/LoadingIndicator';
 
 /* Component for browse page */
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
   articleData, videoData, gameData, activityTypes }) => {
 
   const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button.
+  const [loading, updateLoading] = React.useState(false); // Controls display of loading indicator.
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     const value = evt.target.value;
+
+    // Stops update of activity links if activity type is not changed.
+    if (value === activityType)
+      return;
+
+    updateLoading(true);
     updateActivityType(value);
     switch(value) {
       case activityTypes.GAMES:
@@ -33,6 +41,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
   React.useEffect(() => {
     updateFilteredLinks(links);
+    updateLoading(false);
   },[links]);    // update filtered links to be links when user switches activity type.
 
   return (
@@ -58,7 +67,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <div className="section-padding-large mb-3">
           <div className="row">
             <div className="data-container is-fullwidth">
-              {filteredLinks && filteredLinks.map((data, key) => {
+              {!loading && filteredLinks && filteredLinks.map((data, key) => {
                 return (
                   <div key={key}>
                     {activityType === "games" ?
@@ -73,6 +82,8 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
           </div>
         </div>
       </div>
+      {/** Show loading indicator once user presses the form submit button. */}
+      {loading ? <LoadingIndicator /> : null}
     </section>
   )
 }
