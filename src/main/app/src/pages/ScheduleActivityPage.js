@@ -18,6 +18,7 @@ import VideoCard from '../constants/VideoCard.js';
 import LoadingIndicator from '../constants/LoadingIndicator';
 import {palette, borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
@@ -145,6 +146,10 @@ const ScheduleActivityPage = props => {
     }
   }
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   const handleSubmit = () => {
     if (!validate(title, startTime, endTime, updateTitleError, updateDateError)) { // no errors
       if (isGuest) {
@@ -238,7 +243,10 @@ const ScheduleActivityPage = props => {
         </div>
      :
         <Box bgcolor="text.disabled" border={4} className={classes.root} className="container mt-6">
-        <div className="p-4"> <h3> <i class="fas fa-check-circle"></i> Choose one from the below {activityType} : </h3></div>
+          <div className="p-4"> 
+            <h3> <i class="fas fa-check-circle"></i> Choose one from the below {activityType} : </h3>
+          </div>
+
           {generateRandomActivities(links).map((element, key) => {
             return (
               <div key={key}>
@@ -250,6 +258,13 @@ const ScheduleActivityPage = props => {
               </div>
             )
           })}
+
+          <div class="m-3 p-2 buttons has-addons is-right">
+            <button value="schedule" className="button is-info mx-2" onClick={refreshPage}>Generate 3 new {activityType}</button>
+            <Link to='/browse'>
+              <button value="browse" className="button is-primary mx-2" >Browse more {activityType}</button>
+            </Link>
+          </div>
         </Box>
       }
 
