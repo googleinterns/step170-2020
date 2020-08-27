@@ -199,13 +199,7 @@ const ScheduleActivityPage = props => {
             value={endTime} onChange={moment => updateEndTime(moment.toDate())}/>
         </div>
       </div>
-      {/* Switch to specify not repeating event. */}
-      <FormControlLabel
-        control={<Switch checked={false} onChange={() => {}} />}
-        label="Does not Repeat"
-        labelPlacement="start"
-        className="m-0"
-      />
+      
       {/* Chip list to display added guests. */}
       {guestChips.length > 0 ?
         <ul className={`${classes.chipsList} d-flex flex-row mt-2 mb-3`}>
