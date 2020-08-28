@@ -14,8 +14,12 @@
 
 package com.google.sps.servlets;
 
-import java.util.*;
 import java.lang.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.time.Duration;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
