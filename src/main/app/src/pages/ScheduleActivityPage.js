@@ -16,6 +16,10 @@ import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import LoadingIndicator from '../constants/LoadingIndicator';
+import {palette, borders } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
+import { Link } from 'react-router-dom';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
@@ -151,7 +155,7 @@ const ScheduleActivityPage = props => {
           updateEventScheduled(window.location.origin);
           updateLoading(false);
         }, 2000);
-        
+
       } else {
         updateLoading(true);
         const eventInfo = getEventInfo();
@@ -177,9 +181,9 @@ const ScheduleActivityPage = props => {
     eventScheduled !== "" ?
     <Redirect to="/" /> :
     <div className="container pb-5">
-      {/* Guest mode warning and disclaimer. */}a 
-      
-      {isGuest ? 
+      {/* Guest mode warning and disclaimer. */}
+
+      {isGuest ?
         <Alert severity="warning" className="mb-5">
           {"You are currently using guest mode. An event will"} <strong>NOT</strong> {"be added to your calendar on submittion of this form."}
         </Alert> : null
@@ -192,90 +196,99 @@ const ScheduleActivityPage = props => {
               errorObj.error ? <div key={key}>{errorObj.errorMsg}</div> : null
           )}
         </Alert> : null}
-      <h1 className="text-center">Schedule Activity</h1>
-      {/* Title input */}
-      <div className={classes.root}>
-      <TextField id="title-field" label="Add Title" className={classes.input}
-        value={title} onChange={handleTitleChange} />
-      </div>
-      {/* Datetime selection */}
-      <div className="row py-5">
-        <div className="col-6">
-          <Datetime inputProps={{placeholder: 'Start Time'}}
-            value={startTime} onChange={moment => updateStartTime(moment.toDate())} />
+
+      <section className="section">
+        <h1 className="text-center">Schedule Activity</h1>
+
+        {/* Title input */}
+        <div className={classes.root}>
+        <TextField id="title-field" label="Add Title" className={classes.input}
+          value={title} onChange={handleTitleChange} />
         </div>
-        <div className="col-6">
-          <Datetime inputProps={{placeholder: 'End Time'}}
-            value={endTime} onChange={moment => updateEndTime(moment.toDate())}/>
+        {/* Datetime selection */}
+        <div className="row py-5">
+          <div className="col-6">
+            <Datetime inputProps={{placeholder: 'Start Time'}}
+              value={startTime} onChange={moment => updateStartTime(moment.toDate())} />
+          </div>
+          <div className="col-6">
+            <Datetime inputProps={{placeholder: 'End Time'}}
+              value={endTime} onChange={moment => updateEndTime(moment.toDate())}/>
+          </div>
         </div>
-      </div>
-      {/* Switch to specify not repeating event. */}
-      <FormControlLabel
-        control={<Switch checked={false} onChange={() => {}} />}
-        label="Does not Repeat"
-        labelPlacement="start"
-        className="m-0"
-      />
-      {/* Chip list to display added guests. */}
-      {guestChips.length > 0 ?
-        <ul className={`${classes.chipsList} d-flex flex-row mt-2 mb-3`}>
-          {guestChips.map(chip => {
-              const label = chip.label;
+
+        {/* Chip list to display added guests. */}
+        {guestChips.length > 0 ?
+          <ul className={`${classes.chipsList} d-flex flex-row mt-2 mb-3`}>
+            {guestChips.map(chip => {
+                const label = chip.label;
+                return (
+                  <li key={chip.key} className="d-inline-block">
+                    <Chip
+                      icon={<FaceIcon />}
+                      label={label.includes('@google.com') ? label.substring(0, label.length-10) : label}
+                      onDelete={() => handleChipDelete(chip.key)}
+                    />
+                  </li>
+                )
+              }
+            )}
+          </ul> : null
+        }
+        {/* Form to add guests. */}
+        <div className="d-flex flex-row">
+          <TextField label="Add Guest Email" variant="outlined" style={custom.guestInput} className="flex-grow-1"
+            value={guest} onChange={handleGuestChange} error={guestError} />
+          <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
+        </div>
+
+        {/* Display activity title if an activity was selected. */}
+        {activity.title ?
+          <div className={classes.root} className="container mt-5">
+            <Card className={`${classes.root} mt-3`}>
+              <CardContent>
+                <Typography variant="h5" component="h2">
+                  {activity.title}
+                </Typography>
+              </CardContent>
+            </Card>
+          </div>
+      :
+          <Box borderRadius={16} bgcolor={blueGrey[50]} className={classes.root} className="container mt-6">
+            <div className="p-4 uiTypography-root MuiTypography-h5 MuiTypography-gutterBottom">
+              <h3> <i class="fas fa-check-circle"></i> Choose one of the {activityType} listed below: </h3>
+            </div>
+
+            {generateRandomActivities(links).map((element, key) => {
               return (
-                <li key={chip.key} className="d-inline-block">
-                  <Chip
-                    icon={<FaceIcon />}
-                    label={label.includes('@google.com') ? label.substring(0, label.length-10) : label}
-                    onDelete={() => handleChipDelete(chip.key)}
-                  />
-                </li>
+                <div key={key}>
+                  {activityType === "games" ?
+                    <GameCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                    activityType === "reading" ?
+                    <ArticleCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
+                    <VideoCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> }
+                </div>
               )
-            }
-          )}
-        </ul> : null
-      }
-      {/* Form to add guests. */}
-      <div className="d-flex flex-row">
-        <TextField label="Add Guest Email" variant="outlined" style={custom.guestInput} className="flex-grow-1"
-          value={guest} onChange={handleGuestChange} error={guestError} />
-        <Button variant="contained" color="primary" className={classes.button} onClick={handleGuestSubmit}>Add</Button>
-      </div>
+            })}
 
-      {/* Display activity title if an activity was selected. */}
-      {activity.title ?
-        <div className={classes.root} className="container">
-          <Card className={`${classes.root} mt-3`}>
-            <CardContent>
-              <Typography variant="h5" component="h2">
-                {activity.title}
-              </Typography>
-            </CardContent>
-          </Card>
+            <div class="m-3 p-2 buttons has-addons is-right">
+              <button value="schedule" className="button is-info mx-2" onClick={() => updateRandomActivities([])}>Generate 3 new {activityType}</button>
+              <Link to='/browse'>
+                <button value="browse" className="button is-primary mx-2" >Browse more {activityType}</button>
+              </Link>
+            </div>
+          </Box>
+        }
+
+        <div className={classes.root}>
+          <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
+            Create Event
+          </Button>
         </div>
-     :
-        <div className={classes.root} className="container">
-          {generateRandomActivities(links).map((element, key) => {
-            return (
-              <div key={key}>
-                {activityType === "games" ?
-                  <GameCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
-                  activityType === "reading" ?
-                  <ArticleCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> :
-                  <VideoCard data={element} updateScheduleActivity={alertUpdateActivity} parameters={element} buttonText={"Choose this activity"}/> }
-              </div>
-            )
-          })}
-        </div>
-      }
 
-      <div className={classes.root}>
-        <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
-          Create Event
-        </Button>
-      </div>
-
-      {/** Show loading indicator once user presses the form submit button. */}
-      {loading ? <LoadingIndicator /> : null}
+        {/** Show loading indicator once user presses the form submit button. */}
+        {loading ? <LoadingIndicator /> : null}
+      </section>
 
     </div>
   )
