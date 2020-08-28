@@ -24,12 +24,13 @@ const HelpPage = () => {
   
   // Create a map to all the resources in the airtable to its fields and display them in Resource card format. 
   return (
-    
+    <section className="section">
       <div className="container">
         <div className="row"> 
           <div> {resources.map(resource => <ResourceCard key={resource.fields.url} {...resource.fields} /> )}  </div> 
         </div>
       </div>
+    </section>
   ); 
 }
 

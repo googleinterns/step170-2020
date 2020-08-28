@@ -36,7 +36,7 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
   }
 
   return (
-    <section className="container">
+    <section className="section">
       {/* Alert message for successfull event scheduling. */}
       <Collapse in={eventScheduled !== ""} className="mb-4">
         <Alert

@@ -36,7 +36,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   },[links]);    // update filtered links to be links when user switches activity type.
 
   return (
-    <section className="section-padding-large mb-3">
+    <section className="section">
       <div className = "container">
         {/*Combo box bar component */}
         <div className="field has-addons">
