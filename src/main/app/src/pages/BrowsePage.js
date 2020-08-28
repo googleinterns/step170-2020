@@ -22,7 +22,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   const getPageLinks = () => {
     const links = [];
     let countLinks = activitiesPerPage;
-    for (let idx=pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks > 0; idx++) {
+    for (let idx = pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks > 0; idx++) {
       links.push(filteredLinks[idx]);
       countLinks--;
     }
@@ -115,7 +115,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
             </div>
             {/** Pagination menu. */}
             {!loading ? <TablePagination component="div" className="mx-auto" count={filteredLinks.length} page={pageNumber} onChangePage={(evt, page) => updatePageNumber(page)}
-              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} /> : null}
+              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} labelRowsPerPage="Activities per page:" /> : null}
 
           </div>
         </div>
