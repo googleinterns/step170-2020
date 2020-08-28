@@ -276,18 +276,13 @@ const ScheduleActivityPage = props => {
             })}
 
             <div class="m-3 p-2 buttons has-addons is-right">
-<<<<<<< HEAD
               <button value="schedule" className="button is-info mx-2" onClick={() => updateRandomActivities([])}>Generate 3 new {activityType}</button>
-=======
-              <button value="schedule" className="button is-info mx-2" onClick={refreshPage}>Generate 3 new {activityType}</button>
->>>>>>> 67434b5d4ea8b7e0bf703cba634374cadf6ac176
               <Link to='/browse'>
                 <button value="browse" className="button is-primary mx-2" >Browse more {activityType}</button>
               </Link>
             </div>
           </Box>
         }
-<<<<<<< HEAD
 
         <div className={classes.root}>
           <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
@@ -297,20 +292,8 @@ const ScheduleActivityPage = props => {
 
         {/** Show loading indicator once user presses the form submit button. */}
         {loading ? <LoadingIndicator /> : null}
+
       </section>
-=======
-
-        <div className={classes.root}>
-          <Button id="submit-btn" variant="contained" color="primary" style={custom.largeButton} onClick={handleSubmit} disabled={activity.title ? false : true}>
-            Create Event
-          </Button>
-        </div>
->>>>>>> 67434b5d4ea8b7e0bf703cba634374cadf6ac176
-
-        {/** Show loading indicator once user presses the form submit button. */}
-        {loading ? <LoadingIndicator /> : null}
-      </section>
-
     </div>
   )
 }
