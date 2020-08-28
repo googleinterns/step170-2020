@@ -5,16 +5,46 @@ import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
+import LoadingIndicator from '../constants/LoadingIndicator';
+import TablePagination from '@material-ui/core/TablePagination';
 
 /* Component for browse page */
 const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, updateServlet,
   articleData, videoData, gameData, activityTypes }) => {
 
   const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button.
+  const [loading, updateLoading] = React.useState(false); // Controls display of loading indicator.
+
+  const [pageNumber, updatePageNumber] = React.useState(0); // Page number of pagination
+  const [activitiesPerPage, updateActivitiesPerPage] = React.useState(10);
+
+  // Gets the activities to display for the current page number
+  const getPageLinks = () => {
+    const links = [];
+    let countLinks = activitiesPerPage;
+    for (let idx = pageNumber*activitiesPerPage; idx < filteredLinks.length && countLinks > 0; idx++) {
+      links.push(filteredLinks[idx]);
+      countLinks--;
+    }
+    return links;
+  }
+
+  const handleActivitiesPerPageChange = evt => {
+    updateActivitiesPerPage(parseInt(evt.target.value, 10));
+    updatePageNumber(0);
+  }
+
+  const [pageFilteredLinks, udpatePageFilteredLinks] = React.useState(getPageLinks()); // links for current page only.
 
   // Update activty selection and web servlet state based on dropdown.
   const handleActivitySelection = evt => {
     const value = evt.target.value;
+
+    // Stops update of activity links if activity type is not changed.
+    if (value === activityType)
+      return;
+
+    updateLoading(true);
     updateActivityType(value);
     switch(value) {
       case activityTypes.GAMES:
@@ -33,7 +63,20 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
   React.useEffect(() => {
     updateFilteredLinks(links);
+    updateLoading(false);
   },[links]);    // update filtered links to be links when user switches activity type.
+
+  React.useEffect(() => {
+    udpatePageFilteredLinks(getPageLinks());
+  }, [filteredLinks, pageNumber]); // update page links when user switches pages.
+
+  React.useEffect(() => {
+    udpatePageFilteredLinks(getPageLinks());
+  }, [activitiesPerPage]); // add / remove page links when activities per page changes.
+
+  React.useEffect(() => {
+    updatePageNumber(0);
+  }, [filteredLinks]); // reset page number to zero when activity type changes.
 
   return (
     <section className="section-padding-large mb-3">
@@ -57,8 +100,8 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
         <div className="section-padding-large mb-3">
           <div className="row">
-            <div className="data-container is-fullwidth">
-              {filteredLinks && filteredLinks.map((data, key) => {
+            <div className="data-container is-fullwidth w-100">
+              {!loading && filteredLinks && pageFilteredLinks.map((data, key) => {
                 return (
                   <div key={key}>
                     {activityType === "games" ?
@@ -70,9 +113,15 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
                 )
               })}
             </div>
+            {/** Pagination menu. */}
+            {!loading ? <TablePagination component="div" className="mx-auto" count={filteredLinks.length} page={pageNumber} onChangePage={(evt, page) => updatePageNumber(page)}
+              rowsPerPage={activitiesPerPage} onChangeRowsPerPage={handleActivitiesPerPageChange} labelRowsPerPage="Activities per page:" /> : null}
+
           </div>
         </div>
       </div>
+      {/** Show loading indicator once user presses the form submit button. */}
+      {loading ? <LoadingIndicator /> : null}
     </section>
   )
 }
