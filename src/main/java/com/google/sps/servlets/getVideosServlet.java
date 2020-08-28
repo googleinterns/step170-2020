@@ -97,9 +97,9 @@ public class getVideosServlet extends HttpServlet {
     ArrayList<String> videoCategoryNames = new ArrayList<String>(Arrays.asList("yoga", "workout", "meditation"));
 
     // Get yoga, workout, meditation video strings from api.
-    String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager.
-    if (videoMap == null) return; // Return if exception caught. 
+    String youtubeapiKey = getSecretKey.accessSecretVersion("298755462", "youtube_api_key", "2"); // Get hidden api key from gcloud secret manager. 
     videoMap = getVideoStringFromAPI(youtubeapiKey, videoCategoryNames, videoMap, request, response);
+    if (videoMap == null) return; // Return if exception caught.
 
     // Loop for going through each string, converting to JSON objects, then put in datastore.
     for (Map.Entry<String, String> entry : videoMap.entrySet()) {

@@ -14,14 +14,14 @@
 
 package com.google.sps.servlets;
 
+import java.util.*;
+import java.lang.*;
+import java.time.Duration;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.BufferedReader;
@@ -60,9 +60,19 @@ import com.google.sps.servlets.getStringFromAPI;
 */
 @WebServlet("/articleData")
 public class getArticlesServlet extends HttpServlet {
-  private static final String baseURL = "https://newsapi.org/v2/everything?q=relax&sortBy=popularity&apiKey=";
+  private static final String baseURL = "https://newsapi.org/v2/everything?q=";
   private static final Logger logger = Logger.getLogger(getArticlesServlet.class.getName());
   private static final String KIND = new String("Article");
+
+  private static HashMap<String, String> getArticleStringFromAPI (String newsapiKey, ArrayList<String> articleCategoryNames, HashMap<String, String> articleMap, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    for (int i = 0; i < articleCategoryNames.size(); ++i) {
+      URL url = new URL(baseURL + articleCategoryNames.get(i) + "&sortBy=popularity&apiKey=" + newsapiKey); 
+      String articles = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
+      if (articles == null) return null; // Returns if exception caught.
+      articleMap.put(articleCategoryNames.get(i), articles);
+    }
+    return articleMap;
+  }
 
   @Override
   public void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -78,35 +88,47 @@ public class getArticlesServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     GetServletsUtility.deleteResultsOfQueryFromDatastore(query, datastore,KIND);
 
-    // Get string from api.
-    String newsapiKey = getSecretKey.accessSecretVersion("298755462", "news_api_key", "1");
-    URL url = new URL(baseURL + newsapiKey);
-    String articles = getStringFromAPI.getStringFromAPIMethod(url, null, null, logger, request, response);
-    if (articles == null) return; // Returns if exception caught.  
+    // Map to store strings and catagory types.
+    HashMap<String, String> articleMap = new HashMap<String, String>();
 
-    // Put data from api string into database.
-    JSONObject obj = new JSONObject(articles);
-    JSONArray articleData = obj.getJSONArray("articles");
-    int numArticles = articleData.length();
+    // Arraylist to store the types of videos we want to get from youtube.
+    ArrayList<String> articleCategoryNames = new ArrayList<String>(Arrays.asList("fiction", "cooking", "meditation"));
 
-    for (int i = 0; i < numArticles; ++i) {
-      JSONObject currentArticle = articleData.getJSONObject(i);
-      Entity articleEntity = new Entity(KIND);
+    // Get yoga, workout, meditation video strings from api.
+    String newsapiKey = getSecretKey.accessSecretVersion("298755462", "news_api_key", "1"); // Get hidden api key from gcloud secret manager.
+    articleMap = getArticleStringFromAPI(newsapiKey, articleCategoryNames, articleMap, request, response);
+    if (articleMap == null) return; // Return if exception caught. 
 
-      // Get length of content.
-      String content = currentArticle.getString("content");
-      String contentTruncatedNum = content.substring(203, (content.length()-7)); 
-      int contentLength = 200 + Integer.parseInt(contentTruncatedNum);
+    // Loop for going through each string, converting to JSON objects, then put in datastore.
+    for (Map.Entry<String, String> entry : articleMap.entrySet()) {
+      String category = entry.getKey();
+      String articles = entry.getValue();
 
-      articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
-      articleEntity.setProperty("author", currentArticle.getString("author"));
-      articleEntity.setProperty("title", currentArticle.getString("title"));
-      articleEntity.setProperty("description", currentArticle.getString("description"));
-      articleEntity.setProperty("url", currentArticle.getString("url"));
-      articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
-      articleEntity.setProperty("length", contentLength);
+      // Put data from api string into database.
+      JSONObject obj = new JSONObject(articles);
+      JSONArray articleData = obj.getJSONArray("articles");
+      int numArticles = articleData.length();
 
-      datastore.put(articleEntity);
+      for (int i = 0; i < numArticles; ++i) {
+        JSONObject currentArticle = articleData.getJSONObject(i);
+        Entity articleEntity = new Entity(KIND);
+
+        // Get length of content.
+        String content = currentArticle.getString("content");
+        String contentTruncatedNum = content.substring(203, (content.length()-7)); 
+        int contentLength = 200 + Integer.parseInt(contentTruncatedNum);
+
+        articleEntity.setProperty("publisher", currentArticle.getJSONObject("source").getString("name"));
+        articleEntity.setProperty("author", currentArticle.getString("author"));
+        articleEntity.setProperty("title", currentArticle.getString("title"));
+        articleEntity.setProperty("description", currentArticle.getString("description"));
+        articleEntity.setProperty("url", currentArticle.getString("url"));
+        articleEntity.setProperty("publishedAt", currentArticle.getString("publishedAt"));
+        articleEntity.setProperty("articleCategory", category);
+        articleEntity.setProperty("length", contentLength);
+
+        datastore.put(articleEntity);
+      }
     }
   }
 
@@ -127,9 +149,10 @@ public class getArticlesServlet extends HttpServlet {
       String description = (String) entity.getProperty("description");
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      String articleCategory = (String) entity.getProperty("articleCategory");
       long length = (long) entity.getProperty("length");
 
-      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, length);
+      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, articleCategory, length);
       articles.add(newArticle);
     }
 
