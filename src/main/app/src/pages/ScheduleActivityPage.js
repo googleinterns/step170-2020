@@ -146,7 +146,12 @@ const ScheduleActivityPage = props => {
   const handleSubmit = () => {
     if (!validate(title, startTime, endTime, updateTitleError, updateDateError)) { // no errors
       if (isGuest) {
-        updateEventScheduled(window.location.origin);
+        updateLoading(true);
+        setTimeout(() => { // simulate form submittion.
+          updateEventScheduled(window.location.origin);
+          updateLoading(false);
+        }, 2000);
+        
       } else {
         updateLoading(true);
         const eventInfo = getEventInfo();
@@ -167,11 +172,18 @@ const ScheduleActivityPage = props => {
   }
 
   return (
-    !isLoggedIn ?
+    !isLoggedIn && !isGuest ?
     <Redirect to="/login" /> :
     eventScheduled !== "" ?
     <Redirect to="/" /> :
     <div className="container pb-5">
+      {/* Guest mode warning and disclaimer. */}a 
+      
+      {isGuest ? 
+        <Alert severity="warning" className="mb-5">
+          {"You are currently using guest mode. An event will"} <strong>NOT</strong> {"be added to your calendar on submittion of this form."}
+        </Alert> : null
+      }
       {/* Alert errors if any. */}
       {displayErrors && (titleError || dateError || servletError) ?
         <Alert severity="error" onClose={() => updateDisplayErrors(false)} className="mb-5">

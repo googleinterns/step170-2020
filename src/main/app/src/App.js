@@ -65,7 +65,6 @@ const App = () => {
   // Guest sigin in.
   React.useEffect(() => {
     if (isGuest) {
-      updateIsLoggedIn(true);
       updateGreeting("Welcome Guest!");
     }
   },[isGuest]);
@@ -73,7 +72,7 @@ const App = () => {
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId}
-        greeting={greeting} updateGreeting={updateGreeting} updateUserEmail={updateUserEmail} />
+        greeting={greeting} updateGreeting={updateGreeting} updateUserEmail={updateUserEmail} updateIsGuest={updateIsGuest} />
       <main style={{ marginTop: '0.5rem' }}>
         <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn}
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId}

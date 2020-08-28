@@ -8,7 +8,7 @@ import { handleLogin, handleLogout,
 import info from '../constants/keys';
 
 /** Displayed before the Schedule Activity Page if the user is not logged in already. */
-const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting, updateIsGuest, updateUserEmail}) => {
+const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, greeting, updateGreeting, isGuest, updateIsGuest, updateUserEmail}) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -16,7 +16,7 @@ const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserI
   const scope = info[0].scope;
 
   return (
-    isLoggedIn ?
+    isLoggedIn || isGuest ?
     <Redirect to="/schedule-activity" /> :
     <div className="d-flex justify-content-center flex-column align-items-center">
       <GoogleLogin
