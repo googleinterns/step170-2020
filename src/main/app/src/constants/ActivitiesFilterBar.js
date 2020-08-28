@@ -121,7 +121,6 @@ const FilterCommonSection = ({filterButtonClick, filterResetClick}) => {
 const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, numOfPlayers}) => {
   return (
     <React.Fragment>
-      <p> Filter out games based on the number of players:</p>
       <div className="field is-grouped">
         <p className="control is-expanded has-icons-left"><span className="icon"><i className="fas fa-filter"></i></span><input className="input" onChange={handleFilterChange} type="text" value={numOfPlayers} placeholder="How many people are there with you? Eg. 0"></input></p>
         <FilterCommonSection filterButtonClick={filterButtonClick} filterResetClick={filterResetClick} />

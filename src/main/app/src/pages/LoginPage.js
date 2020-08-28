@@ -35,7 +35,7 @@ const LoginPage = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserI
       />
       {/* Allow guest signin */}
       <p className="my-2">or</p>
-      <Button variant="contained" size="large" className="d-inline-block" onClick={() => updateIsGuest(true)}>Guest</Button>
+      <Button variant="contained" size="large" className="d-inline-block" onClick={() => updateIsGuest(true)}><i class="fas fa-user-alt"></i> Guest</Button>
     </div>
   )
 }
