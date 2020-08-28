@@ -8,6 +8,7 @@ import info from './constants/keys.js';
 import './css/app.css';
 
 import updateActivityLinks from './hooks/updateActivityLinks';
+import clearCookies from './hooks/clearCookies';
 
 // Web Servlet links.
 const articleData = './articleData';
@@ -56,6 +57,13 @@ const App = () => {
 
   // State for activity selected (this can be the three random activities or the activity that the user selected on the browse page)
   const [activity, updateActivity] = React.useState({});
+
+  const [cookiesCleared, updateCookiesCleared] = React.useState(false);
+
+  if (!cookiesCleared) { // Clear cookies only once on site visit.
+    clearCookies();
+    updateCookiesCleared(true);
+  }
 
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
