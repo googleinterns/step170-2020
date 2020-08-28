@@ -16,6 +16,8 @@ import GameCard from '../constants/GameCard.js';
 import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import LoadingIndicator from '../constants/LoadingIndicator';
+import {palette, borders } from '@material-ui/system';
+import Box from '@material-ui/core/Box';
 
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
@@ -241,7 +243,8 @@ const ScheduleActivityPage = props => {
           </Card>
         </div>
      :
-        <div className={classes.root} className="container">
+        <Box bgcolor="text.disabled" border={4} className={classes.root} className="container mt-6">
+        <div className="p-4"> <h3> <i class="fas fa-check-circle"></i> Choose one from the below {activityType} : </h3></div>
           {generateRandomActivities(links).map((element, key) => {
             return (
               <div key={key}>
@@ -253,7 +256,7 @@ const ScheduleActivityPage = props => {
               </div>
             )
           })}
-        </div>
+        </Box>
       }
 
       <div className={classes.root}>
