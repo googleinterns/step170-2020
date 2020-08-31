@@ -20,7 +20,8 @@ import {palette, borders } from '@material-ui/system';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
 import blueGrey from '@material-ui/core/colors/blueGrey';
-
+import Cookies from 'js-cookie';
+import {getScheduleActivityCookies, clearFormCookies} from '../hooks/cookies';
 /* Component for the schedule activity page.
   If the user isn't already logged in, they wil be redirected to
   the login page. */
@@ -29,12 +30,24 @@ const ScheduleActivityPage = props => {
         updateEventScheduled, updateActivity , activityType, isGuest,
         randomActivities, updateRandomActivities, userEmail } = props;
 
+  const [cookiesFetched, updateCookiesFetched] = React.useState(false);
+
   // Event fields stored as component state.
   const [title, updateTitle] = React.useState("");
   const [startTime, updateStartTime] = React.useState(new Date());
   const [endTime, updateEndTime] = React.useState(new Date(Date.now() + (60000 * 30))); // Set end date 30mins ahead.
   const [guestChips, updateGuestChips] = React.useState([]);
   const [guest, updateGuest] = React.useState("");
+
+  // Retrieve form field cookies to populate state if they exist
+  if (!cookiesFetched) {
+    updateCookiesFetched(true);
+    const formFields = getScheduleActivityCookies();
+    updateTitle(formFields.title ? formFields.title : title);
+    updateGuestChips(formFields.guests ? JSON.parse(formFields.guests) : guestChips);
+    if (!activity.title && formFields.activity)
+      updateActivity(JSON.parse(formFields.activity));
+  }
 
   // Form errors
   const [titleError, updateTitleError] = React.useState(false);
@@ -52,6 +65,7 @@ const ScheduleActivityPage = props => {
   ];
 
   const [loading, updateLoading] = React.useState(false);
+  const [formSubmitted, updateFormSubmitted] = React.useState(false);
 
   // Get object for css classes.
   const classes = useStyles();
@@ -74,6 +88,7 @@ const ScheduleActivityPage = props => {
       updateGuestChips(chips); // update chip list
       updateGuest(""); // reset guest
       updateGuestError(false); // reset guest error
+      Cookies.set('!guests', JSON.stringify(guestChips)); // Store guest chips in cookie
     } else {
       updateGuestError(true);
     }
@@ -123,6 +138,7 @@ const ScheduleActivityPage = props => {
       return filtered;
     }, []);
     updateGuestChips(chips);
+    Cookies.set('!guests', JSON.stringify(guestChips)); // Store guest chips in cookie
   }
 
   // Retrieve all event information from state.
@@ -147,10 +163,6 @@ const ScheduleActivityPage = props => {
     }
   }
 
-  function refreshPage() {
-    window.location.reload(false);
-  }
-
   const handleSubmit = () => {
     if (!validate(title, startTime, endTime, updateTitleError, updateDateError)) { // no errors
       if (isGuest) {
@@ -158,14 +170,17 @@ const ScheduleActivityPage = props => {
         setTimeout(() => { // simulate form submittion.
           updateEventScheduled(window.location.origin);
           updateLoading(false);
+          clearFormCookies();
+          updateFormSubmitted(true);
         }, 2000);
-
       } else {
         updateLoading(true);
         const eventInfo = getEventInfo();
         $.post('/createEvent', eventInfo)
         .done(eventUrl => {
           updateEventScheduled(eventUrl);
+          clearFormCookies();
+          updateFormSubmitted(true);
         })
         .fail(() => {
           // Stop loading and display error message if request failed.
@@ -179,10 +194,15 @@ const ScheduleActivityPage = props => {
     }
   }
 
+  // Store form title into cookies on update
+  React.useEffect(() => {
+    Cookies.set('!title', title);
+  }, [title]);
+
   return (
     !isLoggedIn && !isGuest ?
     <Redirect to="/login" /> :
-    eventScheduled !== "" ?
+    formSubmitted ?
     <Redirect to="/" /> :
     <div className="container pb-5">
       {/* Guest mode warning and disclaimer. */}

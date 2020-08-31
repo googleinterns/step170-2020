@@ -6,9 +6,10 @@ import Line from './constants/Line';
 import ResourceCard from './constants/ResourceCard';
 import info from './constants/keys.js';
 import './css/app.css';
+import Cookies from 'js-cookie';
 
 import updateActivityLinks from './hooks/updateActivityLinks';
-import clearCookies from './hooks/clearCookies';
+import {clearCookies} from './hooks/cookies';
 
 // Web Servlet links.
 const articleData = './articleData';
@@ -76,6 +77,10 @@ const App = () => {
       updateGreeting("Welcome Guest!");
     }
   },[isGuest]);
+
+  React.useEffect(() => {
+    Cookies.set('!activity', JSON.stringify(activity)); // Store selected activity in cookie
+  },[activity]);
 
   return (
     <Router>
