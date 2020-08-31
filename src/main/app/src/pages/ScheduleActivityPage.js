@@ -280,7 +280,7 @@ const ScheduleActivityPage = props => {
       :
           <Box borderRadius={16} bgcolor={blueGrey[50]} className={classes.root} className="container mt-6">
             <div className="p-4 uiTypography-root MuiTypography-h5 MuiTypography-gutterBottom">
-              <h3> <i class="fas fa-check-circle"></i> Choose one of the {activityType} listed below: </h3>
+              <h3> <i className="fas fa-check-circle"></i> Choose one of the {activityType} listed below: </h3>
             </div>
 
             {generateRandomActivities(links).map((element, key) => {
@@ -295,7 +295,7 @@ const ScheduleActivityPage = props => {
               )
             })}
 
-            <div class="m-3 p-2 buttons has-addons is-right">
+            <div className="m-3 p-2 buttons has-addons is-right">
               <button value="schedule" className="button is-info mx-2" onClick={() => updateRandomActivities([])}>Generate 3 new {activityType}</button>
               <Link to='/browse'>
                 <button value="browse" className="button is-primary mx-2" >Browse more {activityType}</button>
