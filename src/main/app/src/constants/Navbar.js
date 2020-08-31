@@ -8,7 +8,8 @@ import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
-const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, updateUserEmail, greeting, updateGreeting}) => {
+const Navbar = ({ isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, updateUserEmail, greeting, updateGreeting,
+  updateIsGuest }) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -39,28 +40,29 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
               <NavLink className="navbar-item is-size-6" to="/help">Help</NavLink>
               <NavLink className="navbar-item is-size-6" to="/about">About</NavLink> 
             </div>
-            <div className="navbar-item">
-              <div className="buttons">
-              {/* Display login or logout button depending on loggedIn status */}
-              { !isLoggedIn ?
-                <GoogleLogin
-                  clientId={clientID}
-                  render={renderProps => (
-                    <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="button is-info" id="authorize_button">
-                      <i className="fab fa-google fa-fw"></i> Login with Google
-                    </button>
-                  )}
-                  onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
-                  onFailure={res => handleLoginFail(res)}
-                  discoveryDocs={discoveryDocs}
-                  scope={scope}
-                  cookiePolicy={'single_host_origin'}
-                  isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
-                />
-                :
-                <GoogleLogout
-                  clientId={clientID}
-                  render={renderProps => (
+          <div className="navbar-item">
+            <div className="buttons">
+            {/* Display login or logout button depending on loggedIn status */}
+            { !isLoggedIn ?
+              <GoogleLogin
+                clientId={clientID}
+                render={renderProps => (
+                  <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="button is-info" id="authorize_button">
+                    <i className="fab fa-google fa-fw"></i>Login with Google
+                  </button>
+                )}
+                onSuccess={res => 
+                  handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail, updateIsGuest)}
+                onFailure={res => handleLoginFail(res)}
+                discoveryDocs={discoveryDocs}
+                scope={scope}
+                cookiePolicy={'single_host_origin'}
+                isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
+              />
+              :
+              <GoogleLogout
+                clientId={clientID}
+                render={renderProps => (
                   <div className="dropdown is-right is-hoverable">
                     <div className="dropdown-trigger">
                       <button className="button is-warning" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -69,24 +71,18 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
                           <i className="fas fa-angle-down" aria-hidden="true"></i>
                         </span>
                       </button>
-                    </div>
-                    <div className="dropdown-menu" id="dropdown-menu" role="menu">
-                      <div className="dropdown-content">
-                        <a onClick={renderProps.onClick} disabled={renderProps.disabled} className="is-primary dropdown-item" id="signout_button">
-                          <span> <i className="fas fa-sign-out-alt fa-fw"></i>Logout</span>
-                        </a>
-                      </div>
+                      onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
+                      onFailure={res => handleLoginFail(res)}
+                      discoveryDocs={discoveryDocs}
+                      scope={scope}
+                      cookiePolicy={'single_host_origin'}
+                      isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
                     </div>
                   </div>
-                  )}
-                  onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
-                  onFailure={res => handleLogoutFail(res)}
-                  discoveryDocs={discoveryDocs}
-                  scope={scope}
-                  cookiePolicy={'single_host_origin'}
-                /> }
-              </div>
+                )}
+              /> } 
             </div>
+          </div>
           </div>
         </div>
       </div>

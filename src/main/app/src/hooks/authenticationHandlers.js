@@ -1,5 +1,6 @@
 // Handle successful login
-const handleLogin = (res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail) => {
+const handleLogin = (res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail, updateIsGuest) => {
+  updateIsGuest(false); // Reset guest mode
   updateIsLoggedIn(true);
   updateAccessToken(res.accessToken);
   updateUserId(res.Da);

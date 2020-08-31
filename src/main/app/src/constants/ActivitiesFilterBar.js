@@ -8,7 +8,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
   const [videoDuration, updateVideoDuration] = React.useState("*");
   const [articleCategory, updateArticleCategory] = React.useState("*");
   const [articleLength, updateArticleLength] = React.useState("*");
-
+  
   // When reset button is clicked, all the state go back to its default value (i.e, no filter) So, it displays all the links.
   const filterResetClick = evt => {
     switch(activityType) {

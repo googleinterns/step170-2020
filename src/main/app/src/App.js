@@ -6,8 +6,10 @@ import Line from './constants/Line';
 import ResourceCard from './constants/ResourceCard';
 import info from './constants/keys.js';
 import './css/app.css';
+import Cookies from 'js-cookie';
 
 import updateActivityLinks from './hooks/updateActivityLinks';
+import {clearCookies} from './hooks/cookies';
 
 // Web Servlet links.
 const articleData = './articleData';
@@ -57,6 +59,13 @@ const App = () => {
   // State for activity selected (this can be the three random activities or the activity that the user selected on the browse page)
   const [activity, updateActivity] = React.useState({});
 
+  const [cookiesCleared, updateCookiesCleared] = React.useState(false);
+
+  if (!cookiesCleared) { // Clear cookies only once on site visit.
+    clearCookies();
+    updateCookiesCleared(true);
+  }
+
   // Fetches data from web servlet right when the user opens the app.
   React.useEffect(() => {
     updateActivityLinks(updateLinks, servlet);
@@ -65,15 +74,18 @@ const App = () => {
   // Guest sigin in.
   React.useEffect(() => {
     if (isGuest) {
-      updateIsLoggedIn(true);
       updateGreeting("Welcome Guest!");
     }
   },[isGuest]);
 
+  React.useEffect(() => {
+    Cookies.set('!activity', JSON.stringify(activity)); // Store selected activity in cookie
+  },[activity]);
+
   return (
     <Router>
       <Navbar isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken} updateUserId={updateUserId}
-        greeting={greeting} updateGreeting={updateGreeting} updateUserEmail={updateUserEmail} />
+        greeting={greeting} updateGreeting={updateGreeting} updateUserEmail={updateUserEmail} updateIsGuest={updateIsGuest} />
       <main style={{ marginTop: '0.5rem' }}>
         <Routes activityType={activityType} updateActivityType={updateActivityType} activity={activity} updateActivity={updateActivity} updateServlet={updateServlet} links={links} isLoggedIn={isLoggedIn}
           updateIsLoggedIn={updateIsLoggedIn} accessToken={accessToken} updateAccessToken={updateAccessToken} userId={userId}

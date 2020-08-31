@@ -23,7 +23,7 @@ const Routes = ({ activityType, updateActivityType, activity, updateActivity, up
         <Route exact path='/help' component={HelpPage} />
         <Route exact path='/about' component={AboutPage} />
         <Route exact path='/login' render={() => <LoginPage isLoggedIn={isLoggedIn} updateIsLoggedIn={updateIsLoggedIn} updateAccessToken={updateAccessToken}
-          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} updateIsGuest={updateIsGuest} updateUserEmail={updateUserEmail} />} />
+          updateUserId={updateUserId} greeting={greeting} updateGreeting={updateGreeting} isGuest={isGuest} updateIsGuest={updateIsGuest} updateUserEmail={updateUserEmail} />} />
 
         <Route
           render={function() {

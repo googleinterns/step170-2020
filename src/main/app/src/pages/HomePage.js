@@ -59,7 +59,7 @@ const HomePage = ({ activity, activityType, updateActivityType, updateServlet, a
       {/* Added logo to homepage. */}
       <div className="container has-text-centered">
         <div className="my-5">
-          <img className="none" style={{border:0}} src={logo} alt="Logo" width="800" height="100"/>
+          <img className="none" style={{border:0, width: "40%"}} src={logo} alt="Logo" />
           <h4>WeTime helps you schedule and find activities for group bonding and self-care.</h4>
         </div>
       </div>
