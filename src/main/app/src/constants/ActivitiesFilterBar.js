@@ -33,15 +33,16 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
   const checkGameEntryValue = (value) => {
     let errors = false;
 
-    // Check for negative numbers.
-    if (value.includes("-")) {
-      console.log("invalid number, please enter a positive integer value.");
+    // Check for non-integers strings.
+    if (isNaN(value) || (value % 1 != 0)) {
+      console.log("invalid input, please enter a positive integer value.");
       updateGameError(true);
       errors = true;
     }
 
-    // Check for non-integers.
-    if (isNaN(value)) {
+    // Check for non-integers, including negative numbers, point.
+    var intValue = parseInt(value); 
+    if (intValue < 0) {
       console.log("invalid number, please enter a positive integer value.");
       updateGameError(true);
       errors = true;
@@ -60,14 +61,12 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
     const name = evt.target.name;
 
     switch(activityType) {
-   
       case activityTypes.GAMES:
         updateNumOfPlayers(value);
         if (checkGameEntryValue(value)) break;
         updateGameError(false);
         linkFilters.numOfPlayers = value;
         break;
-
       case activityTypes.VIDEOS:
         if (name === "VideoCategory") {
           updateVideoCategory(value);
@@ -81,7 +80,6 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
           console.log("Error: Unrecognized video filter modified.");
         } 
         break;
-
       case activityTypes.ARTICLES: 
         if (name === "ArticleCategory") {
             updateArticleCategory(value); 
@@ -95,7 +93,6 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
             console.log("Error: Unrecognized article filter modified.");
         } 
         break;
-
       default:
         console.log("Error: Invalid activity type selection.");
     }
