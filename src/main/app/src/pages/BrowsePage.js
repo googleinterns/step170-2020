@@ -6,6 +6,7 @@ import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 import LoadingIndicator from '../constants/LoadingIndicator';
+import Alert from '@material-ui/lab/Alert';
 import TablePagination from '@material-ui/core/TablePagination';
 
 /* Component for browse page */
@@ -15,8 +16,11 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   const [filteredLinks, updateFilteredLinks] = React.useState(links);       // The links or filtered links after user clicks filter button.
   const [loading, updateLoading] = React.useState(false); // Controls display of loading indicator.
 
+  const [gameError, updateGameError] = React.useState(false); // Filter errors
+
   const [pageNumber, updatePageNumber] = React.useState(0); // Page number of pagination
   const [activitiesPerPage, updateActivitiesPerPage] = React.useState(10);
+
 
   // Gets the activities to display for the current page number
   const getPageLinks = () => {
@@ -96,7 +100,9 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
 
         {/* This division is for filtering the results based on the user entered input. */}
         <ActivitiesFilterBar activityType={activityType} activityTypes={activityTypes}
-          links={links} updateFilteredLinks={updateFilteredLinks} />
+          links={links} updateFilteredLinks={updateFilteredLinks} updateGameError={updateGameError}/>
+
+        {gameError ? (<Alert severity="error">Error: invalid number, please enter a positive integer.</Alert>) : <div/>}
 
         <div className="section-padding-large mb-3">
           <div className="row">
