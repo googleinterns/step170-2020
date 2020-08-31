@@ -122,9 +122,10 @@ public class getArticlesServletTest {
       String description = (String) entity.getProperty("description");
       String url = (String) entity.getProperty("url");
       String publishedAt = (String) entity.getProperty("publishedAt");
+      String articleCategory = (String) entity.getProperty("articleCategory");
       Long length = (long) entity.getProperty("length");
 
-      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, length);
+      Article newArticle = new Article(entityKey, publisher, author, title, description, url, publishedAt, articleCategory, length);
       articles.add(newArticle);
     }
 
@@ -143,6 +144,7 @@ public class getArticlesServletTest {
     articleEntity.setProperty("description", "testDescription");
     articleEntity.setProperty("url", "testUrl");
     articleEntity.setProperty("publishedAt", "testPublishedAt");
+    articleEntity.setProperty("articleCategory", "testArticleCategory");
     articleEntity.setProperty("length", 1);
 
     Entity articleEntity1 = new Entity("Article");
@@ -152,6 +154,7 @@ public class getArticlesServletTest {
     articleEntity1.setProperty("description", "testDescription2");
     articleEntity1.setProperty("url", "testUrl2");
     articleEntity1.setProperty("publishedAt", "testPublishedAt2");
+    articleEntity.setProperty("articleCategory", "testArticleCategory2");
     articleEntity1.setProperty("length", 2);
     
     // Adding two entities to our mock datastore

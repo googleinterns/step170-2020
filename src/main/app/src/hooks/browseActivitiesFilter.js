@@ -61,7 +61,7 @@ const filterArticles = (article, filters) => {
   }
 
   // Filter by article type and length
-  return (filters.articleType === "*" || filters.articleType === article.type)
+  return (filters.articleCategory === "*" || filters.articleCategory === article.articleCategory)
     && isWithinArticleLength(Number(article.length));
 }
 

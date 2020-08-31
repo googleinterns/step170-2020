@@ -6,7 +6,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
   const [numOfPLayers, updateNumOfPlayers] = React.useState("");
   const [videoCategory, updateVideoCategory] = React.useState("*");
   const [videoDuration, updateVideoDuration] = React.useState("*");
-  const [articleType, updateArticleType] = React.useState("*");
+  const [articleCategory, updateArticleCategory] = React.useState("*");
   const [articleLength, updateArticleLength] = React.useState("*");
 
   /*
@@ -25,7 +25,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         linkFilters.videoDuration = videoDuration;                // Length of the video.
         break;
       case activityTypes.ARTICLES:
-        linkFilters.articleType = articleType;          // Meditation, Technology, Social. 
+        linkFilters.articleCategory = articleCategory;            // Meditation, Short Stories, Cooking. 
         linkFilters.articleLength = articleLength;     
         break;
       default:
@@ -46,7 +46,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         updateVideoDuration("*");
         break;
       case activityTypes.ARTICLES:
-        updateArticleType("*");
+        updateArticleCategory("*");
         updateArticleLength("*");
         break;
       default:
@@ -77,8 +77,8 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
         break;
 
       case activityTypes.ARTICLES:
-        if (name === "ArticleType")
-          updateArticleType(value);
+        if (name === "ArticleCategory")
+          updateArticleCategory(value);
         else if (name === "ArticleLength")
           updateArticleLength(value);
         else
@@ -100,7 +100,7 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
       const videoProps = Object.assign(props, {videoCategory: videoCategory, videoDuration: videoDuration});
       return <VideosFilterBar {...videoProps} />
     case activityTypes.ARTICLES:
-      const articleProps = Object.assign(props, {articleType: articleType, articleLength: articleLength});
+      const articleProps = Object.assign(props, {articleCategory: articleCategory, articleLength: articleLength});
       return <ArticlesFilterBar {...articleProps} />
     default:
       return null;
@@ -130,15 +130,15 @@ const GamesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick
 }
 
 /** Articles filter options. */
-const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, articleType, articleLength}) => {
+const ArticlesFilterBar = ({handleFilterChange, filterButtonClick, filterResetClick, articleCategory, articleLength}) => {
   return (
     <React.Fragment>
       <div className="field is-grouped">
         <div className="control is-expanded"><div className="select is-fullwidth">
-          <select name="ArticleType" onChange={handleFilterChange} value={articleType}>
-            <option value="*">{"All [Article Type]"}</option>
-            <option value="tech">{"Technology"}</option>
-            <option value="social">{"Social"}</option>
+          <select name="ArticleCategory" onChange={handleFilterChange} value={articleCategory}>
+            <option value="*">{"All [Article Category]"}</option>
+            <option value="cooking">{"Cooking"}</option>
+            <option value="fiction">{"Short Stories"}</option>
             <option value="meditation">{"Meditation"}</option>
           </select>
         </div></div>

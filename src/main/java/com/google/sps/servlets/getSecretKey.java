@@ -1,6 +1,5 @@
 package com.google.sps.servlets;
 
-import java.lang.*;
 import com.google.cloud.secretmanager.v1.AccessSecretVersionResponse;
 import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 import com.google.cloud.secretmanager.v1.SecretVersionName;

@@ -25,10 +25,11 @@ public final class Article extends Activity {
   private final String author;
   private final String description;
   private final String publishedAt;
+  private final String articleCategory;
   private final long length;
 
   public Article(String key, String publisher, String author, String title,
-    String description, String url, String publishedAt, long length) {
+    String description, String url, String publishedAt, String articleCategory, long length) {
 
     // Initialize activity fields
     super(key, title, Activity.Category.ARTICLES, url);
@@ -37,6 +38,7 @@ public final class Article extends Activity {
     this.author = author;
     this.description = description;
     this.publishedAt = publishedAt;
+    this.articleCategory = articleCategory;
     this.length = length;
   }
 }
