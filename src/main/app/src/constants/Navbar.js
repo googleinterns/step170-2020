@@ -8,7 +8,8 @@ import info from './keys.js';
 import 'bulma/css/bulma.css';
 
 /* Component for web app navigation bar */
-const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, updateUserEmail, greeting, updateGreeting}) => {
+const Navbar = ({ isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, updateUserEmail, greeting, updateGreeting,
+  updateIsGuest }) => {
 
   // Initialize google auth api information
   const clientID = info[0].clientID;
@@ -51,7 +52,8 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
                     <i className="fab fa-google fa-fw"></i>Login with Google
                   </button>
                 )}
-                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
+                onSuccess={res => 
+                  handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail, updateIsGuest)}
                 onFailure={res => handleLoginFail(res)}
                 discoveryDocs={discoveryDocs}
                 scope={scope}
