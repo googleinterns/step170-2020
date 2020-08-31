@@ -83,7 +83,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
   }, [filteredLinks]); // reset page number to zero when activity type changes.
 
   return (
-    <section className="section-padding-large mb-3">
+    <section className="section">
       <div className = "container">
         {/*Combo box bar component */}
         <div className="field has-addons">

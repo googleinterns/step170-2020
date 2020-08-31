@@ -4,7 +4,7 @@ const handleLogin = (res, updateIsLoggedIn, updateGreeting, updateAccessToken, u
   updateAccessToken(res.accessToken);
   updateUserId(res.Da);
   updateUserEmail(res.profileObj.email);
-  updateGreeting("Welcome " + res.profileObj.name +"!");
+  updateGreeting(res.profileObj.name);
 }
 
 // Handle successful logout
