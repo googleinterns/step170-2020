@@ -79,7 +79,8 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
           linkFilters.videoCategory = videoCategory;
         } else {
           console.log("Error: Unrecognized video filter modified.");
-        } break;
+        } 
+        break;
 
       case activityTypes.ARTICLES: 
         if (name === "ArticleCategory") {
@@ -92,7 +93,8 @@ const ActivitiesFilterBar = ({activityType, activityTypes, links, updateFiltered
             linkFilters.articleCategory = articleCategory;
         } else {
             console.log("Error: Unrecognized article filter modified.");
-        } break;
+        } 
+        break;
 
       default:
         console.log("Error: Invalid activity type selection.");

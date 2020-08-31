@@ -6,6 +6,7 @@ import ArticleCard from '../constants/ArticleCard.js';
 import VideoCard from '../constants/VideoCard.js';
 import ActivitiesFilterBar from '../constants/ActivitiesFilterBar';
 import LoadingIndicator from '../constants/LoadingIndicator';
+import Alert from '@material-ui/lab/Alert';
 import TablePagination from '@material-ui/core/TablePagination';
 
 /* Component for browse page */
@@ -101,7 +102,7 @@ const BrowsePage = ({ links, activityType, updateActivityType, updateActivity, u
         <ActivitiesFilterBar activityType={activityType} activityTypes={activityTypes}
           links={links} updateFilteredLinks={updateFilteredLinks} updateGameError={updateGameError}/>
 
-        {gameError ? (<h6 style={{color: 'red'}}>Error: invalid number, please enter a positive integer.</h6>) : <div/>}
+        {gameError ? (<Alert severity="error">Error: invalid number, please enter a positive integer.</Alert>) : <div/>}
 
         <div className="section-padding-large mb-3">
           <div className="row">
