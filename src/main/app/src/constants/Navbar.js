@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import {GoogleLogin, GoogleLogout} from 'react-google-login';
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { handleLogin, handleLogout,
   handleLoginFail, handleLogoutFail } from '../hooks/authenticationHandlers';
 import logo from '../assets/wetime_logo.png';
@@ -22,70 +22,70 @@ const Navbar = ({isLoggedIn, updateIsLoggedIn, updateAccessToken, updateUserId, 
       <div className="container">
         <div className="navbar-brand">
           <NavLink className="navbar-item" to="/"><img style={{border:0}} src={logo} alt="Logo"></img></NavLink>
-          
-          <a onClick={() => {setisActive(!isActive);}} role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-          </a>
-        </div>
-
-        {/*Navbar tabs to other pages.*/}
-        <div id="navbarBasicExample" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
-          <div className="navbar-start">
-            <NavLink className="navbar-item" to="/help"><h6> Help </h6></NavLink>
-            <NavLink className="navbar-item" to="/about"><h6> About </h6></NavLink> 
-          </div>
         </div>
 
         {/*The login and log out button. Changes according to signed in status. Handled in js just below.*/}
         <div className="navbar-end">
-          <div className="navbar-item">
-            <div className="buttons">
-            {/* Display login or logout button depending on loggedIn status */}
-            { !isLoggedIn ?
-              <GoogleLogin
-                clientId={clientID}
-                render={renderProps => (
-                  <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="button is-info" id="authorize_button">
-                    <i className="fab fa-google fa-fw"></i>Login with Google
-                  </button>
-                )}
-                onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
-                onFailure={res => handleLoginFail(res)}
-                discoveryDocs={discoveryDocs}
-                scope={scope}
-                cookiePolicy={'single_host_origin'}
-                isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
-              />
-              :
-              <GoogleLogout
-                clientId={clientID}
-                render={renderProps => (
-                <div className="dropdown is-right is-hoverable">
-                  <div className="dropdown-trigger">
-                    <button className="button is-warning" aria-haspopup="true" aria-controls="dropdown-menu">
-                      <span><i className="fas fa-user"></i> Hello {greeting}!</span>
-                      <span className="icon is-small">
-                        <i className="fas fa-angle-down" aria-hidden="true"></i>
-                      </span>
+          <div className="is-dark">
+            <a onClick={() => {setisActive(!isActive);}} role="button" className={`navbar-burger burger ${isActive ? "is-active" : ""}`} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </a>
+          </div>
+          {/*Navbar tabs to other pages.*/}
+          <div id="navbarBasicExample" className={`navbar-menu ${isActive ? "is-active" : ""}`}>
+            <div className="navbar-start mr-3">
+              <NavLink className="navbar-item is-size-6" to="/help">Help</NavLink>
+              <NavLink className="navbar-item is-size-6" to="/about">About</NavLink> 
+            </div>
+            <div className="navbar-item">
+              <div className="buttons">
+              {/* Display login or logout button depending on loggedIn status */}
+              { !isLoggedIn ?
+                <GoogleLogin
+                  clientId={clientID}
+                  render={renderProps => (
+                    <button onClick={renderProps.onClick} disabled={renderProps.disabled} className="button is-info" id="authorize_button">
+                      <i className="fab fa-google fa-fw"></i> Login with Google
                     </button>
-                  </div>
-                  <div className="dropdown-menu" id="dropdown-menu" role="menu">
-                    <div className="dropdown-content">
-                      <a onClick={renderProps.onClick} disabled={renderProps.disabled} className="is-primary dropdown-item" id="signout_button">
-                        <span> <i className="fas fa-sign-out-alt fa-fw"></i>Logout</span>
-                      </a>
+                  )}
+                  onSuccess={res => handleLogin(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
+                  onFailure={res => handleLoginFail(res)}
+                  discoveryDocs={discoveryDocs}
+                  scope={scope}
+                  cookiePolicy={'single_host_origin'}
+                  isSignedIn = {true}    /* This makes sure the user is logged in across different pages of the webapp. */
+                />
+                :
+                <GoogleLogout
+                  clientId={clientID}
+                  render={renderProps => (
+                  <div className="dropdown is-right is-hoverable">
+                    <div className="dropdown-trigger">
+                      <button className="button is-warning" aria-haspopup="true" aria-controls="dropdown-menu">
+                        <span><i className="fas fa-user"></i> Hello {greeting}!</span>
+                        <span className="icon is-small">
+                          <i className="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                      </button>
+                    </div>
+                    <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                      <div className="dropdown-content">
+                        <a onClick={renderProps.onClick} disabled={renderProps.disabled} className="is-primary dropdown-item" id="signout_button">
+                          <span> <i className="fas fa-sign-out-alt fa-fw"></i>Logout</span>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                </div>
-                )}
-                onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
-                onFailure={res => handleLogoutFail(res)}
-                discoveryDocs={discoveryDocs}
-                scope={scope}
-                cookiePolicy={'single_host_origin'}
-              /> }
+                  )}
+                  onLogoutSuccess={res => handleLogout(res, updateIsLoggedIn, updateGreeting, updateAccessToken, updateUserId, updateUserEmail)}
+                  onFailure={res => handleLogoutFail(res)}
+                  discoveryDocs={discoveryDocs}
+                  scope={scope}
+                  cookiePolicy={'single_host_origin'}
+                /> }
+              </div>
             </div>
           </div>
         </div>
